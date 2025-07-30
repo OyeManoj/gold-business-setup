@@ -36,10 +36,6 @@ export function generateReceiptText(transaction: Transaction, language: Language
     }
   }
   
-  receipt += `--------------------------------\n`;
-  receipt += `Signature: _______________\n`;
-  receipt += `--------------------------------`;
-
   return receipt;
 }
 

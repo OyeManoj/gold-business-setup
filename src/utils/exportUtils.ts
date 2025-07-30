@@ -82,6 +82,90 @@ export function exportTransactionsToExcel(
     { wch: 18 }   // Total Amount
   ];
   mainWorksheet['!cols'] = colWidths;
+
+  // Add styling to the worksheet
+  const range = XLSX.utils.decode_range(mainWorksheet['!ref'] || 'A1');
+  
+  // Style headers (row 1)
+  for (let col = range.s.c; col <= range.e.c; col++) {
+    const cellRef = XLSX.utils.encode_cell({ r: 0, c: col });
+    if (!mainWorksheet[cellRef]) continue;
+    
+    mainWorksheet[cellRef].s = {
+      font: { bold: true, color: { rgb: "FFFFFF" } },
+      fill: { fgColor: { rgb: "2D3748" } },
+      alignment: { horizontal: "center", vertical: "center" },
+      border: {
+        top: { style: "thin", color: { rgb: "000000" } },
+        bottom: { style: "thin", color: { rgb: "000000" } },
+        left: { style: "thin", color: { rgb: "000000" } },
+        right: { style: "thin", color: { rgb: "000000" } }
+      }
+    };
+  }
+
+  // Style data rows with alternating colors and type-based colors
+  for (let row = 1; row <= range.e.r; row++) {
+    const transactionIndex = row - 1;
+    const transaction = transactions[transactionIndex];
+    
+    if (!transaction) continue;
+
+    // Get type color
+    let typeColor = "FFFFFF"; // default white
+    if (transaction.type === 'PURCHASE') {
+      typeColor = "C6F6D5"; // light green
+    } else if (transaction.type === 'SALE') {
+      typeColor = "FED7D7"; // light red
+    } else if (transaction.type === 'EXCHANGE') {
+      typeColor = "BEE3F8"; // light blue
+    }
+
+    // Alternating row background
+    const isEvenRow = row % 2 === 0;
+    const baseColor = isEvenRow ? "F7FAFC" : "FFFFFF";
+
+    for (let col = range.s.c; col <= range.e.c; col++) {
+      const cellRef = XLSX.utils.encode_cell({ r: row, c: col });
+      if (!mainWorksheet[cellRef]) continue;
+
+      // Special styling for type column
+      if (col === 4) { // Type column
+        mainWorksheet[cellRef].s = {
+          fill: { fgColor: { rgb: typeColor } },
+          font: { bold: true },
+          alignment: { horizontal: "center", vertical: "center" },
+          border: {
+            top: { style: "thin", color: { rgb: "E2E8F0" } },
+            bottom: { style: "thin", color: { rgb: "E2E8F0" } },
+            left: { style: "thin", color: { rgb: "E2E8F0" } },
+            right: { style: "thin", color: { rgb: "E2E8F0" } }
+          }
+        };
+      } else {
+        // Regular cell styling
+        const alignment = col === 0 || col === 1 || col === 2 || col === 3 ? "center" : "right";
+        const isBold = col === 10; // Total Amount column
+        
+        mainWorksheet[cellRef].s = {
+          fill: { fgColor: { rgb: baseColor } },
+          font: { bold: isBold },
+          alignment: { horizontal: alignment, vertical: "center" },
+          border: {
+            top: { style: "thin", color: { rgb: "E2E8F0" } },
+            bottom: { style: "thin", color: { rgb: "E2E8F0" } },
+            left: { style: "thin", color: { rgb: "E2E8F0" } },
+            right: { style: "thin", color: { rgb: "E2E8F0" } }
+          }
+        };
+
+        // Special formatting for amount column
+        if (col === 10) {
+          mainWorksheet[cellRef].s.font = { bold: true, color: { rgb: "1A365D" } };
+        }
+      }
+    }
+  }
   
   // Add main worksheet
   XLSX.utils.book_append_sheet(workbook, mainWorksheet, 'Transaction Details');
@@ -128,6 +212,57 @@ export function exportTransactionsToExcel(
     { wch: 20 },  // Value
     { wch: 15 }   // Unit
   ];
+
+  // Add styling to summary worksheet
+  const summaryRange = XLSX.utils.decode_range(summaryWorksheet['!ref'] || 'A1');
+  
+  for (let row = summaryRange.s.r; row <= summaryRange.e.r; row++) {
+    for (let col = summaryRange.s.c; col <= summaryRange.e.c; col++) {
+      const cellRef = XLSX.utils.encode_cell({ r: row, c: col });
+      if (!summaryWorksheet[cellRef]) continue;
+
+      const cellValue = summaryWorksheet[cellRef].v;
+      
+      // Style section headers
+      if (cellValue === 'TRANSACTION SUMMARY' || cellValue === 'TYPE BREAKDOWN' || cellValue === 'FILTER DETAILS') {
+        summaryWorksheet[cellRef].s = {
+          font: { bold: true, color: { rgb: "FFFFFF" }, size: 14 },
+          fill: { fgColor: { rgb: "4A5568" } },
+          alignment: { horizontal: "center", vertical: "center" },
+          border: {
+            top: { style: "medium", color: { rgb: "000000" } },
+            bottom: { style: "medium", color: { rgb: "000000" } },
+            left: { style: "medium", color: { rgb: "000000" } },
+            right: { style: "medium", color: { rgb: "000000" } }
+          }
+        };
+      }
+      // Style data rows
+      else if (cellValue && cellValue !== '') {
+        const isTotalRow = typeof cellValue === 'string' && cellValue.includes('Total');
+        const isAmountRow = typeof cellValue === 'string' && cellValue.includes('Total Amount');
+        
+        summaryWorksheet[cellRef].s = {
+          font: { 
+            bold: isTotalRow,
+            color: { rgb: isAmountRow ? "1A365D" : "2D3748" },
+            size: isTotalRow ? 12 : 11
+          },
+          fill: { fgColor: { rgb: isTotalRow ? "F7FAFC" : "FFFFFF" } },
+          alignment: { 
+            horizontal: col === 0 ? "left" : "center", 
+            vertical: "center" 
+          },
+          border: {
+            top: { style: "thin", color: { rgb: "E2E8F0" } },
+            bottom: { style: "thin", color: { rgb: "E2E8F0" } },
+            left: { style: "thin", color: { rgb: "E2E8F0" } },
+            right: { style: "thin", color: { rgb: "E2E8F0" } }
+          }
+        };
+      }
+    }
+  }
   
   // Add summary worksheet
   XLSX.utils.book_append_sheet(workbook, summaryWorksheet, 'Summary');

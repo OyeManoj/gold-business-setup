@@ -10,11 +10,11 @@ import { calculateTransaction } from '@/utils/calculations';
 import { saveTransaction } from '@/utils/storage';
 import { generateReceiptText, printReceipt } from '@/utils/receipt';
 import { useTranslation } from '@/utils/translations';
+import { validateTransactionForm, FormData } from '@/utils/formValidation';
+import { useLiveCalculation } from '@/hooks/useLiveCalculation';
 import { ArrowLeft, Check, X, Calculator } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
 
 export default function TransactionFlow() {
   const { type } = useParams<{ type: string }>();
@@ -22,7 +22,7 @@ export default function TransactionFlow() {
   const { toast } = useToast();
   
   const [language, setLanguage] = useState<Language>('en');
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     weight: '',
     purity: '',
     reduction: '',
@@ -30,72 +30,15 @@ export default function TransactionFlow() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showSummary, setShowSummary] = useState(false);
-  const [liveCalculation, setLiveCalculation] = useState<any>(null);
 
   const t = useTranslation(language);
   const transactionType = type?.toUpperCase() as TransactionType;
 
-  // Live calculation effect
-  useEffect(() => {
-    const weight = parseFloat(formData.weight) || 0;
-    const purity = transactionType === 'SALE' ? 100 : (parseFloat(formData.purity) || 0);
-    const rate = parseFloat(formData.rate) || 0;
-    const reduction = transactionType === 'EXCHANGE' ? (parseFloat(formData.reduction) || 0) : 0;
-    
-
-    // For Exchange: show calculation even with partial data
-    if (transactionType === 'EXCHANGE') {
-      if (weight > 0 || purity > 0 || reduction >= 0) {
-        try {
-          const result = calculateTransaction(transactionType, weight, purity, 1, reduction);
-          setLiveCalculation(result);
-        } catch (error) {
-          setLiveCalculation(null);
-        }
-      } else {
-        setLiveCalculation(null);
-      }
-    } else {
-      // For Purchase/Sale: show calculation with partial data
-      if (weight > 0 || rate > 0 || (transactionType === 'PURCHASE' && purity > 0)) {
-        try {
-          const result = calculateTransaction(transactionType, weight, purity, rate, reduction);
-          setLiveCalculation(result);
-        } catch (error) {
-          setLiveCalculation(null);
-        }
-      } else {
-        setLiveCalculation(null);
-      }
-    }
-  }, [formData, transactionType]);
+  const liveCalculation = useLiveCalculation(formData, transactionType);
 
   // Validation
   const validateForm = () => {
-    const newErrors: Record<string, string> = {};
-    
-    if (!formData.weight || parseFloat(formData.weight) <= 0) {
-      newErrors.weight = 'Weight must be greater than 0';
-    }
-    
-    if (transactionType !== 'SALE') {
-      if (!formData.purity || parseFloat(formData.purity) <= 0 || parseFloat(formData.purity) > 100) {
-        newErrors.purity = 'Purity must be between 1-100%';
-      }
-    }
-    
-    if (transactionType === 'EXCHANGE') {
-      if (!formData.reduction || parseFloat(formData.reduction) < 0) {
-        newErrors.reduction = 'Reduction cannot be negative';
-      }
-    }
-    
-    if (transactionType !== 'EXCHANGE') {
-      if (!formData.rate || parseFloat(formData.rate) <= 0) {
-        newErrors.rate = 'Rate must be greater than 0';
-      }
-    }
-
+    const newErrors = validateTransactionForm(formData, transactionType);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

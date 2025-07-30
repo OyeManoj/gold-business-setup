@@ -8,70 +8,61 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Light gold business color palette with white backgrounds */
+    /* Black and white color palette */
     --background: 0 0% 100%;
-    --foreground: 30 20% 25%;
+    --foreground: 0 0% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 30 20% 25%;
+    --card-foreground: 0 0% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 30 20% 25%;
+    --popover-foreground: 0 0% 10%;
 
-    --primary: 45 95% 60%;
+    --primary: 0 0% 10%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 45 85% 70%;
+    --primary-glow: 0 0% 30%;
 
-    --secondary: 210 60% 80%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 0 0% 85%;
+    --secondary-foreground: 0 0% 10%;
 
-    --muted: 0 0% 94%;
-    --muted-foreground: 30 20% 40%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 45 40% 90%;
-    --accent-foreground: 30 30% 15%;
+    --accent: 0 0% 92%;
+    --accent-foreground: 0 0% 10%;
 
-    --destructive: 0 85% 65%;
+    --destructive: 0 0% 20%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 85%;
-    --input: 45 30% 96%;
-    --ring: 45 95% 60%;
+    --border: 0 0% 88%;
+    --input: 0 0% 97%;
+    --ring: 0 0% 10%;
 
-    --success: 120 65% 55%;
+    --success: 0 0% 25%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 95% 60%;
+    --warning: 0 0% 30%;
     --warning-foreground: 0 0% 100%;
 
-    /* Bold, vibrant gold business colors that pop on white */
-    --gold: 45 95% 60%;
-    --gold-light: 48 85% 80%;
-    --gold-dark: 42 85% 50%;
-    --bronze: 30 70% 65%;
-    --bronze-light: 30 60% 78%;
-    --copper: 25 80% 70%;
-    --navy: 210 70% 60%;
-    --navy-light: 210 60% 75%;
-    --charcoal: 0 0% 60%;
-    --champagne: 45 50% 88%;
-    --cream: 45 35% 95%;
+    /* Black and white business colors */
+    --dark: 0 0% 10%;
+    --dark-light: 0 0% 25%;
+    --dark-medium: 0 0% 40%;
+    --gray: 0 0% 60%;
+    --gray-light: 0 0% 75%;
+    --light-gray: 0 0% 85%;
+    --off-white: 0 0% 95%;
+    --pure-white: 0 0% 100%;
+    --charcoal: 0 0% 15%;
+    --slate: 0 0% 50%;
 
-    /* Vibrant accent colors that really pop */
-    --sage: 120 50% 65%;
-    --sage-light: 120 40% 80%;
-    --lavender: 260 60% 70%;
-    --lavender-light: 260 50% 83%;
-    --peach: 20 80% 73%;
-    --peach-light: 20 70% 87%;
-    --coral: 10 85% 70%;
-    --coral-light: 10 75% 85%;
-    --mint: 150 60% 70%;
-    --mint-light: 150 50% 85%;
-    --emerald: 160 70% 55%;
-    --emerald-light: 160 60% 75%;
-    --violet: 270 65% 65%;
-    --violet-light: 270 55% 80%;
+    /* Monochrome accent variations */
+    --accent-1: 0 0% 20%;
+    --accent-1-light: 0 0% 80%;
+    --accent-2: 0 0% 35%;
+    --accent-2-light: 0 0% 70%;
+    --accent-3: 0 0% 25%;
+    --accent-3-light: 0 0% 75%;
 
     /* Modern spacing and layout */
     --radius: 8px;
@@ -82,14 +73,14 @@ All colors MUST be HSL.
     --spacing-xl: 32px;
     --spacing-2xl: 48px;
 
-    /* Bold shadows that make elements pop off white background */
+    /* Monochrome shadows */
     --shadow-sm: 0 2px 4px 0 hsl(0 0% 0% / 0.08);
     --shadow-md: 0 4px 12px -2px hsl(0 0% 0% / 0.12);
     --shadow-lg: 0 12px 24px -6px hsl(0 0% 0% / 0.15);
     --shadow-elegant: 0 8px 20px hsl(0 0% 0% / 0.10);
-    --shadow-gold: 0 8px 20px hsl(45 95% 60% / 0.25);
-    --shadow-coral: 0 8px 20px hsl(10 85% 70% / 0.20);
-    --shadow-mint: 0 8px 20px hsl(150 60% 70% / 0.20);
+    --shadow-dark: 0 8px 20px hsl(0 0% 0% / 0.20);
+    --shadow-light: 0 4px 12px hsl(0 0% 0% / 0.05);
+    --shadow-strong: 0 12px 28px hsl(0 0% 0% / 0.18);
 
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

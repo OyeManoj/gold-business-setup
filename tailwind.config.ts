@@ -71,50 +71,31 @@ export default {
 					DEFAULT: 'hsl(var(--warning))',
 					foreground: 'hsl(var(--warning-foreground))'
 				},
-				gold: {
-					DEFAULT: 'hsl(var(--gold))',
-					light: 'hsl(var(--gold-light))',
-					dark: 'hsl(var(--gold-dark))'
+				dark: {
+					DEFAULT: 'hsl(var(--dark))',
+					light: 'hsl(var(--dark-light))',
+					medium: 'hsl(var(--dark-medium))'
 				},
-				bronze: {
-					DEFAULT: 'hsl(var(--bronze))',
-					light: 'hsl(var(--bronze-light))'
+				gray: {
+					DEFAULT: 'hsl(var(--gray))',
+					light: 'hsl(var(--gray-light))'
 				},
-				copper: 'hsl(var(--copper))',
-				navy: {
-					DEFAULT: 'hsl(var(--navy))',
-					light: 'hsl(var(--navy-light))'
-				},
+				'light-gray': 'hsl(var(--light-gray))',
+				'off-white': 'hsl(var(--off-white))',
+				'pure-white': 'hsl(var(--pure-white))',
 				charcoal: 'hsl(var(--charcoal))',
-				champagne: 'hsl(var(--champagne))',
-				cream: 'hsl(var(--cream))',
-				sage: {
-					DEFAULT: 'hsl(var(--sage))',
-					light: 'hsl(var(--sage-light))'
+				slate: 'hsl(var(--slate))',
+				'accent-1': {
+					DEFAULT: 'hsl(var(--accent-1))',
+					light: 'hsl(var(--accent-1-light))'
 				},
-				lavender: {
-					DEFAULT: 'hsl(var(--lavender))',
-					light: 'hsl(var(--lavender-light))'
+				'accent-2': {
+					DEFAULT: 'hsl(var(--accent-2))',
+					light: 'hsl(var(--accent-2-light))'
 				},
-				peach: {
-					DEFAULT: 'hsl(var(--peach))',
-					light: 'hsl(var(--peach-light))'
-				},
-				coral: {
-					DEFAULT: 'hsl(var(--coral))',
-					light: 'hsl(var(--coral-light))'
-				},
-				mint: {
-					DEFAULT: 'hsl(var(--mint))',
-					light: 'hsl(var(--mint-light))'
-				},
-				emerald: {
-					DEFAULT: 'hsl(var(--emerald))',
-					light: 'hsl(var(--emerald-light))'
-				},
-				violet: {
-					DEFAULT: 'hsl(var(--violet))',
-					light: 'hsl(var(--violet-light))'
+				'accent-3': {
+					DEFAULT: 'hsl(var(--accent-3))',
+					light: 'hsl(var(--accent-3-light))'
 				}
 			},
 			fontFamily: {

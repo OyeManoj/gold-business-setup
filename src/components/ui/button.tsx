@@ -9,14 +9,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gold text-white hover:bg-gold-dark hover:shadow-xl transition-all duration-200 shadow-lg border-0 font-semibold",
+        default: "bg-dark text-white hover:bg-dark/90 hover:shadow-xl transition-all duration-200 shadow-lg border-0 font-semibold",
         destructive: "bg-destructive text-white hover:bg-destructive/90 hover:shadow-xl transition-all duration-200 shadow-lg border-0 font-semibold",
-        outline: "border-3 border-gold/60 bg-white hover:bg-gold/10 hover:border-gold hover:text-gold shadow-md text-gold font-semibold hover:shadow-lg",
-        secondary: "bg-coral text-white hover:bg-coral/90 hover:shadow-lg transition-all duration-200 shadow-md font-semibold",
-        ghost: "hover:bg-gold/20 hover:text-gold rounded-lg text-gold border-0 font-medium",
-        link: "text-gold hover:text-gold-dark underline-offset-4 hover:underline transition-colors duration-200 font-medium",
-        success: "bg-emerald text-white hover:bg-emerald/90 hover:shadow-xl transition-all duration-200 shadow-lg border-0 font-semibold",
-        premium: "bg-bronze text-white hover:bg-bronze/90 hover:shadow-xl transition-all duration-200 shadow-lg border-0 font-semibold",
+        outline: "border-3 border-dark/60 bg-white hover:bg-dark/10 hover:border-dark hover:text-dark shadow-md text-dark font-semibold hover:shadow-lg",
+        secondary: "bg-accent-2 text-white hover:bg-accent-2/90 hover:shadow-lg transition-all duration-200 shadow-md font-semibold",
+        ghost: "hover:bg-dark/20 hover:text-dark rounded-lg text-dark border-0 font-medium",
+        link: "text-dark hover:text-dark/70 underline-offset-4 hover:underline transition-colors duration-200 font-medium",
+        success: "bg-accent-3 text-white hover:bg-accent-3/90 hover:shadow-xl transition-all duration-200 shadow-lg border-0 font-semibold",
+        premium: "bg-charcoal text-white hover:bg-charcoal/90 hover:shadow-xl transition-all duration-200 shadow-lg border-0 font-semibold",
       },
       size: {
         default: "h-9 px-4 py-1",

@@ -40,10 +40,10 @@ const Index = () => {
       <div className="container mx-auto px-6 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gold mb-4 drop-shadow-sm">
+          <h1 className="text-4xl font-bold text-dark mb-4 drop-shadow-sm">
             {t.appTitle}
           </h1>
-          <div className="w-16 h-1 bg-gold/80 mx-auto rounded-full shadow-sm"></div>
+          <div className="w-16 h-1 bg-dark mx-auto rounded-full shadow-sm"></div>
         </div>
 
         {/* Navigation Controls */}
@@ -69,16 +69,16 @@ const Index = () => {
             {transactions.map((transaction, index) => {
               const Icon = transaction.icon;
               const colors = [
-                { bg: 'bg-gold', text: 'text-gold', accent: 'bg-gold', hover: 'hover:bg-gold/5', shadow: 'shadow-gold' },
-                { bg: 'bg-coral', text: 'text-coral', accent: 'bg-coral', hover: 'hover:bg-coral/5', shadow: 'shadow-coral' },
-                { bg: 'bg-emerald', text: 'text-emerald', accent: 'bg-emerald', hover: 'hover:bg-emerald/5', shadow: 'shadow-mint' }
+                { bg: 'bg-accent-1', text: 'text-accent-1', accent: 'bg-accent-1', hover: 'hover:bg-accent-1/5', shadow: 'shadow-dark' },
+                { bg: 'bg-accent-2', text: 'text-accent-2', accent: 'bg-accent-2', hover: 'hover:bg-accent-2/5', shadow: 'shadow-dark' },
+                { bg: 'bg-accent-3', text: 'text-accent-3', accent: 'bg-accent-3', hover: 'hover:bg-accent-3/5', shadow: 'shadow-strong' }
               ];
               const colorScheme = colors[index];
               
               return (
                 <Card
                   key={transaction.type}
-                  className={`group cursor-pointer border-2 border-white bg-white hover:shadow-xl transition-all duration-300 shadow-lg hover:border-${colorScheme.accent}/20 ${colorScheme.hover} hover:-translate-y-1`}
+                  className={`group cursor-pointer border-2 border-border bg-white hover:shadow-xl transition-all duration-300 shadow-lg hover:border-dark/20 ${colorScheme.hover} hover:-translate-y-1`}
                   onClick={() => navigate(transaction.path)}
                 >
                   <CardContent className="p-8 text-center">

@@ -9,17 +9,12 @@ export function generateReceiptText(transaction: Transaction, language: Language
 
   let receipt = `\n`;
   receipt += `        GOLD EXCHANGE RECEIPT\n`;
-  receipt += `          CUSTOMER COPY\n`;
   receipt += `        ═══════════════════════\n\n`;
   receipt += `        ID: ${transaction.id}\n`;
   receipt += `        ${date} • ${time}\n\n`;
   
   receipt += `        FINE WEIGHT: ${transaction.fineGold}G\n`;
   receipt += `        ═══════════════════════\n\n`;
-  
-  receipt += `        CUSTOMER\n`;
-  receipt += `        NAME: ____________________\n`;
-  receipt += `        MOBILE: __________________\n\n`;
   
   receipt += `        DETAILS\n`;
   receipt += `        ───────────────────────\n`;

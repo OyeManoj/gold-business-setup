@@ -89,6 +89,13 @@ export default function History() {
           </CardHeader>
           
           <CardContent>
+            {/* Summary below filter option */}
+            {filteredTransactions.length > 0 && (
+              <div className="mb-6">
+                <TransactionSummaryCard summary={summary} />
+              </div>
+            )}
+            
             {filteredTransactions.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-muted-foreground text-lg">
@@ -157,13 +164,6 @@ export default function History() {
                     </tbody>
                   </table>
                 </div>
-
-                {/* Summary at the bottom */}
-                {filteredTransactions.length > 0 && (
-                  <div className="mt-8 pt-6 border-t-2 border-border">
-                    <TransactionSummaryCard summary={summary} />
-                  </div>
-                )}
               </>
             )}
           </CardContent>

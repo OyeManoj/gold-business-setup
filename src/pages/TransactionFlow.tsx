@@ -138,45 +138,41 @@ export default function TransactionFlow() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-light/20 via-blue-light/10 to-green-light/20">
-      <div className="container mx-auto px-6 py-8">
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-4">
         {/* Header */}
-        <div className="flex items-center justify-between mb-12">
+        <div className="flex items-center justify-between mb-6">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-purple hover:text-purple hover:bg-purple/10"
+            className="flex items-center gap-2"
           >
             <ArrowLeft size={16} />
             <span className="font-medium">{t.back}</span>
           </Button>
           
-          <div className="p-1 bg-gradient-to-r from-purple to-blue rounded-2xl">
-            <div className="bg-background rounded-xl">
-              <LanguageToggle
-                currentLanguage={language}
-                onLanguageChange={setLanguage}
-              />
-            </div>
-          </div>
+          <LanguageToggle
+            currentLanguage={language}
+            onLanguageChange={setLanguage}
+          />
         </div>
 
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-6">
             {/* Input Form */}
-            <Card className="h-fit border-0 shadow-elegant bg-gradient-to-br from-card via-card to-white backdrop-blur-sm">
-              <CardHeader className="pb-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <Badge className={`${getTransactionColor(transactionType)} text-white px-4 py-2 text-sm font-semibold rounded-xl shadow-md`}>
+            <Card className="h-fit border shadow-sm">
+              <CardHeader className="pb-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <Badge className={`${getTransactionColor(transactionType)} text-white px-3 py-1 text-sm font-semibold rounded-lg`}>
                     {t[transactionType.toLowerCase() as keyof typeof t]}
                   </Badge>
                 </div>
-                <CardTitle className="text-2xl font-bold text-foreground tracking-tight">
+                <CardTitle className="text-xl font-bold text-foreground">
                   {isEditMode ? 'Edit Transaction' : 'Transaction Details'}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-8">
+              <CardContent className="space-y-6">
                 {/* Weight Input */}
                 <BusinessInput
                   id="weight"
@@ -245,13 +241,13 @@ export default function TransactionFlow() {
                   variant="premium"
                   size="lg"
                   onClick={handleCalculate}
-                  className="w-full h-16 text-lg font-semibold tracking-wide shadow-orange"
+                  className="w-full"
                   disabled={
                     !formData.weight || 
                     (transactionType !== 'EXCHANGE' && !formData.rate)
                   }
                 >
-                  <Calculator size={24} className="mr-3" />
+                  <Calculator size={20} className="mr-2" />
                   {isEditMode ? 'Update Transaction' : 'Calculate Transaction'}
                 </Button>
               </CardContent>
@@ -259,30 +255,30 @@ export default function TransactionFlow() {
 
             {/* Live Calculation Display */}
             {liveCalculation && !showSummary && (
-              <Card className="bg-gradient-to-br from-purple/5 via-blue/5 to-green/5 border-2 border-purple/20 shadow-elegant backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle className="text-xl text-center font-bold flex items-center justify-center gap-3 text-purple">
-                    <Calculator size={24} className="text-purple" />
+              <Card className="bg-purple/5 border-2 border-purple/20 shadow-sm">
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-lg text-center font-bold flex items-center justify-center gap-2 text-purple">
+                    <Calculator size={20} className="text-purple" />
                     Live Preview
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="text-center space-y-6">
-                    <div className="p-8 bg-gradient-to-br from-purple/10 to-blue/10 rounded-2xl border-2 border-purple/20 shadow-md">
-                      <div className="text-sm font-medium text-muted-foreground mb-3">Fine Gold Output</div>
-                      <div className="text-4xl font-bold text-purple">{liveCalculation.fineGold} g</div>
+                <CardContent className="space-y-4">
+                  <div className="text-center space-y-4">
+                    <div className="p-6 bg-purple/10 rounded-lg border border-purple/20">
+                      <div className="text-sm font-medium text-muted-foreground mb-2">Fine Gold Output</div>
+                      <div className="text-3xl font-bold text-purple">{liveCalculation.fineGold} g</div>
                     </div>
                     {transactionType !== 'EXCHANGE' && liveCalculation.amount && (
-                      <div className="p-8 bg-gradient-to-br from-green/10 to-emerald/10 rounded-2xl border-2 border-green/20 shadow-md">
-                        <div className="text-sm font-medium text-muted-foreground mb-3">Total Amount</div>
-                        <div className="text-3xl font-bold text-green">₹{liveCalculation.amount.toLocaleString()}</div>
+                      <div className="p-6 bg-green/10 rounded-lg border border-green/20">
+                        <div className="text-sm font-medium text-muted-foreground mb-2">Total Amount</div>
+                        <div className="text-2xl font-bold text-green">₹{liveCalculation.amount.toLocaleString()}</div>
                       </div>
                     )}
                   </div>
-                  <div className="pt-6 text-center">
-                    <div className="inline-flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-purple/10 to-blue/10 rounded-full border border-purple/20">
-                      <div className="w-3 h-3 bg-purple rounded-full animate-pulse"></div>
-                      <span className="text-sm text-purple font-semibold">Updates live as you type</span>
+                  <div className="pt-2 text-center">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple/10 rounded-full border border-purple/20">
+                      <div className="w-2 h-2 bg-purple rounded-full animate-pulse"></div>
+                      <span className="text-xs text-purple font-semibold">Updates live</span>
                     </div>
                   </div>
                 </CardContent>
@@ -291,7 +287,7 @@ export default function TransactionFlow() {
 
             {/* Summary Panel */}
             {showSummary && calculation && (
-              <div className="space-y-8">
+              <div className="space-y-6">
                 <TransactionSummary
                   type={transactionType}
                   weight={parseFloat(formData.weight)}
@@ -305,23 +301,23 @@ export default function TransactionFlow() {
                 />
 
                 {/* Action Buttons */}
-                <div className="flex gap-6">
+                <div className="flex gap-4">
                   <Button
                     variant="success"
                     size="lg"
                     onClick={handleConfirm}
-                    className="flex-1 h-16 text-lg font-semibold tracking-wide shadow-green"
+                    className="flex-1"
                   >
-                    <Check size={24} className="mr-3" />
+                    <Check size={20} className="mr-2" />
                     {isEditMode ? 'Update' : t.confirm}
                   </Button>
                   <Button
                     variant="outline"
                     size="lg"
                     onClick={() => setShowSummary(false)}
-                    className="flex-1 h-16 text-lg font-medium"
+                    className="flex-1"
                   >
-                    <X size={24} className="mr-3" />
+                    <X size={20} className="mr-2" />
                     Edit
                   </Button>
                 </div>

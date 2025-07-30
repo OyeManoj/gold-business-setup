@@ -9,14 +9,9 @@ export function generateReceiptText(transaction: Transaction, language: Language
 
   let receipt = `\n`;
   receipt += `        GOLD EXCHANGE RECEIPT\n`;
-  receipt += `        ═══════════════════════\n\n`;
+  receipt += `        ═══════════════════════\n`;
   receipt += `        ID: ${transaction.id}\n`;
-  receipt += `        ${date} • ${time}\n\n`;
-  
-  receipt += `        FINE WEIGHT: ${transaction.fineGold}G\n`;
-  receipt += `        ═══════════════════════\n\n`;
-  
-  receipt += `        DETAILS\n`;
+  receipt += `        ${date} • ${time}\n`;
   receipt += `        ───────────────────────\n`;
   receipt += `        GROSS WEIGHT      ${String(transaction.weight).padEnd(8)}G\n`;
   receipt += `        PURITY            ${String(transaction.purity).padEnd(8)}%\n`;
@@ -25,6 +20,7 @@ export function generateReceiptText(transaction: Transaction, language: Language
     receipt += `        REDUCTION         ${String(transaction.reduction).padEnd(8)}%\n`;
   }
   
+  receipt += `        ───────────────────────\n`;
   receipt += `        FINE WEIGHT       ${String(transaction.fineGold).padEnd(8)}G\n`;
   
   // Only show payment for non-Exchange transactions

@@ -9,14 +9,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-purple text-white hover:bg-purple/90 hover:shadow-md transform hover:scale-105 shadow-sm border-0",
-        destructive: "bg-red text-white hover:bg-red/90 hover:shadow-md transform hover:scale-105 shadow-sm border-0",
-        outline: "border-2 border-purple/40 bg-white hover:bg-purple/10 hover:border-purple/60 hover:text-purple shadow-sm text-purple/80",
-        secondary: "bg-blue text-white hover:bg-blue/90 hover:shadow-md transform hover:scale-105 shadow-sm border-0",
-        ghost: "hover:bg-purple/20 hover:text-purple rounded-lg text-purple/70 border-0",
-        link: "text-purple hover:text-blue underline-offset-4 hover:underline transition-colors duration-300",
-        success: "bg-green text-white hover:bg-green/90 hover:shadow-md transform hover:scale-105 shadow-sm border-0",
-        premium: "bg-orange text-white hover:bg-orange/90 hover:shadow-md transform hover:scale-105 shadow-md border-0",
+        default: "bg-gold text-navy hover:bg-gold/90 hover:shadow-md transform hover:scale-105 shadow-sm border-0",
+        destructive: "bg-destructive text-white hover:bg-destructive/90 hover:shadow-md transform hover:scale-105 shadow-sm border-0",
+        outline: "border-2 border-gold/60 bg-white hover:bg-gold/10 hover:border-gold hover:text-gold shadow-sm text-gold",
+        secondary: "bg-navy text-gold hover:bg-navy/90 hover:shadow-md transform hover:scale-105 shadow-sm border-0",
+        ghost: "hover:bg-gold/20 hover:text-gold rounded-lg text-gold border-0",
+        link: "text-gold hover:text-gold-dark underline-offset-4 hover:underline transition-colors duration-300",
+        success: "bg-success text-white hover:bg-success/90 hover:shadow-md transform hover:scale-105 shadow-sm border-0",
+        premium: "bg-bronze text-cream hover:bg-bronze/90 hover:shadow-md transform hover:scale-105 shadow-md border-0",
       },
       size: {
         default: "h-9 px-4 py-1",

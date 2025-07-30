@@ -130,10 +130,10 @@ export default function TransactionFlow() {
 
   const getTransactionColor = (type: TransactionType) => {
     switch (type) {
-      case 'EXCHANGE': return 'bg-blue-500';
-      case 'PURCHASE': return 'bg-green-500';
-      case 'SALE': return 'bg-orange-500';
-      default: return 'bg-gray-500';
+      case 'EXCHANGE': return 'bg-gold';
+      case 'PURCHASE': return 'bg-bronze';
+      case 'SALE': return 'bg-navy';
+      default: return 'bg-charcoal';
     }
   };
 
@@ -255,30 +255,30 @@ export default function TransactionFlow() {
 
             {/* Live Calculation Display */}
             {liveCalculation && !showSummary && (
-              <Card className="bg-purple/5 border-2 border-purple/20 shadow-sm">
+              <Card className="bg-gold/5 border-2 border-gold/20 shadow-sm">
                 <CardHeader className="pb-4">
-                  <CardTitle className="text-lg text-center font-bold flex items-center justify-center gap-2 text-purple">
-                    <Calculator size={20} className="text-purple" />
+                  <CardTitle className="text-lg text-center font-bold flex items-center justify-center gap-2 text-gold">
+                    <Calculator size={20} className="text-gold" />
                     Live Preview
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="text-center space-y-4">
-                    <div className="p-6 bg-purple/10 rounded-lg border border-purple/20">
+                    <div className="p-6 bg-gold/10 rounded-lg border border-gold/20">
                       <div className="text-sm font-medium text-muted-foreground mb-2">Fine Gold Output</div>
-                      <div className="text-3xl font-bold text-purple">{liveCalculation.fineGold} g</div>
+                      <div className="text-3xl font-bold text-gold">{liveCalculation.fineGold} g</div>
                     </div>
                     {transactionType !== 'EXCHANGE' && liveCalculation.amount && (
-                      <div className="p-6 bg-green/10 rounded-lg border border-green/20">
+                      <div className="p-6 bg-bronze/10 rounded-lg border border-bronze/20">
                         <div className="text-sm font-medium text-muted-foreground mb-2">Total Amount</div>
-                        <div className="text-2xl font-bold text-green">₹{liveCalculation.amount.toLocaleString()}</div>
+                        <div className="text-2xl font-bold text-bronze">₹{liveCalculation.amount.toLocaleString()}</div>
                       </div>
                     )}
                   </div>
                   <div className="pt-2 text-center">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple/10 rounded-full border border-purple/20">
-                      <div className="w-2 h-2 bg-purple rounded-full animate-pulse"></div>
-                      <span className="text-xs text-purple font-semibold">Updates live</span>
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold/10 rounded-full border border-gold/20">
+                      <div className="w-2 h-2 bg-gold rounded-full animate-pulse"></div>
+                      <span className="text-xs text-gold font-semibold">Updates live</span>
                     </div>
                   </div>
                 </CardContent>

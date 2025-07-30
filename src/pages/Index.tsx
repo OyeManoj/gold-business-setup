@@ -40,10 +40,10 @@ const Index = () => {
       <div className="container mx-auto px-4 py-6">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-purple mb-3">
+          <h1 className="text-3xl font-bold text-navy mb-3">
             {t.appTitle}
           </h1>
-          <div className="w-16 h-0.5 bg-purple mx-auto"></div>
+          <div className="w-16 h-0.5 bg-gold mx-auto"></div>
         </div>
 
         {/* Navigation Controls */}
@@ -69,23 +69,23 @@ const Index = () => {
             {transactions.map((transaction, index) => {
               const Icon = transaction.icon;
               const colors = [
-                { bg: 'bg-blue', text: 'text-blue', shadow: 'shadow-blue' },
-                { bg: 'bg-green', text: 'text-green', shadow: 'shadow-green' },
-                { bg: 'bg-orange', text: 'text-orange', shadow: 'shadow-orange' }
+                { bg: 'bg-gold', text: 'text-gold', shadow: 'shadow-gold' },
+                { bg: 'bg-bronze', text: 'text-bronze', shadow: 'shadow-bronze' },
+                { bg: 'bg-navy', text: 'text-navy', shadow: 'shadow-navy' }
               ];
               const colorScheme = colors[index];
               
               return (
                 <Card
                   key={transaction.type}
-                  className="group cursor-pointer border-2 hover:border-purple/40 bg-white hover:shadow-md transition-all duration-300"
+                  className="group cursor-pointer border-2 hover:border-gold/40 bg-white hover:shadow-md transition-all duration-300"
                   onClick={() => navigate(transaction.path)}
                 >
                   <CardContent className="p-6 text-center">
-                    <div className="w-16 h-16 mx-auto mb-4 rounded-xl bg-muted flex items-center justify-center">
+                    <div className={`w-16 h-16 mx-auto mb-4 rounded-xl ${colorScheme.bg}/10 flex items-center justify-center`}>
                       <Icon size={24} className={`${colorScheme.text} group-hover:scale-110 transition-transform duration-300`} />
                     </div>
-                    <h3 className="text-lg font-semibold mb-2 text-foreground">
+                    <h3 className="text-lg font-semibold mb-2 text-navy">
                       {transaction.title}
                     </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">

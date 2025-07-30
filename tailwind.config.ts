@@ -76,30 +76,18 @@ export default {
 					light: 'hsl(var(--gold-light))',
 					dark: 'hsl(var(--gold-dark))'
 				},
-				blue: {
-					DEFAULT: 'hsl(var(--blue))',
-					light: 'hsl(var(--blue-light))'
+				bronze: {
+					DEFAULT: 'hsl(var(--bronze))',
+					light: 'hsl(var(--bronze-light))'
 				},
-				green: {
-					DEFAULT: 'hsl(var(--green))',
-					light: 'hsl(var(--green-light))'
+				copper: 'hsl(var(--copper))',
+				navy: {
+					DEFAULT: 'hsl(var(--navy))',
+					light: 'hsl(var(--navy-light))'
 				},
-				purple: {
-					DEFAULT: 'hsl(var(--purple))',
-					light: 'hsl(var(--purple-light))'
-				},
-				orange: {
-					DEFAULT: 'hsl(var(--orange))',
-					light: 'hsl(var(--orange-light))'
-				},
-				pink: {
-					DEFAULT: 'hsl(var(--pink))',
-					light: 'hsl(var(--pink-light))'
-				},
-				cyan: 'hsl(var(--cyan))',
-				red: 'hsl(var(--red))',
-				yellow: 'hsl(var(--yellow))',
-				emerald: 'hsl(var(--emerald))'
+				charcoal: 'hsl(var(--charcoal))',
+				champagne: 'hsl(var(--champagne))',
+				cream: 'hsl(var(--cream))'
 			},
 			fontFamily: {
 				'sans': ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],

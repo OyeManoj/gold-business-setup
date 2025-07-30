@@ -7,11 +7,11 @@ export function generateReceiptText(transaction: Transaction, language: Language
   const date = transaction.date.toLocaleDateString();
   const time = transaction.date.toLocaleTimeString();
 
-  let receipt = `\n\n`;
+  let receipt = `\n`;
   receipt += `                RECEIPT\n`;
-  receipt += `        ──────────────────────\n\n`;
+  receipt += `        ──────────────────────\n`;
   receipt += `        ${date}  •  ${time}\n`;
-  receipt += `        ${t[transaction.type.toLowerCase() as keyof typeof t].toUpperCase()}\n\n\n`;
+  receipt += `        ${t[transaction.type.toLowerCase() as keyof typeof t].toUpperCase()}\n\n`;
   
   receipt += `        Weight        ${transaction.weight} ${t.grams}\n`;
   receipt += `        Purity        ${transaction.purity}${t.percent}\n`;
@@ -20,24 +20,24 @@ export function generateReceiptText(transaction: Transaction, language: Language
     receipt += `        Reduction     ${transaction.reduction}${t.percent}\n`;
   }
   
-  receipt += `\n\n`;
+  receipt += `\n`;
   receipt += `        ┌─────────────────────┐\n`;
   receipt += `        │                     │\n`;
   receipt += `        │   ${String(transaction.fineGold).padEnd(15)} ${t.grams}   │\n`;
   receipt += `        │                     │\n`;
   receipt += `        │    FINE GOLD        │\n`;
   receipt += `        │                     │\n`;
-  receipt += `        └─────────────────────┘\n\n`;
+  receipt += `        └─────────────────────┘\n`;
   
   // Only show rate and amount for non-Exchange transactions
   if (transaction.type !== 'EXCHANGE') {
-    receipt += `        Rate          ${t.rupees}${transaction.rate}/${t.grams}\n\n`;
+    receipt += `\n        Rate          ${t.rupees}${transaction.rate}/${t.grams}\n`;
     receipt += `        ━━━━━━━━━━━━━━━━━━━━━━\n`;
     receipt += `        TOTAL         ${t.rupees}${transaction.amount.toLocaleString()}\n`;
-    receipt += `        ━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+    receipt += `        ━━━━━━━━━━━━━━━━━━━━━━\n`;
   }
   
-  receipt += `\n        Thank you\n\n\n`;
+  receipt += `\n        Thank you\n`;
   
   return receipt;
 }

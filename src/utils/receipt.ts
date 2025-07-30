@@ -7,27 +7,35 @@ export function generateReceiptText(transaction: Transaction, language: Language
   const date = transaction.date.toLocaleDateString();
   const time = transaction.date.toLocaleTimeString();
 
-  let receipt = `ID: ${transaction.id}\n`;
-  receipt += `${date} ${time}\n`;
-  receipt += `Type: ${t[transaction.type.toLowerCase() as keyof typeof t]}\n`;
-  receipt += `--------------------------------\n`;
+  let receipt = `\n`;
+  receipt += `        TRANSACTION RECEIPT\n`;
+  receipt += `    ============================\n\n`;
+  receipt += `    ID: ${transaction.id}\n`;
+  receipt += `    Date: ${date}\n`;
+  receipt += `    Time: ${time}\n`;
+  receipt += `    Type: ${t[transaction.type.toLowerCase() as keyof typeof t]}\n\n`;
+  receipt += `    ----------------------------\n`;
+  receipt += `    TRANSACTION DETAILS\n`;
+  receipt += `    ----------------------------\n\n`;
   
-  receipt += `Weight:      ${transaction.weight} ${t.grams}\n`;
-  receipt += `Purity:      ${transaction.purity}${t.percent}\n`;
+  receipt += `    Weight:      ${String(transaction.weight).padEnd(12)} ${t.grams}\n`;
+  receipt += `    Purity:      ${String(transaction.purity).padEnd(12)} ${t.percent}\n`;
   
   if (transaction.reduction !== undefined) {
-    receipt += `Reduction:   ${transaction.reduction}${t.percent}\n`;
+    receipt += `    Reduction:   ${String(transaction.reduction).padEnd(12)} ${t.percent}\n`;
   }
   
-  receipt += `Fine Gold:   ${transaction.fineGold} ${t.grams}\n`;
+  receipt += `    Fine Gold:   ${String(transaction.fineGold).padEnd(12)} ${t.grams}\n\n`;
   
   // Only show rate and amount for non-Exchange transactions
   if (transaction.type !== 'EXCHANGE') {
-    receipt += `Rate:        ${t.rupees}${transaction.rate}/${t.grams}\n`;
-    receipt += `................................\n`;
-    receipt += `TOTAL:       ${t.rupees}${transaction.amount.toLocaleString()}\n`;
-    receipt += `................................\n`;
+    receipt += `    Rate:        ${t.rupees}${String(transaction.rate).padEnd(8)} /${t.grams}\n\n`;
+    receipt += `    ============================\n`;
+    receipt += `    TOTAL:       ${t.rupees}${transaction.amount.toLocaleString()}\n`;
+    receipt += `    ============================\n\n`;
   }
+  
+  receipt += `    Thank you for your business!\n\n`;
   
   return receipt;
 }
@@ -43,13 +51,21 @@ export function printReceipt(receiptText: string): void {
           <style>
             body {
               font-family: 'Courier New', monospace;
-              font-size: 12px;
+              font-size: 14px;
               margin: 0;
               padding: 20px;
               white-space: pre-wrap;
+              line-height: 1.4;
+              max-width: 400px;
+              margin: 0 auto;
+              background: white;
             }
             @media print {
-              body { margin: 0; padding: 10px; }
+              body { 
+                margin: 0; 
+                padding: 15px;
+                font-size: 12px;
+              }
             }
           </style>
         </head>

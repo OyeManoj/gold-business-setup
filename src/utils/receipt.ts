@@ -25,7 +25,12 @@ export function generateReceiptText(transaction: Transaction, language: Language
     receipt += `    Reduction:   ${String(transaction.reduction).padEnd(12)} ${t.percent}\n`;
   }
   
-  receipt += `    Fine Gold:   ${String(transaction.fineGold).padEnd(12)} ${t.grams}\n\n`;
+  receipt += `\n    ┌────────────────────────────┐\n`;
+  receipt += `    │      FINE GOLD RESULT      │\n`;
+  receipt += `    │                            │\n`;
+  receipt += `    │    ${String(transaction.fineGold).padEnd(18)} ${t.grams}  │\n`;
+  receipt += `    │                            │\n`;
+  receipt += `    └────────────────────────────┘\n\n`;
   
   // Only show rate and amount for non-Exchange transactions
   if (transaction.type !== 'EXCHANGE') {

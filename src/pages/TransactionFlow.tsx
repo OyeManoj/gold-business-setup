@@ -39,15 +39,15 @@ export default function TransactionFlow() {
 
   // Live calculation effect
   useEffect(() => {
-    const weight = parseFloat(formData.weight);
-    const purity = transactionType === 'SALE' ? 100 : parseFloat(formData.purity);
-    const rate = parseFloat(formData.rate);
-    const reduction = transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined;
-    const cashPaid = formData.enableCashPayment ? parseFloat(formData.cashPaid) || 0 : undefined;
+    const weight = parseFloat(formData.weight) || 0;
+    const purity = transactionType === 'SALE' ? 100 : (parseFloat(formData.purity) || 0);
+    const rate = parseFloat(formData.rate) || 0;
+    const reduction = transactionType === 'EXCHANGE' ? (parseFloat(formData.reduction) || 0) : 0;
+    const cashPaid = formData.enableCashPayment ? (parseFloat(formData.cashPaid) || 0) : 0;
 
-    // For Exchange: only need weight, purity, and reduction
+    // For Exchange: show calculation even with partial data
     if (transactionType === 'EXCHANGE') {
-      if (weight && weight > 0 && purity && purity > 0 && reduction !== undefined && reduction >= 0) {
+      if (weight > 0 || purity > 0 || reduction >= 0) {
         try {
           const result = calculateTransaction(transactionType, weight, purity, 1, reduction, cashPaid);
           setLiveCalculation(result);
@@ -58,15 +58,13 @@ export default function TransactionFlow() {
         setLiveCalculation(null);
       }
     } else {
-      // For Purchase/Sale: need weight, rate, and for Purchase also purity
-      if (weight && weight > 0 && rate && rate > 0) {
-        if (transactionType === 'SALE' || (purity && purity > 0)) {
-          try {
-            const result = calculateTransaction(transactionType, weight, purity, rate, reduction, cashPaid);
-            setLiveCalculation(result);
-          } catch (error) {
-            setLiveCalculation(null);
-          }
+      // For Purchase/Sale: show calculation with partial data
+      if (weight > 0 || rate > 0 || (transactionType === 'PURCHASE' && purity > 0)) {
+        try {
+          const result = calculateTransaction(transactionType, weight, purity, rate, reduction, cashPaid);
+          setLiveCalculation(result);
+        } catch (error) {
+          setLiveCalculation(null);
         }
       } else {
         setLiveCalculation(null);

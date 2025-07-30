@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { TransactionType } from "@/types/transaction";
+import { ArrowRightLeft, ShoppingCart, DollarSign } from "lucide-react";
 
 interface TransactionSummaryProps {
   type: TransactionType;
@@ -24,77 +24,93 @@ export function TransactionSummary({
   fineGold,
   amount,
   reduction,
-  
   remainingFineGold,
 }: TransactionSummaryProps) {
-  const getTypeColor = (type: TransactionType) => {
+  const getTypeIcon = (type: TransactionType) => {
     switch (type) {
-      case 'EXCHANGE': return 'bg-blue-100 text-blue-800';
-      case 'PURCHASE': return 'bg-green-100 text-green-800';
-      case 'SALE': return 'bg-orange-100 text-orange-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'EXCHANGE': return <ArrowRightLeft className="w-6 h-6 text-warning" />;
+      case 'PURCHASE': return <ShoppingCart className="w-6 h-6 text-success" />;
+      case 'SALE': return <DollarSign className="w-6 h-6 text-primary" />;
+      default: return <ArrowRightLeft className="w-6 h-6 text-muted-foreground" />;
     }
   };
 
+  const getTypeName = (type: TransactionType) => {
+    switch (type) {
+      case 'EXCHANGE': return 'Exchange';
+      case 'PURCHASE': return 'Purchase';
+      case 'SALE': return 'Sale';
+      default: return 'Transaction';
+    }
+  };
+
+  const adjustedPurity = reduction ? purity - (purity * reduction / 100) : purity;
+
   return (
-    <Card className="bg-gradient-to-br from-gold-light/30 to-background border-2 border-gold/20">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-xl">Transaction Summary</CardTitle>
-          <Badge className={getTypeColor(type)}>{type}</Badge>
+    <Card className="w-full max-w-md mx-auto bg-background border border-border shadow-sm">
+      {/* Header */}
+      <CardHeader className="pb-4">
+        <div className="flex items-center gap-3">
+          {getTypeIcon(type)}
+          <CardTitle className="text-lg font-medium text-warning">
+            {getTypeName(type)} Summary
+          </CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Input Details */}
-        <div className="space-y-3">
-          <h4 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">
-            Input Details
-          </h4>
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Weight:</span>
-              <span className="font-medium">{weight} g</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Purity:</span>
-              <span className="font-medium">{purity}%</span>
-            </div>
-            {reduction !== undefined && (
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Reduction:</span>
-                <span className="font-medium">{reduction}%</span>
-              </div>
-            )}
-            {type !== 'EXCHANGE' && (
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Rate:</span>
-                <span className="font-medium">₹{rate}/g</span>
-              </div>
-            )}
+
+      <CardContent className="space-y-6">
+        {/* Fine Weight Output - Highlighted Section */}
+        <div className="bg-warning/10 rounded-lg p-4 text-center">
+          <div className="text-warning text-sm font-medium mb-2">
+            Fine Weight Output
+          </div>
+          <div className="text-3xl font-bold text-warning">
+            {fineGold}g
           </div>
         </div>
 
-        <Separator />
+        {/* Details List */}
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <span className="text-foreground font-medium">Old Weight:</span>
+            <span className="text-foreground font-medium">{weight}g</span>
+          </div>
 
-        {/* Calculated Results */}
-        <div className="space-y-3">
-          <h4 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">
-            Calculated Results
-          </h4>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center p-3 bg-card rounded-lg border">
-              <span className="font-medium">Fine Gold:</span>
-              <span className="text-lg font-bold text-primary">{fineGold} g</span>
-            </div>
-            {type !== 'EXCHANGE' && (
-              <div className="flex justify-between items-center p-3 bg-card rounded-lg border">
-                <span className="font-medium">Total Amount:</span>
-                <span className="text-xl font-bold text-green-600">₹{amount.toLocaleString()}</span>
-              </div>
+          <div className="flex justify-between items-center">
+            <span className="text-foreground font-medium">Original Purity:</span>
+            <span className="text-foreground font-medium">{purity}%</span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="text-foreground font-medium">Reduction:</span>
+            <span className="text-foreground font-medium">{reduction || 0}%</span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="text-foreground font-medium">Adjusted Purity:</span>
+            <span className="text-foreground font-medium">{adjustedPurity.toFixed(1)}%</span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="text-foreground font-medium">Fine Weight:</span>
+            <Badge variant="secondary" className="bg-foreground text-background font-medium">
+              {fineGold}g
+            </Badge>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="text-foreground font-medium">Payment:</span>
+            {type === 'EXCHANGE' ? (
+              <Badge variant="outline" className="border-warning text-warning font-medium">
+                Fine Gold
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="border-success text-success font-medium">
+                ₹{amount.toLocaleString()}
+              </Badge>
             )}
           </div>
         </div>
-
       </CardContent>
     </Card>
   );

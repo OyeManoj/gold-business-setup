@@ -9,14 +9,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gradient-to-r from-purple to-purple-glow text-primary-foreground hover:shadow-elegant transform hover:scale-105 shadow-md",
-        destructive: "bg-gradient-to-r from-destructive to-red-500 text-destructive-foreground hover:shadow-lg transform hover:scale-105 shadow-md",
-        outline: "border border-border/50 bg-background/80 backdrop-blur-sm hover:bg-purple/10 hover:border-purple/40 hover:text-purple shadow-sm hover:shadow-md",
-        secondary: "bg-gradient-to-r from-blue to-cyan text-white hover:shadow-md transform hover:scale-105",
-        ghost: "hover:bg-purple/10 hover:text-purple rounded-xl",
-        link: "text-purple underline-offset-4 hover:underline",
-        success: "bg-gradient-to-r from-green to-emerald-500 text-success-foreground hover:shadow-lg transform hover:scale-105 shadow-md",
-        premium: "bg-gradient-to-r from-orange to-gold text-white hover:shadow-elegant transform hover:scale-105 shadow-lg",
+        default: "bg-gradient-to-r from-purple via-blue to-purple text-white hover:from-purple/90 hover:to-blue/90 hover:shadow-elegant transform hover:scale-105 shadow-lg border-0",
+        destructive: "bg-gradient-to-r from-red-500 via-pink-500 to-red-600 text-white hover:from-red-600 hover:to-pink-600 hover:shadow-lg transform hover:scale-105 shadow-md border-0",
+        outline: "border-2 border-purple/40 bg-white/80 backdrop-blur-sm hover:bg-gradient-to-r hover:from-purple/10 hover:to-blue/10 hover:border-purple/60 hover:text-purple shadow-sm hover:shadow-md text-purple/80",
+        secondary: "bg-gradient-to-r from-blue via-cyan to-blue text-white hover:from-blue/90 hover:to-cyan/90 hover:shadow-md transform hover:scale-105 shadow-md border-0",
+        ghost: "hover:bg-gradient-to-r hover:from-purple/20 hover:to-blue/20 hover:text-purple rounded-xl text-purple/70 border-0",
+        link: "text-purple hover:text-blue underline-offset-4 hover:underline transition-colors duration-300",
+        success: "bg-gradient-to-r from-green via-emerald-400 to-green text-white hover:from-green/90 hover:to-emerald-500 hover:shadow-lg transform hover:scale-105 shadow-md border-0",
+        premium: "bg-gradient-to-r from-orange via-yellow-400 to-gold text-white hover:from-orange/90 hover:to-gold/90 hover:shadow-elegant transform hover:scale-105 shadow-lg border-0",
       },
       size: {
         default: "h-11 px-6 py-2",

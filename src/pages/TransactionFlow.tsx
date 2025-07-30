@@ -132,7 +132,7 @@ export default function TransactionFlow() {
     switch (type) {
       case 'EXCHANGE': return 'bg-gold';
       case 'PURCHASE': return 'bg-coral';
-      case 'SALE': return 'bg-mint';
+      case 'SALE': return 'bg-emerald';
       default: return 'bg-charcoal';
     }
   };
@@ -255,30 +255,30 @@ export default function TransactionFlow() {
 
             {/* Live Calculation Display */}
             {liveCalculation && !showSummary && (
-              <Card className="bg-champagne/70 border-0 shadow-md">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-lg text-center font-semibold flex items-center justify-center gap-2 text-gold">
-                    <Calculator size={20} className="text-gold" />
+              <Card className="bg-white border-2 border-gold/30 shadow-xl">
+                <CardHeader className="pb-6 bg-champagne/50 rounded-t-xl">
+                  <CardTitle className="text-xl text-center font-bold flex items-center justify-center gap-3 text-gold">
+                    <Calculator size={22} className="text-gold drop-shadow-sm" />
                     Live Preview
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="text-center space-y-4">
-                    <div className="p-6 bg-white rounded-xl border-2 border-gold/20 shadow-sm">
-                      <div className="text-sm font-semibold text-muted-foreground mb-2">Fine Gold Output</div>
-                      <div className="text-3xl font-bold text-gold">{liveCalculation.fineGold} g</div>
+                <CardContent className="space-y-6 p-6">
+                  <div className="text-center space-y-5">
+                    <div className="p-8 bg-white rounded-2xl border-3 border-gold/30 shadow-lg">
+                      <div className="text-sm font-bold text-gold mb-3 uppercase tracking-wide">Fine Gold Output</div>
+                      <div className="text-4xl font-bold text-gold drop-shadow-sm">{liveCalculation.fineGold} g</div>
                     </div>
                     {transactionType !== 'EXCHANGE' && liveCalculation.amount && (
-                      <div className="p-6 bg-white rounded-xl border-2 border-coral/20 shadow-sm">
-                        <div className="text-sm font-semibold text-muted-foreground mb-2">Total Amount</div>
-                        <div className="text-2xl font-bold text-coral">₹{liveCalculation.amount.toLocaleString()}</div>
+                      <div className="p-8 bg-white rounded-2xl border-3 border-coral/30 shadow-lg">
+                        <div className="text-sm font-bold text-coral mb-3 uppercase tracking-wide">Total Amount</div>
+                        <div className="text-3xl font-bold text-coral drop-shadow-sm">₹{liveCalculation.amount.toLocaleString()}</div>
                       </div>
                     )}
                   </div>
-                  <div className="pt-2 text-center">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full border-2 border-gold/20 shadow-sm">
-                      <div className="w-2 h-2 bg-gold rounded-full animate-pulse"></div>
-                      <span className="text-sm text-gold font-semibold">Updates live</span>
+                  <div className="pt-4 text-center">
+                    <div className="inline-flex items-center gap-3 px-5 py-3 bg-gold/10 rounded-full border-2 border-gold/30 shadow-md">
+                      <div className="w-3 h-3 bg-gold rounded-full animate-pulse shadow-sm"></div>
+                      <span className="text-sm text-gold font-bold uppercase tracking-wide">Updates live</span>
                     </div>
                   </div>
                 </CardContent>

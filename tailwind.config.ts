@@ -107,6 +107,14 @@ export default {
 				mint: {
 					DEFAULT: 'hsl(var(--mint))',
 					light: 'hsl(var(--mint-light))'
+				},
+				emerald: {
+					DEFAULT: 'hsl(var(--emerald))',
+					light: 'hsl(var(--emerald-light))'
+				},
+				violet: {
+					DEFAULT: 'hsl(var(--violet))',
+					light: 'hsl(var(--violet-light))'
 				}
 			},
 			fontFamily: {

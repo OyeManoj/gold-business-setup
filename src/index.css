@@ -18,56 +18,60 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 30 20% 25%;
 
-    --primary: 45 85% 65%;
+    --primary: 45 95% 60%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 45 75% 75%;
+    --primary-glow: 45 85% 70%;
 
-    --secondary: 210 40% 85%;
-    --secondary-foreground: 30 25% 20%;
+    --secondary: 210 60% 80%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 95%;
-    --muted-foreground: 30 15% 45%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 30 20% 40%;
 
-    --accent: 45 25% 94%;
-    --accent-foreground: 30 25% 20%;
+    --accent: 45 40% 90%;
+    --accent-foreground: 30 30% 15%;
 
-    --destructive: 0 75% 70%;
-    --destructive-foreground: 0 75% 10%;
+    --destructive: 0 85% 65%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 88%;
-    --input: 45 20% 97%;
-    --ring: 45 85% 65%;
+    --border: 0 0% 85%;
+    --input: 45 30% 96%;
+    --ring: 45 95% 60%;
 
-    --success: 120 50% 60%;
+    --success: 120 65% 55%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 85% 65%;
-    --warning-foreground: 30 25% 15%;
+    --warning: 38 95% 60%;
+    --warning-foreground: 0 0% 100%;
 
-    /* Vibrant but elegant gold business colors */
-    --gold: 45 85% 65%;
-    --gold-light: 48 75% 85%;
-    --gold-dark: 42 75% 55%;
-    --bronze: 30 55% 70%;
-    --bronze-light: 30 45% 82%;
-    --copper: 25 65% 75%;
-    --navy: 210 50% 65%;
-    --navy-light: 210 40% 78%;
-    --charcoal: 0 0% 65%;
-    --champagne: 45 35% 92%;
-    --cream: 45 25% 97%;
+    /* Bold, vibrant gold business colors that pop on white */
+    --gold: 45 95% 60%;
+    --gold-light: 48 85% 80%;
+    --gold-dark: 42 85% 50%;
+    --bronze: 30 70% 65%;
+    --bronze-light: 30 60% 78%;
+    --copper: 25 80% 70%;
+    --navy: 210 70% 60%;
+    --navy-light: 210 60% 75%;
+    --charcoal: 0 0% 60%;
+    --champagne: 45 50% 88%;
+    --cream: 45 35% 95%;
 
-    /* More vibrant accent colors */
-    --sage: 120 35% 70%;
-    --sage-light: 120 25% 85%;
-    --lavender: 260 40% 75%;
-    --lavender-light: 260 30% 87%;
-    --peach: 20 65% 78%;
-    --peach-light: 20 50% 90%;
-    --coral: 10 70% 75%;
-    --coral-light: 10 55% 88%;
-    --mint: 150 40% 75%;
-    --mint-light: 150 30% 88%;
+    /* Vibrant accent colors that really pop */
+    --sage: 120 50% 65%;
+    --sage-light: 120 40% 80%;
+    --lavender: 260 60% 70%;
+    --lavender-light: 260 50% 83%;
+    --peach: 20 80% 73%;
+    --peach-light: 20 70% 87%;
+    --coral: 10 85% 70%;
+    --coral-light: 10 75% 85%;
+    --mint: 150 60% 70%;
+    --mint-light: 150 50% 85%;
+    --emerald: 160 70% 55%;
+    --emerald-light: 160 60% 75%;
+    --violet: 270 65% 65%;
+    --violet-light: 270 55% 80%;
 
     /* Modern spacing and layout */
     --radius: 8px;
@@ -78,14 +82,14 @@ All colors MUST be HSL.
     --spacing-xl: 32px;
     --spacing-2xl: 48px;
 
-    /* Gentle shadows for minimal design */
-    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.03);
-    --shadow-md: 0 2px 8px -2px hsl(0 0% 0% / 0.06);
-    --shadow-lg: 0 8px 20px -5px hsl(0 0% 0% / 0.08);
-    --shadow-elegant: 0 4px 16px hsl(0 0% 0% / 0.04);
-    --shadow-gold: 0 4px 16px hsl(45 60% 75% / 0.08);
-    --shadow-bronze: 0 4px 16px hsl(30 30% 80% / 0.06);
-    --shadow-navy: 0 4px 16px hsl(210 20% 80% / 0.08);
+    /* Bold shadows that make elements pop off white background */
+    --shadow-sm: 0 2px 4px 0 hsl(0 0% 0% / 0.08);
+    --shadow-md: 0 4px 12px -2px hsl(0 0% 0% / 0.12);
+    --shadow-lg: 0 12px 24px -6px hsl(0 0% 0% / 0.15);
+    --shadow-elegant: 0 8px 20px hsl(0 0% 0% / 0.10);
+    --shadow-gold: 0 8px 20px hsl(45 95% 60% / 0.25);
+    --shadow-coral: 0 8px 20px hsl(10 85% 70% / 0.20);
+    --shadow-mint: 0 8px 20px hsl(150 60% 70% / 0.20);
 
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

@@ -40,10 +40,10 @@ const Index = () => {
       <div className="container mx-auto px-6 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-3xl font-medium text-foreground mb-4">
+          <h1 className="text-4xl font-bold text-gold mb-4 drop-shadow-sm">
             {t.appTitle}
           </h1>
-          <div className="w-12 h-px bg-gold/40 mx-auto"></div>
+          <div className="w-16 h-1 bg-gold/80 mx-auto rounded-full shadow-sm"></div>
         </div>
 
         {/* Navigation Controls */}
@@ -69,26 +69,26 @@ const Index = () => {
             {transactions.map((transaction, index) => {
               const Icon = transaction.icon;
               const colors = [
-                { bg: 'bg-gold', text: 'text-gold', accent: 'bg-gold-light', hover: 'hover:bg-gold/10' },
-                { bg: 'bg-coral', text: 'text-coral', accent: 'bg-coral-light', hover: 'hover:bg-coral/10' },
-                { bg: 'bg-mint', text: 'text-mint', accent: 'bg-mint-light', hover: 'hover:bg-mint/10' }
+                { bg: 'bg-gold', text: 'text-gold', accent: 'bg-gold', hover: 'hover:bg-gold/5', shadow: 'shadow-gold' },
+                { bg: 'bg-coral', text: 'text-coral', accent: 'bg-coral', hover: 'hover:bg-coral/5', shadow: 'shadow-coral' },
+                { bg: 'bg-emerald', text: 'text-emerald', accent: 'bg-emerald', hover: 'hover:bg-emerald/5', shadow: 'shadow-mint' }
               ];
               const colorScheme = colors[index];
               
               return (
                 <Card
                   key={transaction.type}
-                  className={`group cursor-pointer border-0 bg-white hover:shadow-lg transition-all duration-300 shadow-sm ${colorScheme.hover}`}
+                  className={`group cursor-pointer border-2 border-white bg-white hover:shadow-xl transition-all duration-300 shadow-lg hover:border-${colorScheme.accent}/20 ${colorScheme.hover} hover:-translate-y-1`}
                   onClick={() => navigate(transaction.path)}
                 >
                   <CardContent className="p-8 text-center">
-                    <div className={`w-18 h-18 mx-auto mb-6 rounded-2xl ${colorScheme.accent}/60 flex items-center justify-center group-hover:${colorScheme.accent}/80 group-hover:scale-105 transition-all duration-300`}>
-                      <Icon size={24} className={`${colorScheme.text} group-hover:scale-110 transition-transform duration-300`} />
+                    <div className={`w-20 h-20 mx-auto mb-6 rounded-3xl ${colorScheme.accent}/10 border-2 border-${colorScheme.accent}/20 flex items-center justify-center group-hover:${colorScheme.accent}/20 group-hover:scale-110 group-hover:border-${colorScheme.accent}/40 transition-all duration-300 shadow-md`}>
+                      <Icon size={28} className={`${colorScheme.text} group-hover:scale-110 transition-transform duration-300 drop-shadow-sm`} />
                     </div>
-                    <h3 className={`text-base font-semibold mb-3 text-foreground group-hover:${colorScheme.text} transition-colors duration-300`}>
+                    <h3 className={`text-lg font-bold mb-3 text-foreground group-hover:${colorScheme.text} transition-colors duration-300`}>
                       {transaction.title}
                     </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+                    <p className="text-sm text-muted-foreground leading-relaxed group-hover:text-muted-foreground/80 transition-colors duration-300">
                       {transaction.description}
                     </p>
                   </CardContent>

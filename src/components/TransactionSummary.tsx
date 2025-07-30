@@ -65,10 +65,12 @@ export function TransactionSummary({
                 <span className="font-medium">{reduction}%</span>
               </div>
             )}
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Rate:</span>
-              <span className="font-medium">₹{rate}/g</span>
-            </div>
+            {type !== 'EXCHANGE' && (
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Rate:</span>
+                <span className="font-medium">₹{rate}/g</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -84,10 +86,12 @@ export function TransactionSummary({
               <span className="font-medium">Fine Gold:</span>
               <span className="text-lg font-bold text-primary">{fineGold} g</span>
             </div>
-            <div className="flex justify-between items-center p-3 bg-card rounded-lg border">
-              <span className="font-medium">Total Amount:</span>
-              <span className="text-xl font-bold text-green-600">₹{amount.toLocaleString()}</span>
-            </div>
+            {type !== 'EXCHANGE' && (
+              <div className="flex justify-between items-center p-3 bg-card rounded-lg border">
+                <span className="font-medium">Total Amount:</span>
+                <span className="text-xl font-bold text-green-600">₹{amount.toLocaleString()}</span>
+              </div>
+            )}
           </div>
         </div>
 

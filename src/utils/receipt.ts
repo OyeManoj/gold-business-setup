@@ -45,24 +45,32 @@ export function printReceipt(receiptText: string): void {
           <style>
             body {
               font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-              font-size: 14px;
+              font-size: 9px;
               font-weight: 300;
               margin: 0;
-              padding: 40px 20px;
+              padding: 2px;
               white-space: pre-wrap;
-              line-height: 1.6;
-              max-width: 350px;
-              margin: 0 auto;
+              line-height: 1.1;
+              width: 3in;
+              height: 3in;
               background: #ffffff;
-              color: #2c2c2c;
-              letter-spacing: 0.5px;
+              color: #000000;
+              letter-spacing: 0.2px;
+              overflow: hidden;
             }
             @media print {
               body { 
                 margin: 0; 
-                padding: 20px;
-                font-size: 12px;
+                padding: 2px;
+                font-size: 8px;
+                line-height: 1.0;
                 background: white;
+                width: 3in;
+                height: 3in;
+              }
+              @page {
+                size: 3in 3in;
+                margin: 0;
               }
             }
           </style>

@@ -9,14 +9,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gradient-to-r from-primary to-primary-glow text-primary-foreground hover:shadow-elegant transform hover:scale-105 shadow-md",
-        destructive: "bg-gradient-to-r from-destructive to-destructive/90 text-destructive-foreground hover:shadow-lg transform hover:scale-105 shadow-md",
-        outline: "border border-border/50 bg-background/50 backdrop-blur-sm hover:bg-muted/50 hover:border-primary/30 hover:text-primary shadow-sm hover:shadow-md",
-        secondary: "bg-gradient-to-r from-secondary to-muted text-secondary-foreground hover:shadow-md transform hover:scale-105",
-        ghost: "hover:bg-accent/50 hover:text-accent-foreground rounded-xl",
-        link: "text-primary underline-offset-4 hover:underline",
-        success: "bg-gradient-to-r from-success to-success/90 text-success-foreground hover:shadow-lg transform hover:scale-105 shadow-md",
-        premium: "bg-gradient-to-r from-gold to-gold-dark text-white hover:shadow-elegant transform hover:scale-105 shadow-lg",
+        default: "bg-gradient-to-r from-purple to-purple-glow text-primary-foreground hover:shadow-elegant transform hover:scale-105 shadow-md",
+        destructive: "bg-gradient-to-r from-destructive to-red-500 text-destructive-foreground hover:shadow-lg transform hover:scale-105 shadow-md",
+        outline: "border border-border/50 bg-background/80 backdrop-blur-sm hover:bg-purple/10 hover:border-purple/40 hover:text-purple shadow-sm hover:shadow-md",
+        secondary: "bg-gradient-to-r from-blue to-cyan text-white hover:shadow-md transform hover:scale-105",
+        ghost: "hover:bg-purple/10 hover:text-purple rounded-xl",
+        link: "text-purple underline-offset-4 hover:underline",
+        success: "bg-gradient-to-r from-green to-emerald-500 text-success-foreground hover:shadow-lg transform hover:scale-105 shadow-md",
+        premium: "bg-gradient-to-r from-orange to-gold text-white hover:shadow-elegant transform hover:scale-105 shadow-lg",
       },
       size: {
         default: "h-11 px-6 py-2",

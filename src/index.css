@@ -8,35 +8,35 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Modern minimal color palette */
-    --background: 0 0% 99%;
-    --foreground: 225 39% 10%;
+    /* Vibrant colorful palette */
+    --background: 240 20% 98%;
+    --foreground: 240 19% 16%;
 
     --card: 0 0% 100%;
-    --card-foreground: 225 39% 10%;
+    --card-foreground: 240 19% 16%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 225 39% 10%;
+    --popover-foreground: 240 19% 16%;
 
-    --primary: 225 39% 10%;
+    --primary: 262 83% 58%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 225 39% 25%;
+    --primary-glow: 262 83% 70%;
 
-    --secondary: 210 40% 98%;
-    --secondary-foreground: 225 39% 10%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 240 19% 16%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 20% 50%;
+    --muted: 220 14% 95%;
+    --muted-foreground: 240 5% 45%;
 
-    --accent: 210 40% 94%;
-    --accent-foreground: 225 39% 10%;
+    --accent: 220 14% 92%;
+    --accent-foreground: 240 19% 16%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 225 39% 10%;
+    --ring: 262 83% 58%;
 
     --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
@@ -44,13 +44,27 @@ All colors MUST be HSL.
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
-    /* Gold accent colors for financial app */
+    /* Vibrant color scheme */
+    --blue: 217 91% 60%;
+    --blue-light: 217 91% 85%;
+    --green: 142 69% 58%;
+    --green-light: 142 69% 85%;
+    --purple: 262 83% 58%;
+    --purple-light: 262 83% 85%;
+    --orange: 25 95% 53%;
+    --orange-light: 25 95% 85%;
+    --pink: 330 81% 60%;
+    --pink-light: 330 81% 85%;
+    --cyan: 189 85% 51%;
+    --cyan-light: 189 85% 85%;
+
+    /* Gold accent colors */
     --gold: 45 100% 51%;
     --gold-light: 48 100% 88%;
     --gold-dark: 42 88% 42%;
 
     /* Modern spacing and layout */
-    --radius: 12px;
+    --radius: 16px;
     --spacing-xs: 4px;
     --spacing-sm: 8px;
     --spacing-md: 16px;
@@ -58,16 +72,22 @@ All colors MUST be HSL.
     --spacing-xl: 32px;
     --spacing-2xl: 48px;
 
-    /* Elegant shadows */
-    --shadow-sm: 0 1px 3px 0 hsl(225 39% 10% / 0.08);
-    --shadow-md: 0 4px 12px -2px hsl(225 39% 10% / 0.12);
-    --shadow-lg: 0 20px 25px -5px hsl(225 39% 10% / 0.15);
-    --shadow-elegant: 0 8px 30px hsl(225 39% 10% / 0.12);
+    /* Colorful shadows */
+    --shadow-sm: 0 1px 3px 0 hsl(262 83% 58% / 0.12);
+    --shadow-md: 0 4px 12px -2px hsl(262 83% 58% / 0.15);
+    --shadow-lg: 0 20px 25px -5px hsl(262 83% 58% / 0.18);
+    --shadow-elegant: 0 8px 30px hsl(262 83% 58% / 0.15);
+    --shadow-blue: 0 8px 30px hsl(217 91% 60% / 0.2);
+    --shadow-green: 0 8px 30px hsl(142 69% 58% / 0.2);
+    --shadow-orange: 0 8px 30px hsl(25 95% 53% / 0.2);
 
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    /* Vibrant gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--purple)), hsl(var(--pink)));
+    --gradient-blue: linear-gradient(135deg, hsl(var(--blue)), hsl(var(--cyan)));
+    --gradient-green: linear-gradient(135deg, hsl(var(--green)), hsl(142 69% 45%));
+    --gradient-orange: linear-gradient(135deg, hsl(var(--orange)), hsl(var(--gold)));
+    --gradient-rainbow: linear-gradient(135deg, hsl(var(--purple)), hsl(var(--blue)), hsl(var(--green)), hsl(var(--orange)));
     --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(var(--muted)));
-    --gradient-gold: linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)));
 
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

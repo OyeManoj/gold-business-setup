@@ -10,7 +10,6 @@ export interface Transaction {
   
   fineGold: number;
   amount: number;
-  profit?: number; // For exchange transactions
   remainingFineGold?: number;
   date: Date;
 }
@@ -18,6 +17,5 @@ export interface Transaction {
 export interface CalculationResult {
   fineGold: number;
   amount: number;
-  profit?: number; // For exchange transactions
   remainingFineGold?: number;
 }

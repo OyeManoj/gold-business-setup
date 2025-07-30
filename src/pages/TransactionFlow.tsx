@@ -336,12 +336,6 @@ export default function TransactionFlow() {
                       <div className="text-sm text-muted-foreground">Fine Gold</div>
                       <div className="text-2xl font-bold text-primary">{liveCalculation.fineGold} g</div>
                     </div>
-                    {transactionType !== 'EXCHANGE' && (
-                      <div className="p-4 bg-card rounded-lg border">
-                        <div className="text-sm text-muted-foreground">Amount</div>
-                        <div className="text-3xl font-bold text-green-600">₹{liveCalculation.amount.toLocaleString()}</div>
-                      </div>
-                    )}
                     {liveCalculation.remainingFineGold && liveCalculation.remainingFineGold > 0 && (
                       <div className="p-4 bg-card rounded-lg border">
                         <div className="text-sm text-muted-foreground">Remaining Fine Gold</div>

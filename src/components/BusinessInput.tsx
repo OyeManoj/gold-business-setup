@@ -12,7 +12,7 @@ interface BusinessInputProps extends React.InputHTMLAttributes<HTMLInputElement>
 export const BusinessInput = forwardRef<HTMLInputElement, BusinessInputProps>(
   ({ label, unit, error, className, ...props }, ref) => {
     return (
-      <div className="space-y-2">
+      <div className="space-y-3">
         <Label htmlFor={props.id} className="text-sm font-medium text-foreground">
           {label}
         </Label>
@@ -20,14 +20,14 @@ export const BusinessInput = forwardRef<HTMLInputElement, BusinessInputProps>(
           <Input
             ref={ref}
             className={cn(
-              "h-12 text-lg font-medium border-2 focus:border-primary",
+              "h-12 text-base font-normal border-2 rounded-xl focus:border-primary transition-colors",
               error && "border-destructive",
               className
             )}
             {...props}
           />
           {unit && (
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+            <div className="absolute inset-y-0 right-0 flex items-center pr-4">
               <span className="text-sm font-medium text-muted-foreground">
                 {unit}
               </span>
@@ -35,7 +35,7 @@ export const BusinessInput = forwardRef<HTMLInputElement, BusinessInputProps>(
           )}
         </div>
         {error && (
-          <p className="text-sm text-destructive">{error}</p>
+          <p className="text-sm text-destructive font-medium">{error}</p>
         )}
       </div>
     );

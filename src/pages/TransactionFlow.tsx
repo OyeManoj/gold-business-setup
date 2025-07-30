@@ -169,12 +169,12 @@ export default function TransactionFlow() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-gold-light/20">
-      <div className="container mx-auto px-4 py-6">
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-6 py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-12">
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
             onClick={() => navigate('/')}
             className="flex items-center gap-2"
@@ -189,19 +189,19 @@ export default function TransactionFlow() {
           />
         </div>
 
-        <div className="max-w-4xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12">
             {/* Input Form */}
             <Card className="h-fit">
               <CardHeader>
-                <div className="flex items-center gap-3">
-                  <Badge className={`${getTransactionColor(transactionType)} text-white`}>
+                <div className="flex items-center gap-3 mb-4">
+                  <Badge className={`${getTransactionColor(transactionType)} text-white px-3 py-1`}>
                     {t[transactionType.toLowerCase() as keyof typeof t]}
                   </Badge>
-                  <CardTitle className="text-xl">Transaction Details</CardTitle>
                 </div>
+                <CardTitle className="text-xl font-medium">Transaction Details</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-8">
                 {/* Weight Input */}
                 <BusinessInput
                   id="weight"
@@ -268,10 +268,10 @@ export default function TransactionFlow() {
 
                 {/* Calculate Button */}
                 <Button
-                  variant="gold"
+                  variant="default"
                   size="lg"
                   onClick={handleCalculate}
-                  className="w-full h-12 text-lg"
+                  className="w-full h-14 text-base font-medium"
                   disabled={
                     !formData.weight || 
                     (transactionType !== 'EXCHANGE' && !formData.rate)
@@ -285,24 +285,24 @@ export default function TransactionFlow() {
 
             {/* Live Calculation Display */}
             {liveCalculation && !showSummary && (
-              <Card className="bg-gradient-to-br from-gold-light/10 to-background border border-gold/20">
+              <Card className="bg-secondary/30 border-dashed">
                 <CardHeader>
-                  <CardTitle className="text-lg text-center">Live Calculation</CardTitle>
+                  <CardTitle className="text-lg text-center font-medium">Live Preview</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="text-center space-y-3">
-                    <div className="p-4 bg-card rounded-lg border">
-                      <div className="text-sm text-muted-foreground">Fine Gold</div>
-                      <div className="text-2xl font-bold text-primary">{liveCalculation.fineGold} g</div>
+                <CardContent className="space-y-6">
+                  <div className="text-center space-y-4">
+                    <div className="p-6 bg-card rounded-xl border">
+                      <div className="text-sm text-muted-foreground mb-2">Fine Gold</div>
+                      <div className="text-2xl font-medium text-primary">{liveCalculation.fineGold} g</div>
                     </div>
                     {liveCalculation.remainingFineGold && liveCalculation.remainingFineGold > 0 && (
-                      <div className="p-4 bg-card rounded-lg border">
-                        <div className="text-sm text-muted-foreground">Remaining Fine Gold</div>
-                        <div className="text-xl font-bold text-orange-600">{liveCalculation.remainingFineGold} g</div>
+                      <div className="p-6 bg-card rounded-xl border">
+                        <div className="text-sm text-muted-foreground mb-2">Remaining Fine Gold</div>
+                        <div className="text-xl font-medium text-orange-600">{liveCalculation.remainingFineGold} g</div>
                       </div>
                     )}
                   </div>
-                  <div className="pt-4 text-center text-sm text-muted-foreground">
+                  <div className="pt-4 text-center text-xs text-muted-foreground">
                     Values update as you type
                   </div>
                 </CardContent>
@@ -311,7 +311,7 @@ export default function TransactionFlow() {
 
             {/* Summary Panel */}
             {showSummary && calculation && (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 <TransactionSummary
                   type={transactionType}
                   weight={parseFloat(formData.weight)}
@@ -326,12 +326,12 @@ export default function TransactionFlow() {
                 />
 
                 {/* Action Buttons */}
-                <div className="flex gap-4">
+                <div className="flex gap-6">
                   <Button
                     variant="success"
                     size="lg"
                     onClick={handleConfirm}
-                    className="flex-1 h-14 text-lg"
+                    className="flex-1 h-14 text-base font-medium"
                   >
                     <Check size={24} className="mr-2" />
                     {t.confirm}
@@ -340,7 +340,7 @@ export default function TransactionFlow() {
                     variant="outline"
                     size="lg"
                     onClick={() => setShowSummary(false)}
-                    className="flex-1 h-14 text-lg"
+                    className="flex-1 h-14 text-base"
                   >
                     <X size={24} className="mr-2" />
                     Edit

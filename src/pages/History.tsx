@@ -31,11 +31,11 @@ export default function History() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-gold-light">
-      <div className="container mx-auto px-4 py-6">
-        <div className="flex items-center justify-between mb-6">
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-6 py-8">
+        <div className="flex items-center justify-between mb-12">
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
             onClick={() => navigate('/')}
             className="flex items-center gap-2"
@@ -50,10 +50,10 @@ export default function History() {
           />
         </div>
 
-        <Card className="max-w-2xl mx-auto">
+        <Card className="max-w-4xl mx-auto">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="text-2xl">{t.history}</CardTitle>
+              <CardTitle className="text-2xl font-medium">{t.history}</CardTitle>
               {transactions.length > 0 && (
                 <Button
                   variant="destructive"
@@ -80,10 +80,10 @@ export default function History() {
                 {transactions.map((transaction) => (
                   <div
                     key={transaction.id}
-                    className="p-4 border rounded-lg bg-card hover:bg-accent/50 transition-colors"
+                    className="p-6 border rounded-xl bg-card hover:bg-accent/50 transition-colors"
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-semibold text-lg">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="font-medium text-lg">
                         {formatTransactionType(transaction.type)}
                       </span>
                       <span className="text-sm text-muted-foreground">
@@ -91,7 +91,7 @@ export default function History() {
                       </span>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div className="grid grid-cols-2 gap-6 text-sm">
                       <div>
                         <span className="text-muted-foreground">{t.weight}: </span>
                         <span className="font-medium">{transaction.weight} {t.grams}</span>

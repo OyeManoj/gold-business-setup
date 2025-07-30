@@ -9,7 +9,7 @@ export function generateReceiptText(transaction: Transaction, language: Language
 
   // Helper function for proper alignment
   const formatLine = (label: string, value: string, unit: string = '') => {
-    const totalWidth = 23;
+    const totalWidth = 19; // Reduced to fit container better
     const valueUnit = value + unit;
     const spaces = totalWidth - label.length - valueUnit.length;
     return `        ${label}${' '.repeat(Math.max(1, spaces))}${valueUnit}\n`;

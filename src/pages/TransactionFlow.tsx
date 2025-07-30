@@ -32,9 +32,35 @@ export default function TransactionFlow() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showSummary, setShowSummary] = useState(false);
+  const [liveCalculation, setLiveCalculation] = useState<any>(null);
 
   const t = useTranslation(language);
   const transactionType = type?.toUpperCase() as TransactionType;
+
+  // Live calculation effect
+  useEffect(() => {
+    const weight = parseFloat(formData.weight);
+    const purity = transactionType === 'SALE' ? 100 : parseFloat(formData.purity);
+    const rate = parseFloat(formData.rate);
+    const reduction = transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined;
+    const cashPaid = formData.enableCashPayment ? parseFloat(formData.cashPaid) || 0 : undefined;
+
+    // Only calculate if we have the minimum required values
+    if (weight && weight > 0 && rate && rate > 0) {
+      if (transactionType === 'SALE' || (purity && purity > 0)) {
+        if (transactionType !== 'EXCHANGE' || (reduction !== undefined && reduction >= 0)) {
+          try {
+            const result = calculateTransaction(transactionType, weight, purity, rate, reduction, cashPaid);
+            setLiveCalculation(result);
+          } catch (error) {
+            setLiveCalculation(null);
+          }
+        }
+      }
+    } else {
+      setLiveCalculation(null);
+    }
+  }, [formData, transactionType]);
 
   // Validation
   const validateForm = () => {
@@ -276,6 +302,36 @@ export default function TransactionFlow() {
                 </Button>
               </CardContent>
             </Card>
+
+            {/* Live Calculation Display */}
+            {liveCalculation && !showSummary && (
+              <Card className="bg-gradient-to-br from-gold-light/10 to-background border border-gold/20">
+                <CardHeader>
+                  <CardTitle className="text-lg text-center">Live Calculation</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="text-center space-y-3">
+                    <div className="p-4 bg-card rounded-lg border">
+                      <div className="text-sm text-muted-foreground">Fine Gold</div>
+                      <div className="text-2xl font-bold text-primary">{liveCalculation.fineGold} g</div>
+                    </div>
+                    <div className="p-4 bg-card rounded-lg border">
+                      <div className="text-sm text-muted-foreground">Amount</div>
+                      <div className="text-3xl font-bold text-green-600">₹{liveCalculation.amount.toLocaleString()}</div>
+                    </div>
+                    {liveCalculation.remainingFineGold && liveCalculation.remainingFineGold > 0 && (
+                      <div className="p-4 bg-card rounded-lg border">
+                        <div className="text-sm text-muted-foreground">Remaining Fine Gold</div>
+                        <div className="text-xl font-bold text-orange-600">{liveCalculation.remainingFineGold} g</div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="pt-4 text-center text-sm text-muted-foreground">
+                    Values update as you type
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Summary Panel */}
             {showSummary && calculation && (

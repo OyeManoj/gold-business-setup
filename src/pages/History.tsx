@@ -86,10 +86,6 @@ export default function History() {
                 onFilterChange={updateFilter}
               />
             )}
-            
-            {filteredTransactions.length > 0 && (
-              <TransactionSummaryCard summary={summary} />
-            )}
           </CardHeader>
           
           <CardContent>
@@ -100,55 +96,75 @@ export default function History() {
                 </p>
               </div>
             ) : (
-              <div className="space-y-4">
-                {filteredTransactions.map((transaction) => (
-                  <div
-                    key={transaction.id}
-                    className="p-6 border rounded-xl bg-card hover:bg-accent/50 transition-colors"
-                  >
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="font-medium text-lg">
-                        {formatTransactionType(transaction.type, language)}
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleEditTransaction(transaction)}
-                          className="flex items-center gap-1"
+              <>
+                {/* Transaction Table */}
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="border-b-2 border-border">
+                        <th className="text-left py-3 px-2 font-semibold text-foreground">Date & Time</th>
+                        <th className="text-left py-3 px-2 font-semibold text-foreground">Type</th>
+                        <th className="text-right py-3 px-2 font-semibold text-foreground">Weight (g)</th>
+                        <th className="text-right py-3 px-2 font-semibold text-foreground">Purity (%)</th>
+                        <th className="text-right py-3 px-2 font-semibold text-foreground">Rate (₹/g)</th>
+                        <th className="text-right py-3 px-2 font-semibold text-foreground">Fine Gold (g)</th>
+                        <th className="text-right py-3 px-2 font-semibold text-foreground">Amount (₹)</th>
+                        <th className="text-center py-3 px-2 font-semibold text-foreground">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredTransactions.map((transaction, index) => (
+                        <tr 
+                          key={transaction.id}
+                          className={`border-b border-border hover:bg-muted/30 transition-colors ${
+                            index % 2 === 0 ? 'bg-background' : 'bg-muted/10'
+                          }`}
                         >
-                          <Edit size={14} />
-                          Edit
-                        </Button>
-                        <span className="text-sm text-muted-foreground">
-                          {transaction.date.toLocaleDateString()} {transaction.date.toLocaleTimeString()}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-6 text-sm">
-                      <div>
-                        <span className="text-muted-foreground">{t.weight}: </span>
-                        <span className="font-medium">{transaction.weight} {t.grams}</span>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">{t.fineGold}: </span>
-                        <span className="font-medium">{transaction.fineGold} {t.grams}</span>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">{t.rate}: </span>
-                        <span className="font-medium">{t.rupees}{transaction.rate}/{t.grams}</span>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">{t.amount}: </span>
-                        <span className="font-bold text-lg text-primary">
-                          {t.rupees}{transaction.amount}
-                        </span>
-                      </div>
-                    </div>
+                          <td className="py-4 px-2">
+                            <div className="text-sm">
+                              <div className="font-medium">{transaction.date.toLocaleDateString()}</div>
+                              <div className="text-muted-foreground text-xs">{transaction.date.toLocaleTimeString()}</div>
+                            </div>
+                          </td>
+                          <td className="py-4 px-2">
+                            <span className={`inline-flex px-2 py-1 rounded-md text-xs font-medium ${
+                              transaction.type === 'PURCHASE' 
+                                ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' 
+                                : transaction.type === 'SALE'
+                                ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                                : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
+                            }`}>
+                              {formatTransactionType(transaction.type, language)}
+                            </span>
+                          </td>
+                          <td className="py-4 px-2 text-right font-mono text-sm">{transaction.weight.toFixed(3)}</td>
+                          <td className="py-4 px-2 text-right font-mono text-sm">{transaction.purity.toFixed(2)}</td>
+                          <td className="py-4 px-2 text-right font-mono text-sm">{transaction.rate.toLocaleString()}</td>
+                          <td className="py-4 px-2 text-right font-mono text-sm font-medium">{transaction.fineGold.toFixed(3)}</td>
+                          <td className="py-4 px-2 text-right font-mono text-sm font-bold">₹{transaction.amount.toLocaleString()}</td>
+                          <td className="py-4 px-2 text-center">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleEditTransaction(transaction)}
+                              className="h-8 w-8 p-0"
+                            >
+                              <Edit size={14} />
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Summary at the bottom */}
+                {filteredTransactions.length > 0 && (
+                  <div className="mt-8 pt-6 border-t-2 border-border">
+                    <TransactionSummaryCard summary={summary} />
                   </div>
-                ))}
-              </div>
+                )}
+              </>
             )}
           </CardContent>
         </Card>

@@ -44,9 +44,10 @@ All colors MUST be HSL.
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
-    /* Vibrant color scheme */
+    /* Enhanced vibrant color scheme */
     --blue: 217 91% 60%;
     --blue-light: 217 91% 85%;
+    --cyan: 189 85% 51%;
     --green: 142 69% 58%;
     --green-light: 142 69% 85%;
     --purple: 262 83% 58%;
@@ -55,8 +56,9 @@ All colors MUST be HSL.
     --orange-light: 25 95% 85%;
     --pink: 330 81% 60%;
     --pink-light: 330 81% 85%;
-    --cyan: 189 85% 51%;
-    --cyan-light: 189 85% 85%;
+    --red: 0 84% 60%;
+    --yellow: 48 96% 53%;
+    --emerald: 142 71% 45%;
 
     /* Gold accent colors */
     --gold: 45 100% 51%;
@@ -72,7 +74,7 @@ All colors MUST be HSL.
     --spacing-xl: 32px;
     --spacing-2xl: 48px;
 
-    /* Colorful shadows */
+    /* Enhanced colorful shadows */
     --shadow-sm: 0 1px 3px 0 hsl(262 83% 58% / 0.12);
     --shadow-md: 0 4px 12px -2px hsl(262 83% 58% / 0.15);
     --shadow-lg: 0 20px 25px -5px hsl(262 83% 58% / 0.18);
@@ -81,10 +83,10 @@ All colors MUST be HSL.
     --shadow-green: 0 8px 30px hsl(142 69% 58% / 0.2);
     --shadow-orange: 0 8px 30px hsl(25 95% 53% / 0.2);
 
-    /* Vibrant gradients */
+    /* Enhanced vibrant gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--purple)), hsl(var(--pink)));
     --gradient-blue: linear-gradient(135deg, hsl(var(--blue)), hsl(var(--cyan)));
-    --gradient-green: linear-gradient(135deg, hsl(var(--green)), hsl(142 69% 45%));
+    --gradient-green: linear-gradient(135deg, hsl(var(--green)), hsl(var(--emerald)));
     --gradient-orange: linear-gradient(135deg, hsl(var(--orange)), hsl(var(--gold)));
     --gradient-rainbow: linear-gradient(135deg, hsl(var(--purple)), hsl(var(--blue)), hsl(var(--green)), hsl(var(--orange)));
     --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(var(--muted)));
@@ -150,9 +152,32 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground font-light;
+    @apply bg-background text-foreground font-medium;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+    line-height: 1.25;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold;
+    letter-spacing: -0.025em;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl;
+    letter-spacing: -0.02em;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+    letter-spacing: -0.015em;
   }
 
   /* Minimal scrollbar */

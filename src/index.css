@@ -8,54 +8,54 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Gold business color palette */
-    --background: 50 20% 97%;
-    --foreground: 30 15% 15%;
+    /* Light gold business color palette */
+    --background: 50 30% 98%;
+    --foreground: 30 20% 25%;
 
     --card: 0 0% 100%;
-    --card-foreground: 30 15% 15%;
+    --card-foreground: 30 20% 25%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 30 15% 15%;
+    --popover-foreground: 30 20% 25%;
 
-    --primary: 45 100% 51%;
-    --primary-foreground: 30 15% 15%;
-    --primary-glow: 45 100% 65%;
+    --primary: 45 80% 65%;
+    --primary-foreground: 30 20% 20%;
+    --primary-glow: 45 70% 75%;
 
-    --secondary: 210 40% 16%;
-    --secondary-foreground: 50 20% 95%;
+    --secondary: 210 20% 85%;
+    --secondary-foreground: 30 20% 25%;
 
-    --muted: 45 15% 92%;
-    --muted-foreground: 30 8% 45%;
+    --muted: 45 20% 95%;
+    --muted-foreground: 30 15% 55%;
 
-    --accent: 45 25% 88%;
-    --accent-foreground: 30 15% 15%;
+    --accent: 45 30% 92%;
+    --accent-foreground: 30 20% 25%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 70% 70%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 45 15% 85%;
-    --input: 45 15% 90%;
-    --ring: 45 100% 51%;
+    --border: 45 20% 88%;
+    --input: 45 15% 94%;
+    --ring: 45 80% 65%;
 
-    --success: 120 40% 35%;
+    --success: 120 30% 55%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 38 80% 65%;
+    --warning-foreground: 30 20% 20%;
 
-    /* Gold business color scheme */
-    --gold: 45 100% 51%;
-    --gold-light: 48 100% 88%;
-    --gold-dark: 42 88% 42%;
-    --bronze: 30 35% 45%;
-    --bronze-light: 30 35% 65%;
-    --copper: 25 60% 55%;
-    --navy: 210 40% 16%;
-    --navy-light: 210 40% 25%;
-    --charcoal: 0 0% 20%;
-    --champagne: 50 30% 85%;
-    --cream: 50 40% 95%;
+    /* Light gold business color scheme */
+    --gold: 45 80% 65%;
+    --gold-light: 48 70% 90%;
+    --gold-dark: 42 70% 55%;
+    --bronze: 30 40% 70%;
+    --bronze-light: 30 30% 80%;
+    --copper: 25 50% 75%;
+    --navy: 210 30% 75%;
+    --navy-light: 210 25% 85%;
+    --charcoal: 0 0% 65%;
+    --champagne: 50 40% 92%;
+    --cream: 50 30% 97%;
 
     /* Modern spacing and layout */
     --radius: 8px;
@@ -66,14 +66,14 @@ All colors MUST be HSL.
     --spacing-xl: 32px;
     --spacing-2xl: 48px;
 
-    /* Elegant shadows for luxury feel */
-    --shadow-sm: 0 1px 3px 0 hsl(45 100% 51% / 0.12);
-    --shadow-md: 0 4px 12px -2px hsl(45 100% 51% / 0.15);
-    --shadow-lg: 0 20px 25px -5px hsl(45 100% 51% / 0.18);
-    --shadow-elegant: 0 8px 30px hsl(45 100% 51% / 0.15);
-    --shadow-gold: 0 8px 30px hsl(45 100% 51% / 0.25);
-    --shadow-bronze: 0 8px 30px hsl(30 35% 45% / 0.2);
-    --shadow-navy: 0 8px 30px hsl(210 40% 16% / 0.3);
+    /* Light elegant shadows */
+    --shadow-sm: 0 1px 3px 0 hsl(45 80% 65% / 0.08);
+    --shadow-md: 0 4px 12px -2px hsl(45 80% 65% / 0.10);
+    --shadow-lg: 0 20px 25px -5px hsl(45 80% 65% / 0.12);
+    --shadow-elegant: 0 8px 30px hsl(45 80% 65% / 0.10);
+    --shadow-gold: 0 8px 30px hsl(45 80% 65% / 0.15);
+    --shadow-bronze: 0 8px 30px hsl(30 40% 70% / 0.15);
+    --shadow-navy: 0 8px 30px hsl(210 30% 75% / 0.20);
 
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

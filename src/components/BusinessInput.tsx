@@ -20,7 +20,7 @@ export const BusinessInput = forwardRef<HTMLInputElement, BusinessInputProps>(
           <Input
             ref={ref}
             className={cn(
-              "h-11 text-base font-normal border-0 rounded-xl bg-muted/30 focus:bg-white focus:ring-1 focus:ring-gold/30 focus:ring-offset-0 transition-all duration-200 shadow-none",
+              "h-11 text-base font-normal border-0 rounded-xl bg-champagne/60 focus:bg-white focus:ring-1 focus:ring-gold/40 focus:ring-offset-0 transition-all duration-200 shadow-none",
               error && "ring-1 ring-destructive/50 bg-destructive/5",
               className
             )}

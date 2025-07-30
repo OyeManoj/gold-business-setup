@@ -87,7 +87,19 @@ export default {
 				},
 				charcoal: 'hsl(var(--charcoal))',
 				champagne: 'hsl(var(--champagne))',
-				cream: 'hsl(var(--cream))'
+				cream: 'hsl(var(--cream))',
+				sage: {
+					DEFAULT: 'hsl(var(--sage))',
+					light: 'hsl(var(--sage-light))'
+				},
+				lavender: {
+					DEFAULT: 'hsl(var(--lavender))',
+					light: 'hsl(var(--lavender-light))'
+				},
+				peach: {
+					DEFAULT: 'hsl(var(--peach))',
+					light: 'hsl(var(--peach-light))'
+				}
 			},
 			fontFamily: {
 				'sans': ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],

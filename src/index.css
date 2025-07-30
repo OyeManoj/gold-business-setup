@@ -18,44 +18,52 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 30 20% 25%;
 
-    --primary: 45 60% 75%;
+    --primary: 45 70% 70%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 45 50% 85%;
+    --primary-glow: 45 60% 80%;
 
-    --secondary: 210 15% 92%;
-    --secondary-foreground: 30 15% 30%;
+    --secondary: 210 25% 88%;
+    --secondary-foreground: 30 20% 25%;
 
-    --muted: 0 0% 97%;
-    --muted-foreground: 30 8% 60%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 30 12% 50%;
 
-    --accent: 0 0% 99%;
-    --accent-foreground: 30 15% 30%;
+    --accent: 45 15% 96%;
+    --accent-foreground: 30 20% 25%;
 
-    --destructive: 0 50% 80%;
-    --destructive-foreground: 0 50% 20%;
+    --destructive: 0 60% 75%;
+    --destructive-foreground: 0 60% 15%;
 
-    --border: 0 0% 93%;
-    --input: 0 0% 99%;
-    --ring: 45 60% 75%;
+    --border: 0 0% 91%;
+    --input: 45 10% 98%;
+    --ring: 45 70% 70%;
 
-    --success: 120 25% 70%;
+    --success: 120 35% 65%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 60% 75%;
-    --warning-foreground: 30 15% 20%;
+    --warning: 38 70% 70%;
+    --warning-foreground: 30 20% 20%;
 
-    /* Softer gold business color scheme */
-    --gold: 45 60% 75%;
-    --gold-light: 48 50% 92%;
-    --gold-dark: 42 50% 65%;
-    --bronze: 30 30% 80%;
-    --bronze-light: 30 20% 88%;
-    --copper: 25 40% 85%;
-    --navy: 210 20% 80%;
-    --navy-light: 210 15% 88%;
-    --charcoal: 0 0% 75%;
-    --champagne: 0 0% 99%;
-    --cream: 0 0% 100%;
+    /* Attractive muted gold business colors */
+    --gold: 45 70% 70%;
+    --gold-light: 48 60% 88%;
+    --gold-dark: 42 60% 60%;
+    --bronze: 30 40% 75%;
+    --bronze-light: 30 30% 85%;
+    --copper: 25 50% 80%;
+    --navy: 210 35% 70%;
+    --navy-light: 210 25% 82%;
+    --charcoal: 0 0% 70%;
+    --champagne: 45 25% 95%;
+    --cream: 45 15% 98%;
+
+    /* Accent colors for visual interest */
+    --sage: 120 20% 75%;
+    --sage-light: 120 15% 88%;
+    --lavender: 260 25% 80%;
+    --lavender-light: 260 20% 90%;
+    --peach: 20 50% 82%;
+    --peach-light: 20 40% 92%;
 
     /* Modern spacing and layout */
     --radius: 8px;

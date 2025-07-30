@@ -7,11 +7,7 @@ export function generateReceiptText(transaction: Transaction, language: Language
   const date = transaction.date.toLocaleDateString();
   const time = transaction.date.toLocaleTimeString();
 
-  let receipt = `--------------------------------\n`;
-  receipt += `        GOLD BUSINESS\n`;
-  receipt += `     TRANSACTION RECEIPT\n`;
-  receipt += `--------------------------------\n`;
-  receipt += `ID: ${transaction.id}\n`;
+  let receipt = `ID: ${transaction.id}\n`;
   receipt += `${date} ${time}\n`;
   receipt += `Type: ${t[transaction.type.toLowerCase() as keyof typeof t]}\n`;
   receipt += `--------------------------------\n`;

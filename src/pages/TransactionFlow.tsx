@@ -7,7 +7,7 @@ import { TransactionSummary } from '@/components/TransactionSummary';
 import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { TransactionType, Transaction } from '@/types/transaction';
 import { calculateTransaction } from '@/utils/calculations';
-import { saveTransaction } from '@/utils/storage';
+import { saveTransaction, updateTransaction, getTransactions } from '@/utils/storage';
 import { generateReceiptText, printReceipt } from '@/utils/receipt';
 import { useTranslation } from '@/utils/translations';
 import { validateTransactionForm, FormData } from '@/utils/formValidation';
@@ -17,7 +17,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 
 export default function TransactionFlow() {
-  const { type } = useParams<{ type: string }>();
+  const { type, transactionId } = useParams<{ type: string; transactionId?: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -30,9 +30,28 @@ export default function TransactionFlow() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showSummary, setShowSummary] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
 
   const t = useTranslation(language);
   const transactionType = type?.toUpperCase() as TransactionType;
+  const isEditMode = transactionId !== undefined;
+
+  // Load transaction for editing
+  useEffect(() => {
+    if (isEditMode && transactionId) {
+      const transactions = getTransactions();
+      const transaction = transactions.find(t => t.id === transactionId);
+      if (transaction) {
+        setEditingTransaction(transaction);
+        setFormData({
+          weight: transaction.weight.toString(),
+          purity: transaction.purity?.toString() || '',
+          reduction: transaction.reduction?.toString() || '',
+          rate: transaction.rate.toString(),
+        });
+      }
+    }
+  }, [isEditMode, transactionId]);
 
   const liveCalculation = useLiveCalculation(formData, transactionType);
 
@@ -59,14 +78,14 @@ export default function TransactionFlow() {
 
   const handleConfirm = () => {
     const transaction: Transaction = {
-      id: Date.now().toString(),
+      id: isEditMode ? editingTransaction!.id : Date.now().toString(),
       type: transactionType,
       weight: parseFloat(formData.weight),
       purity: transactionType === 'SALE' ? 100 : parseFloat(formData.purity),
       reduction: transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined,
       rate: transactionType === 'EXCHANGE' ? 1 : parseFloat(formData.rate),
       
-      date: new Date(),
+      date: isEditMode ? editingTransaction!.date : new Date(),
       ...calculateTransaction(
         transactionType,
         parseFloat(formData.weight),
@@ -76,19 +95,26 @@ export default function TransactionFlow() {
       )
     };
 
-    saveTransaction(transaction);
-    const receiptText = generateReceiptText(transaction, language);
-    printReceipt(receiptText);
-    
-    toast({
-      title: "Success",
-      description: "Transaction completed and receipt printed",
-      variant: "default"
-    });
+    if (isEditMode) {
+      updateTransaction(transaction);
+      toast({
+        title: "Success",
+        description: "Transaction updated successfully",
+        variant: "default"
+      });
+    } else {
+      saveTransaction(transaction);
+      const receiptText = generateReceiptText(transaction, language);
+      printReceipt(receiptText);
+      toast({
+        title: "Success",
+        description: "Transaction completed and receipt printed",
+        variant: "default"
+      });
+    }
 
     navigate('/');
   };
-
   const calculation = showSummary ? calculateTransaction(
     transactionType,
     parseFloat(formData.weight),
@@ -142,7 +168,9 @@ export default function TransactionFlow() {
                     {t[transactionType.toLowerCase() as keyof typeof t]}
                   </Badge>
                 </div>
-                <CardTitle className="text-xl font-medium">Transaction Details</CardTitle>
+                <CardTitle className="text-xl font-medium">
+                  {isEditMode ? 'Edit Transaction' : 'Transaction Details'}
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-8">
                 {/* Weight Input */}
@@ -221,7 +249,7 @@ export default function TransactionFlow() {
                   }
                 >
                   <Calculator size={20} className="mr-2" />
-                  Calculate Transaction
+                  {isEditMode ? 'Update Transaction' : 'Calculate Transaction'}
                 </Button>
               </CardContent>
             </Card>
@@ -283,7 +311,7 @@ export default function TransactionFlow() {
                     className="flex-1 h-14 text-base font-medium"
                   >
                     <Check size={24} className="mr-2" />
-                    {t.confirm}
+                    {isEditMode ? 'Update' : t.confirm}
                   </Button>
                   <Button
                     variant="outline"

@@ -33,6 +33,20 @@ export function getTransactions(): Transaction[] {
   }
 }
 
+export function updateTransaction(updatedTransaction: Transaction): void {
+  try {
+    const transactions = getTransactions();
+    const index = transactions.findIndex(t => t.id === updatedTransaction.id);
+    
+    if (index !== -1) {
+      transactions[index] = updatedTransaction;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
+    }
+  } catch (error) {
+    console.error('Failed to update transaction:', error);
+  }
+}
+
 export function clearTransactions(): void {
   try {
     localStorage.removeItem(STORAGE_KEY);

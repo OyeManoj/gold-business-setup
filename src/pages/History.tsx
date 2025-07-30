@@ -9,7 +9,7 @@ import { getTransactions, clearTransactions } from '@/utils/storage';
 import { useTranslation } from '@/utils/translations';
 import { formatTransactionType } from '@/utils/exportUtils';
 import { useTransactionFilters } from '@/hooks/useTransactionFilters';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Edit } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 
@@ -38,6 +38,10 @@ export default function History() {
       description: "Transaction history cleared",
       variant: "default"
     });
+  };
+
+  const handleEditTransaction = (transaction: any) => {
+    navigate(`/transaction/${transaction.type.toLowerCase()}/edit/${transaction.id}`);
   };
 
   return (
@@ -106,9 +110,20 @@ export default function History() {
                       <span className="font-medium text-lg">
                         {formatTransactionType(transaction.type, language)}
                       </span>
-                      <span className="text-sm text-muted-foreground">
-                        {transaction.date.toLocaleDateString()} {transaction.date.toLocaleTimeString()}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEditTransaction(transaction)}
+                          className="flex items-center gap-1"
+                        >
+                          <Edit size={14} />
+                          Edit
+                        </Button>
+                        <span className="text-sm text-muted-foreground">
+                          {transaction.date.toLocaleDateString()} {transaction.date.toLocaleTimeString()}
+                        </span>
+                      </div>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-6 text-sm">

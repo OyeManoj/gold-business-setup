@@ -11,7 +11,7 @@ interface TransactionSummaryProps {
   fineGold: number;
   amount: number;
   reduction?: number;
-  cashPaid?: number;
+  
   remainingFineGold?: number;
   language: string;
 }
@@ -24,7 +24,7 @@ export function TransactionSummary({
   fineGold,
   amount,
   reduction,
-  cashPaid,
+  
   remainingFineGold,
 }: TransactionSummaryProps) {
   const getTypeColor = (type: TransactionType) => {
@@ -95,29 +95,6 @@ export function TransactionSummary({
           </div>
         </div>
 
-        {/* Cash Payment Details */}
-        {cashPaid && cashPaid > 0 && (
-          <>
-            <Separator />
-            <div className="space-y-3">
-              <h4 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">
-                Payment Details
-              </h4>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 bg-card rounded-lg border">
-                  <span className="font-medium">Cash Paid:</span>
-                  <span className="text-lg font-bold text-blue-600">₹{cashPaid.toLocaleString()}</span>
-                </div>
-                {remainingFineGold && remainingFineGold > 0 && (
-                  <div className="flex justify-between items-center p-3 bg-card rounded-lg border">
-                    <span className="font-medium">Remaining Fine Gold:</span>
-                    <span className="text-lg font-bold text-orange-600">{remainingFineGold} g</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </>
-        )}
       </CardContent>
     </Card>
   );

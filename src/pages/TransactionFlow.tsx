@@ -27,8 +27,6 @@ export default function TransactionFlow() {
     purity: '',
     reduction: '',
     rate: '',
-    cashPaid: '',
-    enableCashPayment: false
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showSummary, setShowSummary] = useState(false);
@@ -43,13 +41,13 @@ export default function TransactionFlow() {
     const purity = transactionType === 'SALE' ? 100 : (parseFloat(formData.purity) || 0);
     const rate = parseFloat(formData.rate) || 0;
     const reduction = transactionType === 'EXCHANGE' ? (parseFloat(formData.reduction) || 0) : 0;
-    const cashPaid = formData.enableCashPayment ? (parseFloat(formData.cashPaid) || 0) : 0;
+    
 
     // For Exchange: show calculation even with partial data
     if (transactionType === 'EXCHANGE') {
       if (weight > 0 || purity > 0 || reduction >= 0) {
         try {
-          const result = calculateTransaction(transactionType, weight, purity, 1, reduction, cashPaid);
+          const result = calculateTransaction(transactionType, weight, purity, 1, reduction);
           setLiveCalculation(result);
         } catch (error) {
           setLiveCalculation(null);
@@ -61,7 +59,7 @@ export default function TransactionFlow() {
       // For Purchase/Sale: show calculation with partial data
       if (weight > 0 || rate > 0 || (transactionType === 'PURCHASE' && purity > 0)) {
         try {
-          const result = calculateTransaction(transactionType, weight, purity, rate, reduction, cashPaid);
+          const result = calculateTransaction(transactionType, weight, purity, rate, reduction);
           setLiveCalculation(result);
         } catch (error) {
           setLiveCalculation(null);
@@ -97,10 +95,6 @@ export default function TransactionFlow() {
         newErrors.rate = 'Rate must be greater than 0';
       }
     }
-    
-    if (transactionType === 'SALE' && formData.enableCashPayment && (!formData.cashPaid || parseFloat(formData.cashPaid) < 0)) {
-      newErrors.cashPaid = 'Cash paid cannot be negative';
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -128,15 +122,14 @@ export default function TransactionFlow() {
       purity: transactionType === 'SALE' ? 100 : parseFloat(formData.purity),
       reduction: transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined,
       rate: transactionType === 'EXCHANGE' ? 1 : parseFloat(formData.rate),
-      cashPaid: formData.enableCashPayment ? parseFloat(formData.cashPaid) || 0 : undefined,
+      
       date: new Date(),
       ...calculateTransaction(
         transactionType,
         parseFloat(formData.weight),
         transactionType === 'SALE' ? 100 : parseFloat(formData.purity),
         transactionType === 'EXCHANGE' ? 1 : parseFloat(formData.rate),
-        transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined,
-        formData.enableCashPayment ? parseFloat(formData.cashPaid) || 0 : undefined
+        transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined
       )
     };
 
@@ -158,8 +151,7 @@ export default function TransactionFlow() {
     parseFloat(formData.weight),
     transactionType === 'SALE' ? 100 : parseFloat(formData.purity),
     transactionType === 'EXCHANGE' ? 1 : parseFloat(formData.rate),
-    transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined,
-    formData.enableCashPayment ? parseFloat(formData.cashPaid) || 0 : undefined
+    transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined
   ) : null;
 
   if (!transactionType || !['EXCHANGE', 'PURCHASE', 'SALE'].includes(transactionType)) {
@@ -273,37 +265,6 @@ export default function TransactionFlow() {
                   />
                 )}
 
-                {/* Cash Payment Toggle (only for Sale) */}
-                {transactionType === 'SALE' && (
-                  <div className="flex items-center space-x-3 p-4 bg-muted/30 rounded-lg">
-                    <Switch
-                      id="cash-payment"
-                      checked={formData.enableCashPayment}
-                      onCheckedChange={(checked) => 
-                        setFormData(prev => ({ ...prev, enableCashPayment: checked, cashPaid: checked ? prev.cashPaid : '' }))
-                      }
-                    />
-                    <Label htmlFor="cash-payment" className="font-medium">
-                      {t.partialCash}
-                    </Label>
-                  </div>
-                )}
-
-                {/* Cash Payment Input (only for Sale) */}
-                {transactionType === 'SALE' && formData.enableCashPayment && (
-                  <BusinessInput
-                    id="cashPaid"
-                    label={t.cashPaid}
-                    unit={t.rupees}
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value={formData.cashPaid}
-                    onChange={(e) => handleInputChange('cashPaid', e.target.value)}
-                    error={errors.cashPaid}
-                    placeholder="Enter cash amount paid"
-                  />
-                )}
 
                 {/* Calculate Button */}
                 <Button
@@ -359,7 +320,7 @@ export default function TransactionFlow() {
                   fineGold={calculation.fineGold}
                   amount={calculation.amount}
                   reduction={transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined}
-                  cashPaid={formData.enableCashPayment ? parseFloat(formData.cashPaid) || 0 : undefined}
+                  
                   remainingFineGold={calculation.remainingFineGold}
                   language={language}
                 />

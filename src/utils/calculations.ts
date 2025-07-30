@@ -4,17 +4,14 @@ export function calculateExchange(
   weight: number, 
   purity: number, 
   reduction: number, 
-  rate: number, 
-  cash: number = 0
+  rate: number
 ): CalculationResult {
   const fineGold = weight * (purity - reduction) / 100;
   const amount = fineGold * rate;
-  const remainingFineGold = cash > 0 ? fineGold - (cash / rate) : 0;
   
   return { 
     fineGold: Number(fineGold.toFixed(3)), 
-    amount: Number(amount.toFixed(2)), 
-    remainingFineGold: Number(remainingFineGold.toFixed(3)) 
+    amount: Number(amount.toFixed(2))
   };
 }
 
@@ -49,12 +46,11 @@ export function calculateTransaction(
   weight: number,
   purity: number,
   rate: number,
-  reduction?: number,
-  cash?: number
+  reduction?: number
 ): CalculationResult {
   switch (type) {
     case 'EXCHANGE':
-      return calculateExchange(weight, purity, reduction || 0, rate, cash);
+      return calculateExchange(weight, purity, reduction || 0, rate);
     case 'PURCHASE':
       return calculatePurchase(weight, purity, rate);
     case 'SALE':

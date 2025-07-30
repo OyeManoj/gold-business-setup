@@ -111,23 +111,6 @@ export default function History() {
                         </span>
                       </div>
                     </div>
-                    
-                    {transaction.cashPaid && transaction.cashPaid > 0 && (
-                      <div className="mt-2 pt-2 border-t">
-                        <div className="grid grid-cols-2 gap-4 text-sm">
-                          <div>
-                            <span className="text-muted-foreground">{t.cashPaid}: </span>
-                            <span className="font-medium">{t.rupees}{transaction.cashPaid}</span>
-                          </div>
-                          {transaction.remainingFineGold && (
-                            <div>
-                              <span className="text-muted-foreground">{t.remainingFineGold}: </span>
-                              <span className="font-medium">{transaction.remainingFineGold} {t.grams}</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
                   </div>
                 ))}
               </div>

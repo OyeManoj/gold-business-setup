@@ -10,7 +10,7 @@ export const translations = {
     purity: 'Purity (%)',
     reduction: 'Reduction (%)',
     rate: 'Gold Rate (₹/g)',
-    cashPaid: 'Cash Paid (₹)',
+    
     next: 'NEXT',
     back: 'BACK',
     confirm: 'CONFIRM & PRINT',
@@ -21,7 +21,7 @@ export const translations = {
     remainingFineGold: 'Remaining Fine Gold',
     history: 'History',
     enterValue: 'Enter value',
-    partialCash: 'Partial Cash Payment?',
+    
     yes: 'YES',
     no: 'NO',
     receipt: 'Receipt',
@@ -42,7 +42,7 @@ export const translations = {
     purity: 'शुद्धता (%)',
     reduction: 'कमी (%)',
     rate: 'सोने की दर (₹/ग्राम)',
-    cashPaid: 'नकद भुगतान (₹)',
+    
     next: 'आगे',
     back: 'पीछे',
     confirm: 'पुष्टि करें और प्रिंट करें',
@@ -53,7 +53,7 @@ export const translations = {
     remainingFineGold: 'बचा हुआ शुद्ध सोना',
     history: 'इतिहास',
     enterValue: 'मान दर्ज करें',
-    partialCash: 'आंशिक नकद भुगतान?',
+    
     yes: 'हाँ',
     no: 'नहीं',
     receipt: 'रसीद',
@@ -74,7 +74,7 @@ export const translations = {
     purity: 'शुद्धता (%)',
     reduction: 'कपात (%)',
     rate: 'सोन्याचा दर (₹/ग्राम)',
-    cashPaid: 'रोख पैसे (₹)',
+    
     next: 'पुढे',
     back: 'मागे',
     confirm: 'पुष्टी करा आणि प्रिंट करा',
@@ -85,7 +85,7 @@ export const translations = {
     remainingFineGold: 'उरलेले शुद्ध सोने',
     history: 'इतिहास',
     enterValue: 'मूल्य प्रविष्ट करा',
-    partialCash: 'आंशिक रोख पेमेंट?',
+    
     yes: 'होय',
     no: 'नाही',
     receipt: 'पावती',

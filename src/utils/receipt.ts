@@ -29,13 +29,6 @@ export function generateReceiptText(transaction: Transaction, language: Language
     receipt += `................................\n`;
   }
   
-  if (transaction.cashPaid && transaction.cashPaid > 0) {
-    receipt += `Cash Paid:   ${t.rupees}${transaction.cashPaid.toLocaleString()}\n`;
-    if (transaction.remainingFineGold) {
-      receipt += `Remaining:   ${transaction.remainingFineGold} ${t.grams}\n`;
-    }
-  }
-  
   return receipt;
 }
 

@@ -7,7 +7,7 @@ export interface Transaction {
   purity: number;
   reduction?: number;
   rate: number;
-  cashPaid?: number;
+  
   fineGold: number;
   amount: number;
   remainingFineGold?: number;

@@ -36,18 +36,18 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-6 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/30">
+      <div className="container mx-auto px-6 py-16">
         {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-3xl font-light text-foreground mb-4">
+        <div className="text-center mb-20">
+          <h1 className="text-4xl font-extralight text-foreground mb-6 tracking-wide">
             {t.appTitle}
           </h1>
-          <div className="w-12 h-px bg-border mx-auto"></div>
+          <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent mx-auto"></div>
         </div>
 
         {/* Navigation Controls */}
-        <div className="flex items-center justify-center gap-6 mb-16">
+        <div className="flex items-center justify-center gap-8 mb-20">
           <LanguageToggle
             currentLanguage={language}
             onLanguageChange={setLanguage}
@@ -56,7 +56,7 @@ const Index = () => {
             variant="outline"
             size="sm"
             onClick={() => navigate('/history')}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 border-primary/20 hover:border-primary/40 hover:bg-primary/5 transition-all duration-300"
           >
             <History size={16} />
             {t.history}
@@ -64,21 +64,26 @@ const Index = () => {
         </div>
 
         {/* Transaction Grid */}
-        <div className="max-w-3xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {transactions.map((transaction) => {
               const Icon = transaction.icon;
               return (
                 <Card
                   key={transaction.type}
-                  className="group cursor-pointer border-2 hover:border-primary/20 transition-all duration-300"
+                  className="group cursor-pointer border-0 shadow-elegant hover:shadow-lg transform hover:-translate-y-2 bg-gradient-to-br from-card via-card to-muted/50 backdrop-blur-sm transition-all duration-500"
                   onClick={() => navigate(transaction.path)}
                 >
-                  <CardContent className="p-8 text-center">
-                    <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-muted flex items-center justify-center group-hover:bg-primary/10 transition-colors duration-300">
-                      <Icon size={28} className="text-foreground group-hover:text-primary transition-colors duration-300" />
+                  <CardContent className="p-10 text-center">
+                    <div className="relative w-20 h-20 mx-auto mb-8">
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-primary/20 rounded-2xl group-hover:from-primary/20 group-hover:to-primary/30 transition-all duration-500"></div>
+                      <div className="relative w-full h-full flex items-center justify-center">
+                        <Icon size={32} className="text-primary group-hover:scale-110 transition-transform duration-300" />
+                      </div>
                     </div>
-                    <h3 className="text-lg font-medium mb-2">{transaction.title}</h3>
+                    <h3 className="text-xl font-medium mb-3 text-foreground group-hover:text-primary transition-colors duration-300">
+                      {transaction.title}
+                    </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       {transaction.description}
                     </p>

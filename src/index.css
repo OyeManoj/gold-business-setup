@@ -8,34 +8,35 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Minimal color palette */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 9%;
+    /* Modern minimal color palette */
+    --background: 0 0% 99%;
+    --foreground: 225 39% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
+    --card-foreground: 225 39% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
+    --popover-foreground: 225 39% 10%;
 
-    --primary: 0 0% 9%;
+    --primary: 225 39% 10%;
     --primary-foreground: 0 0% 100%;
+    --primary-glow: 225 39% 25%;
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 9%;
+    --secondary: 210 40% 98%;
+    --secondary-foreground: 225 39% 10%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 20% 50%;
 
-    --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 9%;
+    --accent: 210 40% 94%;
+    --accent-foreground: 225 39% 10%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 0 0% 9%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 225 39% 10%;
 
     --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
@@ -43,8 +44,13 @@ All colors MUST be HSL.
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
-    /* Minimal spacing and layout */
-    --radius: 8px;
+    /* Gold accent colors for financial app */
+    --gold: 45 100% 51%;
+    --gold-light: 48 100% 88%;
+    --gold-dark: 42 88% 42%;
+
+    /* Modern spacing and layout */
+    --radius: 12px;
     --spacing-xs: 4px;
     --spacing-sm: 8px;
     --spacing-md: 16px;
@@ -52,10 +58,20 @@ All colors MUST be HSL.
     --spacing-xl: 32px;
     --spacing-2xl: 48px;
 
-    /* Clean shadows */
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    /* Elegant shadows */
+    --shadow-sm: 0 1px 3px 0 hsl(225 39% 10% / 0.08);
+    --shadow-md: 0 4px 12px -2px hsl(225 39% 10% / 0.12);
+    --shadow-lg: 0 20px 25px -5px hsl(225 39% 10% / 0.15);
+    --shadow-elegant: 0 8px 30px hsl(225 39% 10% / 0.12);
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(var(--muted)));
+    --gradient-gold: linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)));
+
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s ease-out;
 
     /* Sidebar */
     --sidebar-background: 0 0% 98%;

@@ -9,14 +9,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gold text-white hover:bg-gold-dark hover:shadow-md transition-all duration-200 shadow-sm border-0",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 hover:shadow-md transition-all duration-200 shadow-sm border-0",
-        outline: "border border-border bg-white hover:bg-muted hover:text-foreground shadow-sm text-muted-foreground",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:shadow-sm transition-all duration-200",
-        ghost: "hover:bg-muted hover:text-foreground rounded-lg text-muted-foreground border-0",
+        default: "bg-gold text-white hover:bg-gold-dark hover:shadow-lg transition-all duration-200 shadow-md border-0",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 hover:shadow-lg transition-all duration-200 shadow-md border-0",
+        outline: "border-2 border-gold/40 bg-white hover:bg-gold/10 hover:border-gold hover:text-gold shadow-sm text-gold",
+        secondary: "bg-coral text-white hover:bg-coral/90 hover:shadow-md transition-all duration-200 shadow-sm",
+        ghost: "hover:bg-gold/15 hover:text-gold rounded-lg text-gold border-0",
         link: "text-gold hover:text-gold-dark underline-offset-4 hover:underline transition-colors duration-200",
-        success: "bg-success text-white hover:bg-success/90 hover:shadow-md transition-all duration-200 shadow-sm border-0",
-        premium: "bg-bronze text-white hover:bg-bronze/90 hover:shadow-md transition-all duration-200 shadow-sm border-0",
+        success: "bg-mint text-white hover:bg-mint/90 hover:shadow-lg transition-all duration-200 shadow-md border-0",
+        premium: "bg-bronze text-white hover:bg-bronze/90 hover:shadow-lg transition-all duration-200 shadow-md border-0",
       },
       size: {
         default: "h-9 px-4 py-1",

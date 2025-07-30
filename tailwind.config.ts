@@ -99,6 +99,14 @@ export default {
 				peach: {
 					DEFAULT: 'hsl(var(--peach))',
 					light: 'hsl(var(--peach-light))'
+				},
+				coral: {
+					DEFAULT: 'hsl(var(--coral))',
+					light: 'hsl(var(--coral-light))'
+				},
+				mint: {
+					DEFAULT: 'hsl(var(--mint))',
+					light: 'hsl(var(--mint-light))'
 				}
 			},
 			fontFamily: {

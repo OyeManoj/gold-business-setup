@@ -96,10 +96,10 @@ export default function TransactionFlow() {
       if (!formData.rate || parseFloat(formData.rate) <= 0) {
         newErrors.rate = 'Rate must be greater than 0';
       }
-      
-      if (formData.enableCashPayment && (!formData.cashPaid || parseFloat(formData.cashPaid) < 0)) {
-        newErrors.cashPaid = 'Cash paid cannot be negative';
-      }
+    }
+    
+    if (transactionType === 'SALE' && formData.enableCashPayment && (!formData.cashPaid || parseFloat(formData.cashPaid) < 0)) {
+      newErrors.cashPaid = 'Cash paid cannot be negative';
     }
 
     setErrors(newErrors);
@@ -273,8 +273,8 @@ export default function TransactionFlow() {
                   />
                 )}
 
-                {/* Cash Payment Toggle (not for Exchange) */}
-                {transactionType !== 'EXCHANGE' && (
+                {/* Cash Payment Toggle (only for Sale) */}
+                {transactionType === 'SALE' && (
                   <div className="flex items-center space-x-3 p-4 bg-muted/30 rounded-lg">
                     <Switch
                       id="cash-payment"
@@ -289,8 +289,8 @@ export default function TransactionFlow() {
                   </div>
                 )}
 
-                {/* Cash Payment Input (not for Exchange) */}
-                {transactionType !== 'EXCHANGE' && formData.enableCashPayment && (
+                {/* Cash Payment Input (only for Sale) */}
+                {transactionType === 'SALE' && formData.enableCashPayment && (
                   <BusinessInput
                     id="cashPaid"
                     label={t.cashPaid}

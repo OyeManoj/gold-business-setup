@@ -13,14 +13,15 @@ export function useLiveCalculation(formData: FormData, transactionType: Transact
     const reduction = transactionType === 'EXCHANGE' ? (parseFloat(formData.reduction) || 0) : 0;
 
     try {
-      // For Exchange: show calculation even with partial data
+      // Show live calculation with any input data
       if (transactionType === 'EXCHANGE') {
-        if (weight > 0 || purity > 0 || reduction >= 0) {
+        // For Exchange: show calculation with any weight or purity
+        if (weight > 0 && purity > 0) {
           return calculateTransaction(transactionType, weight, purity, 1, reduction);
         }
       } else {
-        // For Purchase/Sale: show calculation with partial data
-        if (weight > 0 || rate > 0 || (transactionType === 'PURCHASE' && purity > 0)) {
+        // For Purchase/Sale: show calculation with weight and rate
+        if (weight > 0 && rate > 0 && (transactionType === 'SALE' || purity > 0)) {
           return calculateTransaction(transactionType, weight, purity, rate, reduction);
         }
       }
@@ -31,12 +32,8 @@ export function useLiveCalculation(formData: FormData, transactionType: Transact
   }, [formData, transactionType]);
 
   useEffect(() => {
-    // Debounce the calculation update
-    const timer = setTimeout(() => {
-      setLiveCalculation(calculation);
-    }, 150);
-
-    return () => clearTimeout(timer);
+    // Update immediately for live feedback
+    setLiveCalculation(calculation);
   }, [calculation]);
 
   return liveCalculation;

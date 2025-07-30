@@ -228,25 +228,31 @@ export default function TransactionFlow() {
 
             {/* Live Calculation Display */}
             {liveCalculation && !showSummary && (
-              <Card className="bg-secondary/30 border-dashed">
+              <Card className="bg-primary/5 border-primary/20 border-2">
                 <CardHeader>
-                  <CardTitle className="text-lg text-center font-medium">Live Preview</CardTitle>
+                  <CardTitle className="text-lg text-center font-medium flex items-center justify-center gap-2">
+                    <Calculator size={20} className="text-primary" />
+                    Live Preview
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="text-center space-y-4">
-                    <div className="p-6 bg-card rounded-xl border">
-                      <div className="text-sm text-muted-foreground mb-2">Fine Gold</div>
-                      <div className="text-2xl font-medium text-primary">{liveCalculation.fineGold} g</div>
+                    <div className="p-6 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl border border-primary/20">
+                      <div className="text-sm text-muted-foreground mb-2">Fine Gold Output</div>
+                      <div className="text-3xl font-bold text-primary">{liveCalculation.fineGold} g</div>
                     </div>
-                    {liveCalculation.remainingFineGold && liveCalculation.remainingFineGold > 0 && (
-                      <div className="p-6 bg-card rounded-xl border">
-                        <div className="text-sm text-muted-foreground mb-2">Remaining Fine Gold</div>
-                        <div className="text-xl font-medium text-orange-600">{liveCalculation.remainingFineGold} g</div>
+                    {transactionType !== 'EXCHANGE' && liveCalculation.amount && (
+                      <div className="p-6 bg-gradient-to-br from-green-500/10 to-green-500/5 rounded-xl border border-green-500/20">
+                        <div className="text-sm text-muted-foreground mb-2">Total Amount</div>
+                        <div className="text-2xl font-bold text-green-600">₹{liveCalculation.amount.toLocaleString()}</div>
                       </div>
                     )}
                   </div>
-                  <div className="pt-4 text-center text-xs text-muted-foreground">
-                    Values update as you type
+                  <div className="pt-4 text-center">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full">
+                      <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                      <span className="text-xs text-primary font-medium">Updates live as you type</span>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

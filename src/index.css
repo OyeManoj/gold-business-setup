@@ -8,8 +8,8 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Light gold business color palette */
-    --background: 50 30% 98%;
+    /* Light gold business color palette with white backgrounds */
+    --background: 0 0% 100%;
     --foreground: 30 20% 25%;
 
     --card: 0 0% 100%;
@@ -25,17 +25,17 @@ All colors MUST be HSL.
     --secondary: 210 20% 85%;
     --secondary-foreground: 30 20% 25%;
 
-    --muted: 45 20% 95%;
+    --muted: 0 0% 96%;
     --muted-foreground: 30 15% 55%;
 
-    --accent: 45 30% 92%;
+    --accent: 0 0% 98%;
     --accent-foreground: 30 20% 25%;
 
     --destructive: 0 70% 70%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 45 20% 88%;
-    --input: 45 15% 94%;
+    --border: 0 0% 90%;
+    --input: 0 0% 98%;
     --ring: 45 80% 65%;
 
     --success: 120 30% 55%;
@@ -54,8 +54,8 @@ All colors MUST be HSL.
     --navy: 210 30% 75%;
     --navy-light: 210 25% 85%;
     --charcoal: 0 0% 65%;
-    --champagne: 50 40% 92%;
-    --cream: 50 30% 97%;
+    --champagne: 0 0% 98%;
+    --cream: 0 0% 100%;
 
     /* Modern spacing and layout */
     --radius: 8px;

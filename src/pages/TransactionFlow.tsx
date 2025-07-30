@@ -138,7 +138,7 @@ export default function TransactionFlow() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -255,7 +255,7 @@ export default function TransactionFlow() {
 
             {/* Live Calculation Display */}
             {liveCalculation && !showSummary && (
-              <Card className="bg-gold/5 border-2 border-gold/20 shadow-sm">
+              <Card className="bg-white border-2 border-gold/20 shadow-sm">
                 <CardHeader className="pb-4">
                   <CardTitle className="text-lg text-center font-bold flex items-center justify-center gap-2 text-gold">
                     <Calculator size={20} className="text-gold" />
@@ -264,19 +264,19 @@ export default function TransactionFlow() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="text-center space-y-4">
-                    <div className="p-6 bg-gold/10 rounded-lg border border-gold/20">
+                    <div className="p-6 bg-gold/5 rounded-lg border border-gold/20">
                       <div className="text-sm font-medium text-muted-foreground mb-2">Fine Gold Output</div>
                       <div className="text-3xl font-bold text-gold">{liveCalculation.fineGold} g</div>
                     </div>
                     {transactionType !== 'EXCHANGE' && liveCalculation.amount && (
-                      <div className="p-6 bg-bronze/10 rounded-lg border border-bronze/20">
+                      <div className="p-6 bg-bronze/5 rounded-lg border border-bronze/20">
                         <div className="text-sm font-medium text-muted-foreground mb-2">Total Amount</div>
                         <div className="text-2xl font-bold text-bronze">₹{liveCalculation.amount.toLocaleString()}</div>
                       </div>
                     )}
                   </div>
                   <div className="pt-2 text-center">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold/10 rounded-full border border-gold/20">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold/5 rounded-full border border-gold/20">
                       <div className="w-2 h-2 bg-gold rounded-full animate-pulse"></div>
                       <span className="text-xs text-gold font-semibold">Updates live</span>
                     </div>

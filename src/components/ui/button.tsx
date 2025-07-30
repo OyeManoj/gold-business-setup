@@ -5,18 +5,18 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-gold text-white hover:bg-gold-dark hover:shadow-md transform hover:scale-105 shadow-sm border-0",
-        destructive: "bg-destructive text-white hover:bg-destructive/90 hover:shadow-md transform hover:scale-105 shadow-sm border-0",
-        outline: "border-2 border-gold/50 bg-white hover:bg-gold/10 hover:border-gold hover:text-gold shadow-sm text-gold",
-        secondary: "bg-navy text-white hover:bg-navy/90 hover:shadow-md transform hover:scale-105 shadow-sm border-0",
-        ghost: "hover:bg-gold/15 hover:text-gold rounded-lg text-gold border-0",
-        link: "text-gold hover:text-gold-dark underline-offset-4 hover:underline transition-colors duration-300",
-        success: "bg-success text-white hover:bg-success/90 hover:shadow-md transform hover:scale-105 shadow-sm border-0",
-        premium: "bg-bronze text-white hover:bg-bronze/90 hover:shadow-md transform hover:scale-105 shadow-md border-0",
+        default: "bg-gold text-white hover:bg-gold-dark hover:shadow-md transition-all duration-200 shadow-sm border-0",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 hover:shadow-md transition-all duration-200 shadow-sm border-0",
+        outline: "border border-border bg-white hover:bg-muted hover:text-foreground shadow-sm text-muted-foreground",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:shadow-sm transition-all duration-200",
+        ghost: "hover:bg-muted hover:text-foreground rounded-lg text-muted-foreground border-0",
+        link: "text-gold hover:text-gold-dark underline-offset-4 hover:underline transition-colors duration-200",
+        success: "bg-success text-white hover:bg-success/90 hover:shadow-md transition-all duration-200 shadow-sm border-0",
+        premium: "bg-bronze text-white hover:bg-bronze/90 hover:shadow-md transition-all duration-200 shadow-sm border-0",
       },
       size: {
         default: "h-9 px-4 py-1",

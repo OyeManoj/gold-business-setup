@@ -139,9 +139,9 @@ export default function TransactionFlow() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-6 py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-10">
           <Button
             variant="ghost"
             size="sm"
@@ -159,16 +159,16 @@ export default function TransactionFlow() {
         </div>
 
         <div className="max-w-5xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-6">
+          <div className="grid lg:grid-cols-2 gap-8">
             {/* Input Form */}
-            <Card className="h-fit border shadow-sm">
-              <CardHeader className="pb-4">
-                <div className="flex items-center gap-3 mb-3">
-                  <Badge className={`${getTransactionColor(transactionType)} text-white px-3 py-1 text-sm font-semibold rounded-lg`}>
+            <Card className="h-fit border-0 shadow-sm bg-white">
+              <CardHeader className="pb-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <Badge className={`${getTransactionColor(transactionType)} text-white px-3 py-1.5 text-sm font-medium rounded-lg shadow-sm`}>
                     {t[transactionType.toLowerCase() as keyof typeof t]}
                   </Badge>
                 </div>
-                <CardTitle className="text-xl font-bold text-foreground">
+                <CardTitle className="text-xl font-medium text-foreground">
                   {isEditMode ? 'Edit Transaction' : 'Transaction Details'}
                 </CardTitle>
               </CardHeader>
@@ -238,7 +238,7 @@ export default function TransactionFlow() {
 
                 {/* Calculate Button */}
                 <Button
-                  variant="premium"
+                  variant="default"
                   size="lg"
                   onClick={handleCalculate}
                   className="w-full"
@@ -247,7 +247,7 @@ export default function TransactionFlow() {
                     (transactionType !== 'EXCHANGE' && !formData.rate)
                   }
                 >
-                  <Calculator size={20} className="mr-2" />
+                  <Calculator size={18} className="mr-2" />
                   {isEditMode ? 'Update Transaction' : 'Calculate Transaction'}
                 </Button>
               </CardContent>
@@ -255,30 +255,30 @@ export default function TransactionFlow() {
 
             {/* Live Calculation Display */}
             {liveCalculation && !showSummary && (
-              <Card className="bg-white border-2 border-gold/20 shadow-sm">
+              <Card className="bg-white border-0 shadow-sm">
                 <CardHeader className="pb-4">
-                  <CardTitle className="text-lg text-center font-bold flex items-center justify-center gap-2 text-gold">
-                    <Calculator size={20} className="text-gold" />
+                  <CardTitle className="text-lg text-center font-medium flex items-center justify-center gap-2 text-muted-foreground">
+                    <Calculator size={18} className="text-gold" />
                     Live Preview
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-6">
                   <div className="text-center space-y-4">
-                    <div className="p-6 bg-gold/5 rounded-lg border border-gold/20">
+                    <div className="p-6 bg-gold/3 rounded-xl border border-gold/10">
                       <div className="text-sm font-medium text-muted-foreground mb-2">Fine Gold Output</div>
-                      <div className="text-3xl font-bold text-gold">{liveCalculation.fineGold} g</div>
+                      <div className="text-2xl font-medium text-gold">{liveCalculation.fineGold} g</div>
                     </div>
                     {transactionType !== 'EXCHANGE' && liveCalculation.amount && (
-                      <div className="p-6 bg-bronze/5 rounded-lg border border-bronze/20">
+                      <div className="p-6 bg-bronze/3 rounded-xl border border-bronze/10">
                         <div className="text-sm font-medium text-muted-foreground mb-2">Total Amount</div>
-                        <div className="text-2xl font-bold text-bronze">₹{liveCalculation.amount.toLocaleString()}</div>
+                        <div className="text-xl font-medium text-bronze">₹{liveCalculation.amount.toLocaleString()}</div>
                       </div>
                     )}
                   </div>
                   <div className="pt-2 text-center">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold/5 rounded-full border border-gold/20">
-                      <div className="w-2 h-2 bg-gold rounded-full animate-pulse"></div>
-                      <span className="text-xs text-gold font-semibold">Updates live</span>
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gold/5 rounded-full border border-gold/10">
+                      <div className="w-1.5 h-1.5 bg-gold rounded-full animate-pulse"></div>
+                      <span className="text-xs text-gold font-medium">Updates live</span>
                     </div>
                   </div>
                 </CardContent>
@@ -308,7 +308,7 @@ export default function TransactionFlow() {
                     onClick={handleConfirm}
                     className="flex-1"
                   >
-                    <Check size={20} className="mr-2" />
+                    <Check size={18} className="mr-2" />
                     {isEditMode ? 'Update' : t.confirm}
                   </Button>
                   <Button
@@ -317,7 +317,7 @@ export default function TransactionFlow() {
                     onClick={() => setShowSummary(false)}
                     className="flex-1"
                   >
-                    <X size={20} className="mr-2" />
+                    <X size={18} className="mr-2" />
                     Edit
                   </Button>
                 </div>

@@ -24,9 +24,6 @@ const Index = () => {
               {t.appTitle}
             </h1>
           </div>
-          <p className="text-muted-foreground text-lg">
-            Professional gold trading made simple
-          </p>
         </div>
 
         {/* Language and History Controls */}
@@ -70,35 +67,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Features Section */}
-        <div className="max-w-2xl mx-auto text-center mt-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground">
-            <div className="space-y-2">
-              <div className="w-8 h-8 bg-gold-light rounded-full mx-auto flex items-center justify-center">
-                <span className="text-xs font-bold">✓</span>
-              </div>
-              <p>Offline Support</p>
-            </div>
-            <div className="space-y-2">
-              <div className="w-8 h-8 bg-gold-light rounded-full mx-auto flex items-center justify-center">
-                <span className="text-xs font-bold">✓</span>
-              </div>
-              <p>Multi Language</p>
-            </div>
-            <div className="space-y-2">
-              <div className="w-8 h-8 bg-gold-light rounded-full mx-auto flex items-center justify-center">
-                <span className="text-xs font-bold">✓</span>
-              </div>
-              <p>Receipt Printing</p>
-            </div>
-            <div className="space-y-2">
-              <div className="w-8 h-8 bg-gold-light rounded-full mx-auto flex items-center justify-center">
-                <span className="text-xs font-bold">✓</span>
-              </div>
-              <p>Transaction History</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

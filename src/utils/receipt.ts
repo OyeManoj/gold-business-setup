@@ -7,47 +7,42 @@ export function generateReceiptText(transaction: Transaction, language: Language
   const date = transaction.date.toLocaleDateString();
   const time = transaction.date.toLocaleTimeString();
 
-  let receipt = `=========================================\n`;
-  receipt += `           GOLD BUSINESS\n`;
-  receipt += `        TRANSACTION RECEIPT\n`;
-  receipt += `=========================================\n\n`;
-  receipt += `Receipt #: ${transaction.id}\n`;
-  receipt += `Date: ${date}\n`;
-  receipt += `Time: ${time}\n`;
-  receipt += `Transaction: ${t[transaction.type.toLowerCase() as keyof typeof t].toUpperCase()}\n\n`;
-  receipt += `=========================================\n`;
-  receipt += `           TRANSACTION DETAILS\n`;
-  receipt += `=========================================\n\n`;
+  let receipt = `--------------------------------\n`;
+  receipt += `        GOLD BUSINESS\n`;
+  receipt += `     TRANSACTION RECEIPT\n`;
+  receipt += `--------------------------------\n`;
+  receipt += `ID: ${transaction.id}\n`;
+  receipt += `${date} ${time}\n`;
+  receipt += `Type: ${t[transaction.type.toLowerCase() as keyof typeof t]}\n`;
+  receipt += `--------------------------------\n`;
   
-  receipt += `Weight:           ${transaction.weight} ${t.grams}\n`;
-  receipt += `Purity:           ${transaction.purity}${t.percent}\n`;
+  receipt += `Weight:      ${transaction.weight} ${t.grams}\n`;
+  receipt += `Purity:      ${transaction.purity}${t.percent}\n`;
   
   if (transaction.reduction !== undefined) {
-    receipt += `Reduction:        ${transaction.reduction}${t.percent}\n`;
+    receipt += `Reduction:   ${transaction.reduction}${t.percent}\n`;
   }
   
-  receipt += `Fine Gold:        ${transaction.fineGold} ${t.grams}\n`;
+  receipt += `Fine Gold:   ${transaction.fineGold} ${t.grams}\n`;
   
   // Only show rate and amount for non-Exchange transactions
   if (transaction.type !== 'EXCHANGE') {
-    receipt += `Rate:             ${t.rupees}${transaction.rate}/${t.grams}\n`;
-    receipt += `\n-----------------------------------------\n`;
-    receipt += `TOTAL AMOUNT:     ${t.rupees}${transaction.amount.toLocaleString()}\n`;
-    receipt += `-----------------------------------------\n\n`;
+    receipt += `Rate:        ${t.rupees}${transaction.rate}/${t.grams}\n`;
+    receipt += `................................\n`;
+    receipt += `TOTAL:       ${t.rupees}${transaction.amount.toLocaleString()}\n`;
+    receipt += `................................\n`;
   }
   
   if (transaction.cashPaid && transaction.cashPaid > 0) {
-    receipt += `Cash Paid:        ${t.rupees}${transaction.cashPaid.toLocaleString()}\n`;
+    receipt += `Cash Paid:   ${t.rupees}${transaction.cashPaid.toLocaleString()}\n`;
     if (transaction.remainingFineGold) {
-      receipt += `Remaining Gold:   ${transaction.remainingFineGold} ${t.grams}\n`;
+      receipt += `Remaining:   ${transaction.remainingFineGold} ${t.grams}\n`;
     }
-    receipt += `\n`;
   }
   
-  receipt += `=========================================\n`;
-  receipt += `         AUTHORIZED SIGNATURE\n\n`;
-  receipt += `_____________________\n\n`;
-  receipt += `=========================================`;
+  receipt += `--------------------------------\n`;
+  receipt += `Signature: _______________\n`;
+  receipt += `--------------------------------`;
 
   return receipt;
 }

@@ -8,40 +8,37 @@ export function generateReceiptText(transaction: Transaction, language: Language
   const time = transaction.date.toLocaleTimeString();
 
   let receipt = `\n`;
-  receipt += `           Transaction Summary\n`;
-  receipt += `        ═══════════════════════════\n`;
-  receipt += `        ${date} • ${time}\n`;
-  receipt += `        Type: ${t[transaction.type.toLowerCase() as keyof typeof t].toUpperCase()}\n\n`;
+  receipt += `        GOLD EXCHANGE RECEIPT\n`;
+  receipt += `          CUSTOMER COPY\n`;
+  receipt += `        ═══════════════════════\n\n`;
+  receipt += `        ID: ${transaction.id}\n`;
+  receipt += `        ${date} • ${time}\n\n`;
   
-  receipt += `        INPUT DETAILS\n`;
-  receipt += `        ─────────────────────\n`;
-  receipt += `        Weight:           ${transaction.weight} ${t.grams}\n`;
-  receipt += `        Purity:           ${transaction.purity}${t.percent}\n`;
+  receipt += `        FINE WEIGHT: ${transaction.fineGold}G\n`;
+  receipt += `        ═══════════════════════\n\n`;
+  
+  receipt += `        CUSTOMER\n`;
+  receipt += `        NAME: ____________________\n`;
+  receipt += `        MOBILE: __________________\n\n`;
+  
+  receipt += `        DETAILS\n`;
+  receipt += `        ───────────────────────\n`;
+  receipt += `        GROSS WEIGHT      ${String(transaction.weight).padEnd(8)}G\n`;
+  receipt += `        PURITY            ${String(transaction.purity).padEnd(8)}%\n`;
   
   if (transaction.reduction !== undefined) {
-    receipt += `        Reduction:        ${transaction.reduction}${t.percent}\n`;
+    receipt += `        REDUCTION         ${String(transaction.reduction).padEnd(8)}%\n`;
   }
   
+  receipt += `        FINE WEIGHT       ${String(transaction.fineGold).padEnd(8)}G\n`;
+  
+  // Only show payment for non-Exchange transactions
   if (transaction.type !== 'EXCHANGE') {
-    receipt += `        Rate:             ${t.rupees}${transaction.rate}/${t.grams}\n`;
+    receipt += `        PAYMENT           ${t.rupees}${transaction.amount.toLocaleString()}\n`;
   }
   
-  receipt += `\n        CALCULATED RESULTS\n`;
-  receipt += `        ─────────────────────\n`;
-  receipt += `        ┌─────────────────────────┐\n`;
-  receipt += `        │  Fine Gold:             │\n`;
-  receipt += `        │  ${String(transaction.fineGold).padEnd(21)} ${t.grams}  │\n`;
-  receipt += `        └─────────────────────────┘\n`;
-  
-  // Only show total amount for non-Exchange transactions
-  if (transaction.type !== 'EXCHANGE') {
-    receipt += `        ┌─────────────────────────┐\n`;
-    receipt += `        │  Total Amount:          │\n`;
-    receipt += `        │  ${t.rupees}${String(transaction.amount.toLocaleString()).padEnd(19)}  │\n`;
-    receipt += `        └─────────────────────────┘\n`;
-  }
-  
-  receipt += `\n        Thank you for your business!\n`;
+  receipt += `\n        ───────────────────────\n`;
+  receipt += `        THANK YOU FOR YOUR BUSINESS\n\n`;
   
   return receipt;
 }

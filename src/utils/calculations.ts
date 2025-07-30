@@ -8,10 +8,12 @@ export function calculateExchange(
 ): CalculationResult {
   const fineGold = weight * (purity - reduction) / 100;
   const amount = fineGold * rate;
+  const profit = weight * reduction / 100; // Profit is the reduction amount
   
   return { 
     fineGold: Number(fineGold.toFixed(3)), 
-    amount: Number(amount.toFixed(2))
+    amount: Number(amount.toFixed(2)),
+    profit: Number(profit.toFixed(3))
   };
 }
 

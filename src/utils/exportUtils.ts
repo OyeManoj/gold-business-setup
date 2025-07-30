@@ -7,6 +7,7 @@ export interface ExportSummary {
   totalWeight: number;
   totalFineGold: number;
   totalAmount: number;
+  totalProfit: number; // Total profit from exchanges
   typeBreakdown: Record<string, number>;
 }
 
@@ -14,6 +15,7 @@ export function calculateSummary(transactions: Transaction[]): ExportSummary {
   const totalWeight = transactions.reduce((sum, t) => sum + t.weight, 0);
   const totalFineGold = transactions.reduce((sum, t) => sum + t.fineGold, 0);
   const totalAmount = transactions.reduce((sum, t) => sum + t.amount, 0);
+  const totalProfit = transactions.reduce((sum, t) => sum + (t.profit || 0), 0);
   
   const typeBreakdown = transactions.reduce((acc, t) => {
     acc[t.type] = (acc[t.type] || 0) + 1;
@@ -25,6 +27,7 @@ export function calculateSummary(transactions: Transaction[]): ExportSummary {
     totalWeight: Number(totalWeight.toFixed(3)),
     totalFineGold: Number(totalFineGold.toFixed(3)),
     totalAmount: Number(totalAmount.toFixed(2)),
+    totalProfit: Number(totalProfit.toFixed(3)),
     typeBreakdown
   };
 }
@@ -60,7 +63,8 @@ export function exportTransactionsToExcel(
     'Reduction (%)': transaction.reduction || 0,
     'Rate (₹/g)': transaction.rate,
     'Fine Gold (g)': transaction.fineGold,
-    'Amount (₹)': transaction.amount
+    'Amount (₹)': transaction.amount,
+    'Profit (g)': transaction.profit || 0
   }));
   
   // Add summary rows
@@ -71,6 +75,7 @@ export function exportTransactionsToExcel(
     { 'ID': 'Total Weight (g)', 'Date': summary.totalWeight },
     { 'ID': 'Total Fine Gold (g)', 'Date': summary.totalFineGold },
     { 'ID': 'Total Amount (₹)', 'Date': summary.totalAmount },
+    { 'ID': 'Total Profit (g)', 'Date': summary.totalProfit },
     {},
     { 'ID': '=== TYPE BREAKDOWN ===' }
   ];

@@ -77,6 +77,14 @@ export default function TransactionFlow() {
   };
 
   const handleConfirm = () => {
+    const calculationResult = calculateTransaction(
+      transactionType,
+      parseFloat(formData.weight),
+      transactionType === 'SALE' ? 100 : parseFloat(formData.purity),
+      transactionType === 'EXCHANGE' ? 1 : parseFloat(formData.rate),
+      transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined
+    );
+
     const transaction: Transaction = {
       id: isEditMode ? editingTransaction!.id : Date.now().toString(),
       type: transactionType,
@@ -84,15 +92,8 @@ export default function TransactionFlow() {
       purity: transactionType === 'SALE' ? 100 : parseFloat(formData.purity),
       reduction: transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined,
       rate: transactionType === 'EXCHANGE' ? 1 : parseFloat(formData.rate),
-      
       date: isEditMode ? editingTransaction!.date : new Date(),
-      ...calculateTransaction(
-        transactionType,
-        parseFloat(formData.weight),
-        transactionType === 'SALE' ? 100 : parseFloat(formData.purity),
-        transactionType === 'EXCHANGE' ? 1 : parseFloat(formData.rate),
-        transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined
-      )
+      ...calculationResult
     };
 
     if (isEditMode) {
@@ -269,6 +270,12 @@ export default function TransactionFlow() {
                       <div className="text-sm text-muted-foreground mb-2">Fine Gold Output</div>
                       <div className="text-3xl font-bold text-primary">{liveCalculation.fineGold} g</div>
                     </div>
+                    {transactionType === 'EXCHANGE' && liveCalculation.profit && (
+                      <div className="p-6 bg-gradient-to-br from-green-500/10 to-green-500/5 rounded-xl border border-green-500/20">
+                        <div className="text-sm text-muted-foreground mb-2">Profit</div>
+                        <div className="text-2xl font-bold text-green-600">{liveCalculation.profit} g</div>
+                      </div>
+                    )}
                     {transactionType !== 'EXCHANGE' && liveCalculation.amount && (
                       <div className="p-6 bg-gradient-to-br from-green-500/10 to-green-500/5 rounded-xl border border-green-500/20">
                         <div className="text-sm text-muted-foreground mb-2">Total Amount</div>

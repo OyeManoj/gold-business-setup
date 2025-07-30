@@ -7,25 +7,33 @@ export function generateReceiptText(transaction: Transaction, language: Language
   const date = transaction.date.toLocaleDateString();
   const time = transaction.date.toLocaleTimeString();
 
+  // Helper function for proper alignment
+  const formatLine = (label: string, value: string, unit: string = '') => {
+    const totalWidth = 23;
+    const valueUnit = value + unit;
+    const spaces = totalWidth - label.length - valueUnit.length;
+    return `        ${label}${' '.repeat(Math.max(1, spaces))}${valueUnit}\n`;
+  };
+
   let receipt = `\n`;
   receipt += `        GOLD EXCHANGE RECEIPT\n`;
   receipt += `        ═══════════════════════\n`;
   receipt += `        ID: ${transaction.id}\n`;
   receipt += `        ${date} • ${time}\n`;
   receipt += `        ───────────────────────\n`;
-  receipt += `        GROSS WEIGHT      ${String(transaction.weight).padEnd(8)}G\n`;
-  receipt += `        PURITY            ${String(transaction.purity).padEnd(8)}%\n`;
+  receipt += formatLine('GROSS WEIGHT', String(transaction.weight), 'G');
+  receipt += formatLine('PURITY', String(transaction.purity), '%');
   
   if (transaction.reduction !== undefined) {
-    receipt += `        REDUCTION         ${String(transaction.reduction).padEnd(8)}%\n`;
+    receipt += formatLine('REDUCTION', String(transaction.reduction), '%');
   }
   
   receipt += `        ───────────────────────\n`;
-  receipt += `        FINE WEIGHT       ${String(transaction.fineGold).padEnd(8)}G\n`;
-  
+  receipt += formatLine('FINE WEIGHT', String(transaction.fineGold), 'G');
+
   // Only show payment for non-Exchange transactions
   if (transaction.type !== 'EXCHANGE') {
-    receipt += `        PAYMENT           ${t.rupees}${transaction.amount.toLocaleString()}\n`;
+    receipt += formatLine('PAYMENT', `${t.rupees}${transaction.amount.toLocaleString()}`);
   }
   
   receipt += `\n        ───────────────────────\n`;

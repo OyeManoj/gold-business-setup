@@ -2,12 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Languages } from "lucide-react";
 import { useState } from "react";
 
-export type Language = 'en' | 'hi' | 'mr';
+export type Language = 'en' | 'hi' | 'mr' | 'ar';
 
 const languages = {
   en: 'English',
   hi: 'हिंदी',
-  mr: 'मराठी'
+  mr: 'मराठी',
+  ar: 'العربية'
 };
 
 interface LanguageToggleProps {

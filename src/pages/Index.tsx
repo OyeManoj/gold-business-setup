@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { useTranslation } from '@/utils/translations';
-import { ArrowUpDown, ShoppingCart, TrendingUp, History } from 'lucide-react';
+import { ArrowUpDown, ShoppingCart, TrendingUp, History, Settings } from 'lucide-react';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -52,6 +52,15 @@ const Index = () => {
             currentLanguage={language}
             onLanguageChange={setLanguage}
           />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate('/business-profile')}
+            className="flex items-center gap-2"
+          >
+            <Settings size={16} />
+            {language === 'ar' ? 'ملف العمل' : 'Business Profile'}
+          </Button>
           <Button
             variant="outline"
             size="sm"

@@ -96,6 +96,38 @@ export const translations = {
     rupees: '₹',
     grams: 'ग्राम',
     percent: '%'
+  },
+  ar: {
+    appTitle: 'أعمال الذهب',
+    exchange: 'تبديل',
+    purchase: 'شراء',
+    sale: 'بيع',
+    weight: 'الوزن (غرام)',
+    purity: 'النقاء (%)',
+    reduction: 'التخفيض (%)',
+    rate: 'سعر الذهب (₹/غرام)',
+    
+    next: 'التالي',
+    back: 'السابق',
+    confirm: 'تأكيد وطباعة',
+    cancel: 'إلغاء',
+    summary: 'الملخص',
+    fineGold: 'الذهب الخالص',
+    amount: 'المبلغ',
+    remainingFineGold: 'الذهب الخالص المتبقي',
+    history: 'التاريخ',
+    enterValue: 'أدخل القيمة',
+    
+    yes: 'نعم',
+    no: 'لا',
+    receipt: 'الإيصال',
+    date: 'التاريخ',
+    time: 'الوقت',
+    transaction: 'المعاملة',
+    thankYou: 'شكراً لك!',
+    rupees: '₹',
+    grams: 'غرام',
+    percent: '%'
   }
 };
 

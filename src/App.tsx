@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import TransactionFlow from "./pages/TransactionFlow";
+import BusinessProfile from "./pages/BusinessProfile";
 import History from "./pages/History";
 import NotFound from "./pages/NotFound";
 
@@ -20,6 +21,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/transaction/:type" element={<TransactionFlow />} />
           <Route path="/transaction/:type/edit/:transactionId" element={<TransactionFlow />} />
+          <Route path="/business-profile" element={<BusinessProfile />} />
           <Route path="/history" element={<History />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

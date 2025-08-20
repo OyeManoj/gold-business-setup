@@ -6,8 +6,7 @@
   },
   "files": [
     "dist/**/*",
-    "electron/main.js",
-    "package.json"
+    "electron/main.js"
   ],
   "win": {
     "target": "nsis",
@@ -17,7 +16,9 @@
     "oneClick": false,
     "allowToChangeInstallationDirectory": true,
     "createDesktopShortcut": true,
-    "createStartMenuShortcut": true
+    "createStartMenuShortcut": true,
+    "installerIcon": "public/favicon.ico",
+    "uninstallerIcon": "public/favicon.ico"
   },
   "publish": null
 }

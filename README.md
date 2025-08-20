@@ -1,73 +1,72 @@
-# Welcome to your Lovable project
+# Gold Ease Receipt - Windows Desktop App
 
-## Project info
+A beautiful, offline-first gold business transaction manager for Windows.
 
-**URL**: https://lovable.dev/projects/24c02c5e-b672-4c09-b1c3-eae722ad5449
+## Features
+- ✅ **Completely Offline** - No internet required
+- ✅ **Local Data Storage** - All transactions stored on your device
+- ✅ **Receipt Printing** - Generate and print transaction receipts
+- ✅ **Transaction Types** - Exchange, Purchase, and Sale transactions
+- ✅ **Live Calculations** - Real-time fine gold and amount calculations
+- ✅ **Export Data** - Export transaction history to Excel
+- ✅ **Multi-language** - English and Arabic support
 
-## How can I edit this code?
+## Quick Start
 
-There are several ways of editing your application.
+### For End Users (Simple Installation)
 
-**Use Lovable**
+1. **Download** the installer from the releases page
+2. **Run** `Gold-Ease-Receipt-Setup-1.0.0.exe`
+3. **Install** following the setup wizard
+4. **Launch** the app from your desktop or start menu
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/24c02c5e-b672-4c09-b1c3-eae722ad5449) and start prompting.
+### For Developers
 
-Changes made via Lovable will be committed automatically to this repo.
+#### Prerequisites
+- Node.js 18+ installed
+- Git installed
 
-**Use your preferred IDE**
+#### Installation & Development
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd gold-ease-receipt
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+# Install dependencies
+npm install
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+# Run in development mode
+npm run electron:dev
 ```
 
-**Edit a file directly in GitHub**
+#### Building for Distribution
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+# Build Windows installer
+npm run electron:dist
 
-**Use GitHub Codespaces**
+# The installer will be created in dist-electron/
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Project Structure
 
-## What technologies are used for this project?
+```
+gold-ease-receipt/
+├── electron/           # Electron main process
+├── src/               # React application source
+├── public/            # Static assets
+├── dist/              # Built web application
+└── dist-electron/     # Built desktop application
+```
 
-This project is built with:
+## Data Storage
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+All transaction data is stored locally using Electron's localStorage, ensuring:
+- Complete privacy - no data leaves your device
+- Offline functionality - works without internet
+- Fast performance - instant access to your data
 
-## How can I deploy this project?
+## Support
 
-Simply open [Lovable](https://lovable.dev/projects/24c02c5e-b672-4c09-b1c3-eae722ad5449) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+For issues or questions, please open an issue in the repository.

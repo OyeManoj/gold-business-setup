@@ -14,9 +14,9 @@ export function generateReceiptText(
   const date = transaction.date.toLocaleDateString('en-IN');
   const time = transaction.date.toLocaleTimeString('en-IN', { hour12: true });
 
-  // Helper function for proper alignment in 3x4 paper
+  // Optimized for 3x4 inch paper (approximately 32 characters width at 8pt font)
   const formatLine = (label: string, value: string, unit: string = '') => {
-    const totalWidth = 25; // Optimized for 3x4 paper
+    const totalWidth = 32; // Exact fit for 3 inch width
     const valueUnit = value + unit;
     const spaces = totalWidth - label.length - valueUnit.length;
     return `${label}${' '.repeat(Math.max(1, spaces))}${valueUnit}\n`;
@@ -37,8 +37,8 @@ export function generateReceiptText(
     }
     
     if (receiptSettings.showBusinessAddress && businessProfile.address) {
-      // Split address into lines if too long for 3x4 paper
-      const maxLineLength = 25;
+      // Split address into lines for 32-character width
+      const maxLineLength = 32;
       const words = businessProfile.address.split(' ');
       let currentLine = '';
       
@@ -59,15 +59,15 @@ export function generateReceiptText(
     }
     
     if (receiptSettings.showBusinessName || receiptSettings.showBusinessPhone || receiptSettings.showBusinessAddress) {
-      receipt += `─────────────────────────\n`;
+      receipt += `────────────────────────────────\n`;
     }
   }
   
   receipt += `GOLD EXCHANGE RECEIPT\n`;
-  receipt += `═════════════════════════\n`;
+  receipt += `════════════════════════════════\n`;
   receipt += `ID: ${transaction.id}\n`;
   receipt += `${date} • ${time}\n`;
-  receipt += `─────────────────────────\n`;
+  receipt += `────────────────────────────────\n`;
   receipt += formatLine('GROSS WEIGHT', String(transaction.weight), 'G');
   receipt += formatLine('PURITY', String(transaction.purity), '%');
   
@@ -75,7 +75,7 @@ export function generateReceiptText(
     receipt += formatLine('REDUCTION', String(transaction.reduction), '%');
   }
   
-  receipt += `─────────────────────────\n`;
+  receipt += `────────────────────────────────\n`;
   receipt += formatLine('FINE WEIGHT', String(transaction.fineGold), 'G');
 
   // Only show payment for non-Exchange transactions
@@ -83,7 +83,7 @@ export function generateReceiptText(
     receipt += formatLine('PAYMENT', `${t.rupees}${transaction.amount.toLocaleString()}`);
   }
   
-  receipt += `\n─────────────────────────\n`;
+  receipt += `\n────────────────────────────────\n`;
   receipt += `THANK YOU FOR YOUR BUSINESS\n\n`;
   
   return receipt;

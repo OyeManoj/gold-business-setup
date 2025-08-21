@@ -186,7 +186,7 @@ export default function TransactionFlow() {
                   {isEditMode ? 'Edit Transaction' : 'Transaction Details'}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-5 p-6">
+              <CardContent className="space-y-4 p-4">
                 {/* Average Prices Display */}
                 <DayAveragePrices transactionType={transactionType} />
                 
@@ -258,53 +258,53 @@ export default function TransactionFlow() {
                   variant="default"
                   size="lg"
                   onClick={handleCalculate}
-                  className="w-full py-3 text-base font-bold rounded-lg bg-gradient-to-r from-dark to-charcoal hover:from-charcoal hover:to-dark shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]"
+                  className="w-full py-2.5 text-sm font-bold rounded-lg bg-gradient-to-r from-dark to-charcoal hover:from-charcoal hover:to-dark shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]"
                   disabled={
                     !formData.weight || 
                     (transactionType !== 'EXCHANGE' && !formData.rate)
                   }
                 >
-                  <Calculator size={18} className="mr-2" />
+                  <Calculator size={16} className="mr-2" />
                   {isEditMode ? 'Update Transaction' : 'Calculate Transaction'}
                 </Button>
               </CardContent>
             </Card>
 
-            {/* Live Calculation Display */}
+            {/* Compact Live Calculation Display */}
             {liveCalculation && !showSummary && (
-              <Card className="bg-white border-2 border-dark/30 shadow-xl">
-                <CardHeader className="pb-6 bg-off-white rounded-t-xl">
-                  <CardTitle className="text-xl text-center font-bold flex items-center justify-center gap-3 text-dark">
-                    <Calculator size={22} className="text-dark drop-shadow-sm" />
+              <Card className="bg-white border border-dark/30 shadow-lg">
+                <CardHeader className="pb-4 bg-off-white rounded-t-xl">
+                  <CardTitle className="text-lg text-center font-bold flex items-center justify-center gap-2 text-dark">
+                    <Calculator size={18} className="text-dark drop-shadow-sm" />
                     Live Preview
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6 p-6">
-                  <div className="text-center space-y-5">
-                    <div className="p-8 bg-white rounded-2xl border-3 border-dark/30 shadow-lg">
-                      <div className="text-sm font-bold text-dark mb-3 uppercase tracking-wide">Fine Gold Output</div>
-                      <div className="text-4xl font-bold text-dark drop-shadow-sm">{formatWeight(liveCalculation.fineGold)} g</div>
+                <CardContent className="space-y-4 p-4">
+                  <div className="text-center space-y-3">
+                    <div className="p-4 bg-white rounded-xl border border-dark/30 shadow-md">
+                      <div className="text-xs font-bold text-dark mb-2 uppercase tracking-wide">Fine Gold Output</div>
+                      <div className="text-2xl font-bold text-dark drop-shadow-sm">{formatWeight(liveCalculation.fineGold)} g</div>
                     </div>
                     {transactionType !== 'EXCHANGE' && liveCalculation.amount && (
-                      <div className="p-8 bg-white rounded-2xl border-3 border-accent-2/30 shadow-lg">
-                        <div className="text-sm font-bold text-accent-2 mb-3 uppercase tracking-wide">Total Amount</div>
-                        <div className="text-3xl font-bold text-accent-2 drop-shadow-sm">{formatIndianCurrency(liveCalculation.amount)}</div>
+                      <div className="p-4 bg-white rounded-xl border border-accent-2/30 shadow-md">
+                        <div className="text-xs font-bold text-accent-2 mb-2 uppercase tracking-wide">Total Amount</div>
+                        <div className="text-xl font-bold text-accent-2 drop-shadow-sm">{formatIndianCurrency(liveCalculation.amount)}</div>
                       </div>
                     )}
                   </div>
-                  <div className="pt-4 text-center">
-                    <div className="inline-flex items-center gap-3 px-5 py-3 bg-dark/10 rounded-full border-2 border-dark/30 shadow-md">
-                      <div className="w-3 h-3 bg-dark rounded-full animate-pulse shadow-sm"></div>
-                      <span className="text-sm text-dark font-bold uppercase tracking-wide">Updates live</span>
+                  <div className="pt-2 text-center">
+                    <div className="inline-flex items-center gap-2 px-3 py-2 bg-dark/10 rounded-full border border-dark/30 shadow-sm">
+                      <div className="w-2 h-2 bg-dark rounded-full animate-pulse shadow-sm"></div>
+                      <span className="text-xs text-dark font-bold uppercase tracking-wide">Updates live</span>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             )}
 
-            {/* Summary Panel */}
+            {/* Compact Summary Panel */}
             {showSummary && calculation && (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <TransactionSummary
                   type={transactionType}
                   weight={parseFloat(formData.weight)}
@@ -317,24 +317,24 @@ export default function TransactionFlow() {
                   language={language}
                 />
 
-                {/* Action Buttons */}
-                <div className="flex gap-4">
+                {/* Compact Action Buttons */}
+                <div className="flex gap-3">
                   <Button
                     variant="success"
-                    size="lg"
+                    size="default"
                     onClick={handleConfirm}
-                    className="flex-1"
+                    className="flex-1 py-2.5"
                   >
-                    <Check size={18} className="mr-2" />
+                    <Check size={16} className="mr-2" />
                     {isEditMode ? 'Update' : t.confirm}
                   </Button>
                   <Button
                     variant="outline"
-                    size="lg"
+                    size="default"
                     onClick={() => setShowSummary(false)}
-                    className="flex-1"
+                    className="flex-1 py-2.5"
                   >
-                    <X size={18} className="mr-2" />
+                    <X size={16} className="mr-2" />
                     Edit
                   </Button>
                 </div>

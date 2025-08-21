@@ -50,28 +50,28 @@ export function DayAveragePrices({ transactionType }: DayAveragePricesProps) {
   }
 
   return (
-    <Card className="border-0 shadow-sm bg-primary/5 mb-6">
-      <CardContent className="p-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-green-50 dark:bg-green-950/30">
-              <TrendingUp className="w-4 h-4 text-green-600 dark:text-green-400" />
+    <Card className="border-0 shadow-sm bg-primary/5 mb-3">
+      <CardContent className="p-3">
+        <div className="grid grid-cols-2 gap-3">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-md bg-green-50 dark:bg-green-950/30">
+              <TrendingUp className="w-3 h-3 text-green-600 dark:text-green-400" />
             </div>
             <div>
               <div className="text-xs text-muted-foreground font-medium">Today's Avg Purchase</div>
-              <div className="text-sm font-semibold text-foreground">
+              <div className="text-xs font-semibold text-foreground">
                 {avgPurchasePrice > 0 ? formatIndianRate(avgPurchasePrice) : 'No data'}
               </div>
             </div>
           </div>
           
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-red-50 dark:bg-red-950/30">
-              <TrendingDown className="w-4 h-4 text-red-600 dark:text-red-400" />
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-md bg-red-50 dark:bg-red-950/30">
+              <TrendingDown className="w-3 h-3 text-red-600 dark:text-red-400" />
             </div>
             <div>
               <div className="text-xs text-muted-foreground font-medium">Today's Avg Sale</div>
-              <div className="text-sm font-semibold text-foreground">
+              <div className="text-xs font-semibold text-foreground">
                 {avgSalePrice > 0 ? formatIndianRate(avgSalePrice) : 'No data'}
               </div>
             </div>

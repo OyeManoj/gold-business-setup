@@ -32,8 +32,12 @@ export function useLiveCalculation(formData: FormData, transactionType: Transact
   }, [formData, transactionType]);
 
   useEffect(() => {
-    // Update immediately for live feedback
-    setLiveCalculation(calculation);
+    // Debounce calculation updates for better performance
+    const timer = setTimeout(() => {
+      setLiveCalculation(calculation);
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, [calculation]);
 
   return liveCalculation;

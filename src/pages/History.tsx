@@ -9,10 +9,13 @@ import { getTransactions, clearTransactions } from '@/utils/storage';
 import { useTranslation } from '@/utils/translations';
 import { formatTransactionType } from '@/utils/exportUtils';
 import { useTransactionFilters } from '@/hooks/useTransactionFilters';
-import { ArrowLeft, Edit, History as HistoryIcon } from 'lucide-react';
+import { ArrowLeft, Edit, History as HistoryIcon, Printer } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { formatIndianCurrency, formatIndianRate, formatWeight, formatPercentage } from '@/utils/indianFormatting';
+import { generateReceiptText, printReceipt } from '@/utils/receipt';
+import { getBusinessProfile } from '@/utils/businessStorage';
+import { getReceiptSettings } from '@/utils/receiptSettingsStorage';
 
 export default function History() {
   const navigate = useNavigate();
@@ -51,6 +54,28 @@ export default function History() {
 
   const handleEditTransaction = (transaction: any) => {
     navigate(`/transaction/${transaction.type.toLowerCase()}/edit/${transaction.id}`);
+  };
+
+  const handlePrintReceipt = async (transaction: any) => {
+    try {
+      const businessProfile = await getBusinessProfile();
+      const receiptSettings = await getReceiptSettings();
+      const receiptText = generateReceiptText(transaction, language, businessProfile, receiptSettings);
+      printReceipt(receiptText);
+      
+      toast({
+        title: "Receipt Printing",
+        description: "Receipt sent to printer. If nothing happened, check if popups are blocked in your browser.",
+        variant: "default"
+      });
+    } catch (error) {
+      console.error('Print error:', error);
+      toast({
+        title: "Print Error", 
+        description: "Failed to print receipt. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
@@ -176,14 +201,26 @@ export default function History() {
                             <td className="py-3 px-3 text-right font-mono text-xs font-semibold text-primary">{formatWeight(transaction.fineGold)}</td>
                             <td className="py-3 px-3 text-right font-mono text-xs font-bold text-green-700 dark:text-green-400">{formatIndianCurrency(transaction.amount)}</td>
                             <td className="py-3 px-3 text-center">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleEditTransaction(transaction)}
-                                className="h-7 w-7 p-0 rounded-md border hover:border-primary/30 hover:bg-primary/5 hover:shadow-sm transition-all duration-200"
-                              >
-                                <Edit size={14} />
-                              </Button>
+                              <div className="flex items-center justify-center gap-1">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handlePrintReceipt(transaction)}
+                                  className="h-7 w-7 p-0 rounded-md border hover:border-blue-300 hover:bg-blue-50 hover:shadow-sm transition-all duration-200"
+                                  title="Print Receipt"
+                                >
+                                  <Printer size={14} />
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleEditTransaction(transaction)}
+                                  className="h-7 w-7 p-0 rounded-md border hover:border-primary/30 hover:bg-primary/5 hover:shadow-sm transition-all duration-200"
+                                  title="Edit Transaction"
+                                >
+                                  <Edit size={14} />
+                                </Button>
+                              </div>
                             </td>
                           </tr>
                         ))}

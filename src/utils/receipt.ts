@@ -94,63 +94,176 @@ export function generateReceiptText(
 }
 
 export function printReceipt(receiptText: string): void {
-  // Open print window with security measures to prevent XSS
-  const printWindow = window.open('', '_blank', 'noopener');
-  if (printWindow) {
-    // Prevent access to opener window for security
-    printWindow.opener = null;
+  console.log('printReceipt called with text:', receiptText);
+  
+  // Try multiple approaches for printing
+  
+  // Method 1: Try window.open with noopener
+  try {
+    const printWindow = window.open('', '_blank', 'width=400,height=600,noopener');
+    console.log('Print window opened:', printWindow);
     
-    // Write secure HTML structure
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>Receipt</title>
-          <style>
-            body {
-              font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-              font-size: 9px;
-              font-weight: 300;
-              margin: 0;
-              padding: 2px;
-              white-space: pre-wrap;
-              line-height: 1.1;
-              width: 3in;
-              height: 3in;
-              background: #ffffff;
-              color: #000000;
-              letter-spacing: 0.2px;
-              overflow: hidden;
-            }
-            @media print {
-              body { 
-                margin: 0; 
+    if (printWindow) {
+      // Prevent access to opener window for security
+      printWindow.opener = null;
+      
+      // Write secure HTML structure
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Receipt</title>
+            <style>
+              body {
+                font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+                font-size: 9px;
+                font-weight: 300;
+                margin: 0;
                 padding: 2px;
-                font-size: 8px;
-                line-height: 1.0;
-                background: white;
+                white-space: pre-wrap;
+                line-height: 1.1;
                 width: 3in;
                 height: 3in;
+                background: #ffffff;
+                color: #000000;
+                letter-spacing: 0.2px;
+                overflow: hidden;
               }
-              @page {
-                size: 3in 3in;
-                margin: 0;
+              @media print {
+                body { 
+                  margin: 0; 
+                  padding: 2px;
+                  font-size: 8px;
+                  line-height: 1.0;
+                  background: white;
+                  width: 3in;
+                  height: 3in;
+                }
+                @page {
+                  size: 3in 3in;
+                  margin: 0;
+                }
               }
-            }
-          </style>
-        </head>
-        <body><pre id="receipt"></pre></body>
-      </html>
-    `);
-    printWindow.document.close();
-    
-    // Safely inject receipt text using textContent to prevent XSS
-    const receiptElement = printWindow.document.getElementById('receipt');
-    if (receiptElement) {
-      receiptElement.textContent = receiptText;
+            </style>
+          </head>
+          <body><pre id="receipt"></pre></body>
+        </html>
+      `);
+      printWindow.document.close();
+      
+      // Safely inject receipt text using textContent to prevent XSS
+      const receiptElement = printWindow.document.getElementById('receipt');
+      console.log('Receipt element found:', receiptElement);
+      
+      if (receiptElement) {
+        receiptElement.textContent = receiptText;
+        console.log('Receipt text set successfully');
+      } else {
+        console.error('Receipt element not found');
+      }
+      
+      // Add a small delay to ensure content is loaded before printing
+      setTimeout(() => {
+        console.log('Attempting to print...');
+        try {
+          printWindow.print();
+          console.log('Print dialog should have opened');
+          
+          // Close the window after a delay
+          setTimeout(() => {
+            printWindow.close();
+          }, 1000);
+        } catch (error) {
+          console.error('Error calling print():', error);
+        }
+      }, 100);
+      
+      return; // Success, exit function
     }
-    
-    printWindow.print();
+  } catch (error) {
+    console.error('Method 1 failed:', error);
   }
+  
+  // Method 2: Fallback - create a hidden iframe for printing
+  try {
+    console.log('Trying iframe fallback method...');
+    
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+    
+    if (iframe.contentWindow) {
+      iframe.contentWindow.document.write(`
+        <html>
+          <head>
+            <title>Receipt</title>
+            <style>
+              body {
+                font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+                font-size: 9px;
+                font-weight: 300;
+                margin: 0;
+                padding: 2px;
+                white-space: pre-wrap;
+                line-height: 1.1;
+                width: 3in;
+                height: 3in;
+                background: #ffffff;
+                color: #000000;
+                letter-spacing: 0.2px;
+                overflow: hidden;
+              }
+              @media print {
+                body { 
+                  margin: 0; 
+                  padding: 2px;
+                  font-size: 8px;
+                  line-height: 1.0;
+                  background: white;
+                  width: 3in;
+                  height: 3in;
+                }
+                @page {
+                  size: 3in 3in;
+                  margin: 0;
+                }
+              }
+            </style>
+          </head>
+          <body><pre>${receiptText}</pre></body>
+        </html>
+      `);
+      iframe.contentWindow.document.close();
+      
+      setTimeout(() => {
+        try {
+          iframe.contentWindow?.print();
+          console.log('Iframe print called');
+          
+          // Clean up after printing
+          setTimeout(() => {
+            document.body.removeChild(iframe);
+          }, 1000);
+        } catch (error) {
+          console.error('Iframe print failed:', error);
+          document.body.removeChild(iframe);
+        }
+      }, 100);
+      
+      return; // Success, exit function
+    }
+  } catch (error) {
+    console.error('Method 2 failed:', error);
+  }
+  
+  // Method 3: Last resort - show alert with instructions
+  console.error('All print methods failed');
+  alert(`Print failed: Popup might be blocked. 
+
+Please:
+1. Enable popups for this site in your browser
+2. Or copy the receipt text below and print manually:
+
+${receiptText}`);
 }
 
 // For future Bluetooth thermal printer integration

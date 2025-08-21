@@ -9,7 +9,7 @@ import { ArrowUpDown, ShoppingCart, TrendingUp, History, Settings, LogOut, User 
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, logout, hasPermission } = useAuth();
   const [language, setLanguage] = useState<Language>('en');
   const t = useTranslation(language);
 
@@ -69,15 +69,17 @@ const Index = () => {
                     <span className="font-medium text-sm">{language === 'ar' ? 'ملف العمل' : 'Business Profile'}</span>
                   </Button>
                   
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => navigate('/history')}
-                    className="flex items-center gap-2"
-                  >
-                    <History size={16} />
-                    <span className="font-medium text-sm">{t.history}</span>
-                  </Button>
+                  {hasPermission('history') && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => navigate('/history')}
+                      className="flex items-center gap-2"
+                    >
+                      <History size={16} />
+                      <span className="font-medium text-sm">{t.history}</span>
+                    </Button>
+                  )}
                 </div>
               </div>
 
@@ -86,7 +88,7 @@ const Index = () => {
                 <div className="flex items-center gap-2 px-3 py-2 bg-muted/20 rounded-lg">
                   <User size={16} className="text-muted-foreground" />
                   <span className="text-sm font-medium">{user?.name}</span>
-                  <span className="text-xs text-muted-foreground">({user?.userId})</span>
+                  <span className="text-xs text-muted-foreground">({user?.userId}) - {user?.role}</span>
                 </div>
                 
                 <Button

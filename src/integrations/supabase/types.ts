@@ -52,6 +52,7 @@ export type Database = {
           last_login: string | null
           name: string | null
           pin: string
+          role: string
           updated_at: string
           user_id: string
         }
@@ -62,6 +63,7 @@ export type Database = {
           last_login?: string | null
           name?: string | null
           pin: string
+          role?: string
           updated_at?: string
           user_id: string
         }
@@ -72,6 +74,7 @@ export type Database = {
           last_login?: string | null
           name?: string | null
           pin?: string
+          role?: string
           updated_at?: string
           user_id?: string
         }

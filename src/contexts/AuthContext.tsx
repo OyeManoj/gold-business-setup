@@ -5,6 +5,7 @@ interface User {
   id: string;
   userId: string;
   name: string;
+  role: 'admin' | 'employee';
 }
 
 interface AuthContextType {
@@ -12,6 +13,7 @@ interface AuthContextType {
   login: (userId: string, pin: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   isLoading: boolean;
+  hasPermission: (permission: string) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -43,7 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Query the custom_users table
       const { data, error } = await supabase
         .from('custom_users')
-        .select('id, user_id, name')
+        .select('id, user_id, name, role')
         .eq('user_id', userId)
         .eq('pin', pin)
         .eq('is_active', true)
@@ -62,7 +64,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const userData: User = {
         id: data.id,
         userId: data.user_id,
-        name: data.name || 'User'
+        name: data.name || 'User',
+        role: data.role as 'admin' | 'employee'
       };
 
       setUser(userData);
@@ -80,8 +83,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem('goldease_user');
   };
 
+  const hasPermission = (permission: string): boolean => {
+    if (!user) return false;
+    
+    // Admin has all permissions
+    if (user.role === 'admin') return true;
+    
+    // Define employee restrictions
+    if (user.role === 'employee') {
+      const restrictedPermissions = ['history'];
+      return !restrictedPermissions.includes(permission);
+    }
+    
+    return false;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, logout, isLoading, hasPermission }}>
       {children}
     </AuthContext.Provider>
   );

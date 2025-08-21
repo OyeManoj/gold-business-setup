@@ -13,7 +13,6 @@ import { getBusinessProfile } from '@/utils/businessStorage';
 import { getReceiptSettings } from '@/utils/receiptSettingsStorage';
 import { useTranslation } from '@/utils/translations';
 import { validateTransactionForm, FormData } from '@/utils/formValidation';
-import { useLiveCalculation } from '@/hooks/useLiveCalculation';
 import { ArrowLeft, Check, X, Calculator } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
@@ -60,7 +59,7 @@ export default function TransactionFlow() {
     loadTransaction();
   }, [isEditMode, transactionId]);
 
-  const liveCalculation = useLiveCalculation(formData, transactionType);
+  
 
   // Validation
   const validateForm = () => {
@@ -270,50 +269,19 @@ export default function TransactionFlow() {
               </CardContent>
             </Card>
 
-            {/* Compact Live Calculation Display */}
-            {liveCalculation && !showSummary && (
-              <Card className="bg-white border border-dark/30 shadow-lg">
-                <CardHeader className="pb-4 bg-off-white rounded-t-xl">
-                  <CardTitle className="text-lg text-center font-bold flex items-center justify-center gap-2 text-dark">
-                    <Calculator size={18} className="text-dark drop-shadow-sm" />
-                    Live Preview
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 p-4">
-                  <div className="text-center space-y-3">
-                    <div className="p-4 bg-white rounded-xl border border-dark/30 shadow-md">
-                      <div className="text-xs font-bold text-dark mb-2 uppercase tracking-wide">Fine Gold Output</div>
-                      <div className="text-2xl font-bold text-dark drop-shadow-sm">{formatWeight(liveCalculation.fineGold)} g</div>
-                    </div>
-                    {transactionType !== 'EXCHANGE' && liveCalculation.amount && (
-                      <div className="p-4 bg-white rounded-xl border border-accent-2/30 shadow-md">
-                        <div className="text-xs font-bold text-accent-2 mb-2 uppercase tracking-wide">Total Amount</div>
-                        <div className="text-xl font-bold text-accent-2 drop-shadow-sm">{formatIndianCurrency(liveCalculation.amount)}</div>
-                      </div>
-                    )}
-                  </div>
-                  <div className="pt-2 text-center">
-                    <div className="inline-flex items-center gap-2 px-3 py-2 bg-dark/10 rounded-full border border-dark/30 shadow-sm">
-                      <div className="w-2 h-2 bg-dark rounded-full animate-pulse shadow-sm"></div>
-                      <span className="text-xs text-dark font-bold uppercase tracking-wide">Updates live</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
 
-            {/* Live Summary Panel */}
-            {liveCalculation && (
+            {/* Summary Panel */}
+            {showSummary && calculation && (
               <div className="space-y-4">
                 <TransactionSummary
                   type={transactionType}
-                  weight={parseFloat(formData.weight) || 0}
-                  purity={transactionType === 'SALE' ? 100 : (parseFloat(formData.purity) || 0)}
-                  rate={transactionType === 'EXCHANGE' ? 1 : (parseFloat(formData.rate) || 0)}
-                  fineGold={liveCalculation.fineGold}
-                  amount={liveCalculation.amount}
-                  reduction={transactionType === 'EXCHANGE' ? (parseFloat(formData.reduction) || 0) : undefined}
-                  remainingFineGold={liveCalculation.remainingFineGold}
+                  weight={parseFloat(formData.weight)}
+                  purity={transactionType === 'SALE' ? 100 : parseFloat(formData.purity)}
+                  rate={transactionType === 'EXCHANGE' ? 1 : parseFloat(formData.rate)}
+                  fineGold={calculation.fineGold}
+                  amount={calculation.amount}
+                  reduction={transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined}
+                  remainingFineGold={calculation.remainingFineGold}
                   language={language}
                 />
 

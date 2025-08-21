@@ -4,12 +4,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { useTranslation } from '@/utils/translations';
-import { ArrowUpDown, ShoppingCart, TrendingUp, History, Settings } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { ArrowUpDown, ShoppingCart, TrendingUp, History, Settings, LogOut } from 'lucide-react';
 
 const Index = () => {
   const navigate = useNavigate();
   const [language, setLanguage] = useState<Language>('en');
   const t = useTranslation(language);
+  const { signOut, user } = useAuth();
 
   const transactions = [
     {
@@ -46,30 +48,46 @@ const Index = () => {
           <div className="w-16 h-1 bg-dark mx-auto rounded-full shadow-sm"></div>
         </div>
 
-        {/* Navigation Controls */}
-        <div className="flex items-center justify-center gap-6 mb-12">
-          <LanguageToggle
-            currentLanguage={language}
-            onLanguageChange={setLanguage}
-          />
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => navigate('/business-profile')}
-            className="flex items-center gap-2"
-          >
-            <Settings size={16} />
-            {language === 'ar' ? 'ملف العمل' : 'Business Profile'}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => navigate('/history')}
-            className="flex items-center gap-2"
-          >
-            <History size={16} />
-            {t.history}
-          </Button>
+        {/* User Info and Navigation Controls */}
+        <div className="flex flex-col items-center gap-4 mb-12">
+          <div className="text-center">
+            <p className="text-sm text-muted-foreground">
+              {language === 'ar' ? 'مسجل الدخول كـ:' : 'Signed in as:'} {user?.email}
+            </p>
+          </div>
+          <div className="flex items-center justify-center gap-6">
+            <LanguageToggle
+              currentLanguage={language}
+              onLanguageChange={setLanguage}
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/business-profile')}
+              className="flex items-center gap-2"
+            >
+              <Settings size={16} />
+              {language === 'ar' ? 'ملف العمل' : 'Business Profile'}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/history')}
+              className="flex items-center gap-2"
+            >
+              <History size={16} />
+              {t.history}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={signOut}
+              className="flex items-center gap-2 text-destructive hover:text-destructive"
+            >
+              <LogOut size={16} />
+              {language === 'ar' ? 'تسجيل الخروج' : 'Sign Out'}
+            </Button>
+          </div>
         </div>
 
         {/* Transaction Grid */}

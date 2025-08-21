@@ -1,24 +1,24 @@
-# Gold Ease Receipt - Windows Desktop App
+# Gold Ease Receipt - Professional Business Management Platform
 
-A beautiful, offline-first gold business transaction manager for Windows.
+A beautiful, cloud-powered gold business transaction manager with multi-user support.
 
 ## Features
-- ✅ **Completely Offline** - No internet required
-- ✅ **Local Data Storage** - All transactions stored on your device
-- ✅ **Receipt Printing** - Generate and print transaction receipts
+- ✅ **User Authentication** - Secure login and data isolation
+- ✅ **Cloud Storage** - Data synced across devices with offline fallback
+- ✅ **Multi-User Support** - Each user's data is completely separate
 - ✅ **Transaction Types** - Exchange, Purchase, and Sale transactions
 - ✅ **Live Calculations** - Real-time fine gold and amount calculations
 - ✅ **Export Data** - Export transaction history to Excel
 - ✅ **Multi-language** - English and Arabic support
+- ✅ **Responsive Design** - Works on desktop, tablet, and mobile
 
 ## Quick Start
 
-### For End Users (Simple Installation)
+### For End Users
 
-1. **Download** the installer from the releases page
-2. **Run** `Gold-Ease-Receipt-Setup-1.0.0.exe`
-3. **Install** following the setup wizard
-4. **Launch** the app from your desktop or start menu
+1. **Visit** the website at your deployed URL
+2. **Sign up** for a new account or sign in with existing credentials
+3. **Start managing** your gold business transactions
 
 ### For Developers
 
@@ -36,36 +36,43 @@ cd gold-ease-receipt
 # Install dependencies
 npm install
 
+# Set up Supabase (optional for development)
+# The app includes fallback to localStorage for offline development
+
 # Run in development mode
-npm run electron:dev
+npm run dev
 ```
 
-#### Building for Distribution
+#### Building for Production
 
 ```bash
-# Build Windows installer
-npm run electron:dist
+# Build for production
+npm run build
 
-# The installer will be created in dist-electron/
+# The built files will be in the dist/ directory
 ```
 
 ## Project Structure
 
 ```
 gold-ease-receipt/
-├── electron/           # Electron main process
-├── src/               # React application source
-├── public/            # Static assets
-├── dist/              # Built web application
-└── dist-electron/     # Built desktop application
+├── src/
+│   ├── components/     # Reusable UI components
+│   ├── contexts/       # React contexts (Auth, etc.)
+│   ├── pages/          # Application pages
+│   ├── utils/          # Utility functions
+│   └── integrations/   # Supabase integration
+├── public/             # Static assets
+└── dist/               # Built web application
 ```
 
-## Data Storage
+## Data Storage & Security
 
-All transaction data is stored locally using Electron's localStorage, ensuring:
-- Complete privacy - no data leaves your device
-- Offline functionality - works without internet
-- Fast performance - instant access to your data
+- **Cloud Storage**: User data is securely stored in Supabase with Row-Level Security (RLS)
+- **User Isolation**: Each user's data is completely separate and private
+- **Offline Fallback**: Local storage backup for offline functionality
+- **Authentication**: Secure email/password authentication with Supabase Auth
+- **Data Persistence**: User data persists across devices and sessions
 
 ## Support
 

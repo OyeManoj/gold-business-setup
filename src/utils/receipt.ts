@@ -167,19 +167,27 @@ export function printReceipt(receiptText: string): void {
           visibility: visible;
         }
         #receipt-print-container {
-          position: static !important;
+          position: absolute !important;
           top: 0 !important;
           left: 0 !important;
           width: 3in !important;
+          height: auto !important;
           font-size: 13px !important;
           font-weight: 700 !important;
           line-height: 1.1 !important;
           margin: 0 !important;
           padding: 0 !important;
+          page-break-inside: avoid !important;
         }
         @page {
-          size: 3in 4in;
+          size: 3in auto;
           margin: 0;
+          padding: 0;
+        }
+        html, body {
+          margin: 0 !important;
+          padding: 0 !important;
+          height: auto !important;
         }
       }
     `;
@@ -272,8 +280,9 @@ export function printReceipt(receiptText: string): void {
                   font-weight: 700;
                 }
                 @page {
-                  size: 3in 4in;
+                  size: 3in auto;
                   margin: 0 !important;
+                  padding: 0 !important;
               }
             </style>
           </head>

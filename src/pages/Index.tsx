@@ -95,7 +95,8 @@ const Index = () => {
             {transactions.map((transaction, index) => (
               <Card 
                 key={transaction.type}
-                className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-card backdrop-blur-sm border-border hover:border-primary/20"
+                className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-card backdrop-blur-sm border-border hover:border-primary/20 cursor-pointer"
+                onClick={() => navigate(transaction.path)}
               >
                 <CardContent className="p-8">
                   <div className="text-center">
@@ -110,14 +111,6 @@ const Index = () => {
                     <p className="text-muted-foreground mb-6 leading-relaxed">
                       {transaction.description}
                     </p>
-                    
-                    <Button 
-                      onClick={() => navigate(transaction.path)}
-                      className="w-full"
-                      size="lg"
-                    >
-                      {language === 'ar' ? 'ابدأ المعاملة' : 'Start Transaction'}
-                    </Button>
                   </div>
                 </CardContent>
               </Card>

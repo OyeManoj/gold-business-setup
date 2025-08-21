@@ -18,6 +18,7 @@ import { ArrowLeft, Check, X, Calculator } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 import { DayAveragePrices } from '@/components/DayAveragePrices';
+import { formatWeight, formatIndianCurrency } from '@/utils/indianFormatting';
 
 export default function TransactionFlow() {
   const { type, transactionId } = useParams<{ type: string; transactionId?: string }>();
@@ -280,12 +281,12 @@ export default function TransactionFlow() {
                   <div className="text-center space-y-5">
                     <div className="p-8 bg-white rounded-2xl border-3 border-dark/30 shadow-lg">
                       <div className="text-sm font-bold text-dark mb-3 uppercase tracking-wide">Fine Gold Output</div>
-                      <div className="text-4xl font-bold text-dark drop-shadow-sm">{liveCalculation.fineGold} g</div>
+                      <div className="text-4xl font-bold text-dark drop-shadow-sm">{formatWeight(liveCalculation.fineGold)} g</div>
                     </div>
                     {transactionType !== 'EXCHANGE' && liveCalculation.amount && (
                       <div className="p-8 bg-white rounded-2xl border-3 border-accent-2/30 shadow-lg">
                         <div className="text-sm font-bold text-accent-2 mb-3 uppercase tracking-wide">Total Amount</div>
-                        <div className="text-3xl font-bold text-accent-2 drop-shadow-sm">₹{liveCalculation.amount.toLocaleString()}</div>
+                        <div className="text-3xl font-bold text-accent-2 drop-shadow-sm">{formatIndianCurrency(liveCalculation.amount)}</div>
                       </div>
                     )}
                   </div>

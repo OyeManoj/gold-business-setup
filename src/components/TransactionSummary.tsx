@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { TransactionType } from "@/types/transaction";
+import { formatIndianCurrency, formatIndianRate, formatWeight, formatPercentage } from '@/utils/indianFormatting';
 
 interface TransactionSummaryProps {
   type: TransactionType;
@@ -52,23 +53,23 @@ export function TransactionSummary({
           </h4>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Weight:</span>
-              <span className="font-medium">{weight} g</span>
+                <span className="text-muted-foreground">Weight:</span>
+                <span className="font-medium">{formatWeight(weight)} g</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Purity:</span>
-              <span className="font-medium">{purity}%</span>
+                  <span className="text-muted-foreground">Purity:</span>
+                  <span className="font-medium">{formatPercentage(purity)}%</span>
             </div>
             {reduction !== undefined && (
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Reduction:</span>
-                <span className="font-medium">{reduction}%</span>
+                    <span className="text-muted-foreground">Reduction:</span>
+                    <span className="font-medium">{formatPercentage(reduction)}%</span>
               </div>
             )}
             {type !== 'EXCHANGE' && (
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Rate:</span>
-                <span className="font-medium">₹{rate}/g</span>
+                <span className="font-medium">{formatIndianRate(rate)}</span>
               </div>
             )}
           </div>
@@ -84,12 +85,12 @@ export function TransactionSummary({
           <div className="space-y-3">
             <div className="flex justify-between items-center p-3 bg-card rounded-lg border">
               <span className="font-medium">Fine Gold:</span>
-              <span className="text-lg font-bold text-primary">{fineGold} g</span>
+              <span className="text-lg font-bold text-primary">{formatWeight(fineGold)} g</span>
             </div>
             {type !== 'EXCHANGE' && (
               <div className="flex justify-between items-center p-3 bg-card rounded-lg border">
                 <span className="font-medium">Total Amount:</span>
-                <span className="text-xl font-bold text-green-600">₹{amount.toLocaleString()}</span>
+                <span className="text-xl font-bold text-green-600">{formatIndianCurrency(amount)}</span>
               </div>
             )}
           </div>

@@ -12,6 +12,7 @@ import { useTransactionFilters } from '@/hooks/useTransactionFilters';
 import { ArrowLeft, Edit } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { formatIndianCurrency, formatIndianRate, formatWeight, formatPercentage } from '@/utils/indianFormatting';
 
 export default function History() {
   const navigate = useNavigate();
@@ -152,11 +153,11 @@ export default function History() {
                               {formatTransactionType(transaction.type, language)}
                             </span>
                           </td>
-                          <td className="py-4 px-2 text-right font-mono text-sm">{transaction.weight.toFixed(3)}</td>
-                          <td className="py-4 px-2 text-right font-mono text-sm">{transaction.purity.toFixed(2)}</td>
-                          <td className="py-4 px-2 text-right font-mono text-sm">{transaction.rate.toLocaleString()}</td>
-                          <td className="py-4 px-2 text-right font-mono text-sm font-medium">{transaction.fineGold.toFixed(3)}</td>
-                          <td className="py-4 px-2 text-right font-mono text-sm font-bold">₹{transaction.amount.toLocaleString()}</td>
+                          <td className="py-4 px-2 text-right font-mono text-sm">{formatWeight(transaction.weight)}</td>
+                          <td className="py-4 px-2 text-right font-mono text-sm">{formatPercentage(transaction.purity)}</td>
+                          <td className="py-4 px-2 text-right font-mono text-sm">{formatIndianRate(transaction.rate).replace('₹', '').replace('/g', '')}</td>
+                          <td className="py-4 px-2 text-right font-mono text-sm font-medium">{formatWeight(transaction.fineGold)}</td>
+                          <td className="py-4 px-2 text-right font-mono text-sm font-bold">{formatIndianCurrency(transaction.amount)}</td>
                           <td className="py-4 px-2 text-center">
                             <Button
                               variant="outline"

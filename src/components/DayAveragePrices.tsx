@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { getTransactions } from '@/utils/storage';
 import { TransactionType } from '@/types/transaction';
 import { TrendingUp, TrendingDown } from 'lucide-react';
+import { formatIndianRate } from '@/utils/indianFormatting';
 
 interface DayAveragePricesProps {
   transactionType: TransactionType;
@@ -59,7 +60,7 @@ export function DayAveragePrices({ transactionType }: DayAveragePricesProps) {
             <div>
               <div className="text-xs text-muted-foreground font-medium">Today's Avg Purchase</div>
               <div className="text-sm font-semibold text-foreground">
-                {avgPurchasePrice > 0 ? `₹${avgPurchasePrice}/g` : 'No data'}
+                {avgPurchasePrice > 0 ? formatIndianRate(avgPurchasePrice) : 'No data'}
               </div>
             </div>
           </div>
@@ -71,7 +72,7 @@ export function DayAveragePrices({ transactionType }: DayAveragePricesProps) {
             <div>
               <div className="text-xs text-muted-foreground font-medium">Today's Avg Sale</div>
               <div className="text-sm font-semibold text-foreground">
-                {avgSalePrice > 0 ? `₹${avgSalePrice}/g` : 'No data'}
+                {avgSalePrice > 0 ? formatIndianRate(avgSalePrice) : 'No data'}
               </div>
             </div>
           </div>

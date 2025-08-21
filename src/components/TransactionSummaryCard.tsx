@@ -1,4 +1,5 @@
 import { ExportSummary } from '@/utils/exportUtils';
+import { formatIndianCurrency, formatIndianRate, formatWeight } from '@/utils/indianFormatting';
 
 interface TransactionSummaryCardProps {
   summary: ExportSummary;
@@ -17,19 +18,19 @@ export function TransactionSummaryCard({ summary }: TransactionSummaryCardProps)
           </div>
           <div>
             <span className="text-muted-foreground">Total Weight: </span>
-            <span className="font-medium">{summary.totalWeight}g</span>
+            <span className="font-medium">{formatWeight(summary.totalWeight)}g</span>
           </div>
           <div>
             <span className="text-muted-foreground">Total Fine Gold: </span>
-            <span className="font-medium">{summary.totalFineGold}g</span>
+            <span className="font-medium">{formatWeight(summary.totalFineGold)}g</span>
           </div>
           <div>
             <span className="text-muted-foreground">Total Amount: </span>
-            <span className="font-medium">₹{summary.totalAmount}</span>
+            <span className="font-medium">{formatIndianCurrency(summary.totalAmount)}</span>
           </div>
           <div>
             <span className="text-muted-foreground">Avg Sale Price: </span>
-            <span className="font-medium">₹{summary.avgSalePricePerGram}/g</span>
+            <span className="font-medium">{formatIndianRate(summary.avgSalePricePerGram)}</span>
           </div>
         </div>
       </div>
@@ -43,15 +44,15 @@ export function TransactionSummaryCard({ summary }: TransactionSummaryCardProps)
             <div className="space-y-1 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Day:</span>
-                <span className="font-medium">₹{summary.averagePrices.purchase.day || 0}/g</span>
+                <span className="font-medium">{formatIndianRate(summary.averagePrices.purchase.day || 0)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Week:</span>
-                <span className="font-medium">₹{summary.averagePrices.purchase.week || 0}/g</span>
+                <span className="font-medium">{formatIndianRate(summary.averagePrices.purchase.week || 0)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Month:</span>
-                <span className="font-medium">₹{summary.averagePrices.purchase.month || 0}/g</span>
+                <span className="font-medium">{formatIndianRate(summary.averagePrices.purchase.month || 0)}</span>
               </div>
             </div>
           </div>
@@ -60,15 +61,15 @@ export function TransactionSummaryCard({ summary }: TransactionSummaryCardProps)
             <div className="space-y-1 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Day:</span>
-                <span className="font-medium">₹{summary.averagePrices.sale.day || 0}/g</span>
+                <span className="font-medium">{formatIndianRate(summary.averagePrices.sale.day || 0)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Week:</span>
-                <span className="font-medium">₹{summary.averagePrices.sale.week || 0}/g</span>
+                <span className="font-medium">{formatIndianRate(summary.averagePrices.sale.week || 0)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Month:</span>
-                <span className="font-medium">₹{summary.averagePrices.sale.month || 0}/g</span>
+                <span className="font-medium">{formatIndianRate(summary.averagePrices.sale.month || 0)}</span>
               </div>
             </div>
           </div>
@@ -82,19 +83,19 @@ export function TransactionSummaryCard({ summary }: TransactionSummaryCardProps)
           <div className="flex justify-between">
             <span className="text-muted-foreground">Day PnL:</span>
             <span className={`font-medium ${summary.pnl.day >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-              ₹{summary.pnl.day}
+              {formatIndianCurrency(summary.pnl.day)}
             </span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Week PnL:</span>
             <span className={`font-medium ${summary.pnl.week >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-              ₹{summary.pnl.week}
+              {formatIndianCurrency(summary.pnl.week)}
             </span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Month PnL:</span>
             <span className={`font-medium ${summary.pnl.month >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-              ₹{summary.pnl.month}
+              {formatIndianCurrency(summary.pnl.month)}
             </span>
           </div>
         </div>

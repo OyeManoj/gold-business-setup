@@ -76,13 +76,13 @@ function calculateExchangeProfit(transactions: Transaction[], periodDays: number
   
   const periodTransactions = transactions.filter(t => t.date >= cutoffDate);
   
-  // For exchange transactions, reduction percentage represents profit
+  // For exchange transactions, reduction percentage represents profit in grams
   const exchangeProfit = periodTransactions
     .filter(t => t.type === 'EXCHANGE' && t.reduction)
     .reduce((sum, t) => {
-      // Calculate profit as: weight * (reduction/100) * rate
+      // Calculate profit as: weight * (reduction/100) - this gives profit in grams
       const profitWeight = t.weight * ((t.reduction || 0) / 100);
-      return sum + (profitWeight * t.rate);
+      return sum + profitWeight;
     }, 0);
     
   return exchangeProfit;
@@ -143,9 +143,9 @@ export function calculateSummary(transactions: Transaction[]): ExportSummary {
       month: Number(monthPnL.toFixed(2))
     },
     exchangeProfit: {
-      day: Number(dayExchangeProfit.toFixed(2)),
-      week: Number(weekExchangeProfit.toFixed(2)),
-      month: Number(monthExchangeProfit.toFixed(2))
+      day: Number(dayExchangeProfit.toFixed(3)),
+      week: Number(weekExchangeProfit.toFixed(3)),
+      month: Number(monthExchangeProfit.toFixed(3))
     },
     avgSalePricePerGram: Number(avgSalePricePerGram.toFixed(2))
   };
@@ -251,9 +251,9 @@ export function exportTransactionsToExcel(
     { 'Sr. No.': '', 'Transaction ID': 'PnL (Day):', 'Date': summary.pnl.day, 'Time': '₹', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
     { 'Sr. No.': '', 'Transaction ID': 'PnL (Week):', 'Date': summary.pnl.week, 'Time': '₹', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
     { 'Sr. No.': '', 'Transaction ID': 'PnL (Month):', 'Date': summary.pnl.month, 'Time': '₹', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
-    { 'Sr. No.': '', 'Transaction ID': 'Exchange Profit (Day):', 'Date': summary.exchangeProfit.day, 'Time': '₹', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
-    { 'Sr. No.': '', 'Transaction ID': 'Exchange Profit (Week):', 'Date': summary.exchangeProfit.week, 'Time': '₹', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
-    { 'Sr. No.': '', 'Transaction ID': 'Exchange Profit (Month):', 'Date': summary.exchangeProfit.month, 'Time': '₹', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' }
+    { 'Sr. No.': '', 'Transaction ID': 'Exchange Profit (Day):', 'Date': summary.exchangeProfit.day, 'Time': 'g', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
+    { 'Sr. No.': '', 'Transaction ID': 'Exchange Profit (Week):', 'Date': summary.exchangeProfit.week, 'Time': 'g', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
+    { 'Sr. No.': '', 'Transaction ID': 'Exchange Profit (Month):', 'Date': summary.exchangeProfit.month, 'Time': 'g', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' }
   );
 
   // Add filter information

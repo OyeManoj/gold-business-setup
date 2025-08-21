@@ -103,24 +103,24 @@ export function TransactionSummaryCard({ summary }: TransactionSummaryCardProps)
 
       {/* Exchange Profit */}
       <div className="p-4 bg-purple-50 dark:bg-purple-950/30 rounded-lg">
-        <h3 className="font-medium mb-3">Exchange Profit</h3>
+        <h3 className="font-medium mb-3">Exchange Profit (in grams)</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
           <div className="flex justify-between">
             <span className="text-muted-foreground">Day:</span>
             <span className="font-medium text-green-600 dark:text-green-400">
-              {formatIndianCurrency(summary.exchangeProfit.day)}
+              {formatWeight(summary.exchangeProfit.day)}g
             </span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Week:</span>
             <span className="font-medium text-green-600 dark:text-green-400">
-              {formatIndianCurrency(summary.exchangeProfit.week)}
+              {formatWeight(summary.exchangeProfit.week)}g
             </span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Month:</span>
             <span className="font-medium text-green-600 dark:text-green-400">
-              {formatIndianCurrency(summary.exchangeProfit.month)}
+              {formatWeight(summary.exchangeProfit.month)}g
             </span>
           </div>
         </div>

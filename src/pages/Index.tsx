@@ -4,14 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { useTranslation } from '@/utils/translations';
-import { useAuth } from '@/contexts/AuthContext';
-import { ArrowUpDown, ShoppingCart, TrendingUp, History, Settings, LogOut } from 'lucide-react';
+import { ArrowUpDown, ShoppingCart, TrendingUp, History, Settings } from 'lucide-react';
 
 const Index = () => {
   const navigate = useNavigate();
   const [language, setLanguage] = useState<Language>('en');
   const t = useTranslation(language);
-  const { signOut, user } = useAuth();
 
   const transactions = [
     {
@@ -32,34 +30,33 @@ const Index = () => {
       type: 'sale',
       icon: TrendingUp,
       title: t.sale,
-      description: 'Sell gold at current market rates',
+      description: 'Sell gold with market rate calculations',
       path: '/transaction/sale'
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-off-white to-background">
-      <div className="container mx-auto px-4 py-6">
-        {/* Compact Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-dark mb-3 drop-shadow-sm tracking-tight">
-            {t.appTitle}
-          </h1>
-          <div className="flex justify-center">
-            <div className="w-20 h-1 bg-gradient-to-r from-transparent via-dark to-transparent rounded-full shadow-sm"></div>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl mb-6 shadow-xl">
+            <TrendingUp className="w-10 h-10 text-white" />
           </div>
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">
+            {language === 'ar' ? 'سهولة الذهب' : 'Gold Ease Receipt'}
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            {language === 'ar' 
+              ? 'نظام إدارة معاملات الذهب المتخصص لإنشاء الفواتير والحسابات الدقيقة'
+              : 'Professional gold transaction management system for accurate receipts and calculations'
+            }
+          </p>
         </div>
 
-        {/* Compact User Info and Navigation */}
+        {/* Compact Navigation */}
         <div className="max-w-4xl mx-auto mb-8">
-          <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 shadow-md border border-border/50">
-            <div className="text-center mb-3">
-              <p className="text-sm text-muted-foreground font-medium">
-                {language === 'ar' ? 'مسجل الدخول كـ:' : 'Signed in as:'} 
-                <span className="text-foreground font-semibold ml-1">User {user?.user_id_pin}</span>
-              </p>
-            </div>
-            
+          <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 shadow-md border border-border/50">            
             <div className="flex flex-wrap items-center justify-center gap-3">
               <LanguageToggle
                 currentLanguage={language}
@@ -86,54 +83,55 @@ const Index = () => {
                   <History size={16} />
                   <span className="font-medium text-sm">{t.history}</span>
                 </Button>
-                
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={signOut}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg border border-destructive/20 text-destructive hover:text-destructive hover:border-destructive/30 hover:shadow-sm transition-all duration-200 bg-white/80"
-                >
-                  <LogOut size={16} />
-                  <span className="font-medium text-sm">{language === 'ar' ? 'تسجيل الخروج' : 'Sign Out'}</span>
-                </Button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Compact Transaction Grid */}
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {transactions.map((transaction, index) => {
-              const Icon = transaction.icon;
-              const colors = [
-                { bg: 'bg-accent-1', text: 'text-accent-1', accent: 'accent-1', hover: 'hover:bg-accent-1/5', shadow: 'shadow-md' },
-                { bg: 'bg-accent-2', text: 'text-accent-2', accent: 'accent-2', hover: 'hover:bg-accent-2/5', shadow: 'shadow-md' },
-                { bg: 'bg-accent-3', text: 'text-accent-3', accent: 'accent-3', hover: 'hover:bg-accent-3/5', shadow: 'shadow-lg' }
-              ];
-              const colorScheme = colors[index];
-              
-              return (
-                <Card
-                  key={transaction.type}
-                  className={`group cursor-pointer border border-border/60 bg-white/90 hover:bg-white hover:shadow-lg transition-all duration-300 hover:border-${colorScheme.accent}/30 ${colorScheme.hover} hover:-translate-y-1 hover:scale-[1.02] rounded-xl backdrop-blur-sm`}
-                  onClick={() => navigate(transaction.path)}
-                >
-                  <CardContent className="p-6 text-center">
-                    <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-${colorScheme.accent}/10 border border-${colorScheme.accent}/20 flex items-center justify-center group-hover:bg-${colorScheme.accent}/20 group-hover:scale-110 group-hover:border-${colorScheme.accent}/40 transition-all duration-300 shadow-sm group-hover:shadow-md`}>
-                      <Icon size={24} className={`${colorScheme.text} group-hover:scale-110 transition-transform duration-300 drop-shadow-sm`} />
+        {/* Transaction Cards */}
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {transactions.map((transaction, index) => (
+              <Card 
+                key={transaction.type}
+                className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 bg-white/80 backdrop-blur-sm border-amber-200/50 hover:border-amber-300/70"
+              >
+                <CardContent className="p-8">
+                  <div className="text-center">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                      <transaction.icon className="w-8 h-8 text-white" />
                     </div>
-                    <h3 className={`text-lg font-bold mb-2 text-foreground group-hover:${colorScheme.text} transition-colors duration-300 tracking-tight`}>
+                    
+                    <h3 className="text-2xl font-bold text-gray-900 mb-3">
                       {transaction.title}
                     </h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed group-hover:text-muted-foreground/80 transition-colors duration-300">
+                    
+                    <p className="text-gray-600 mb-6 leading-relaxed">
                       {transaction.description}
                     </p>
-                  </CardContent>
-                </Card>
-              );
-            })}
+                    
+                    <Button 
+                      onClick={() => navigate(transaction.path)}
+                      className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                      size="lg"
+                    >
+                      {language === 'ar' ? 'ابدأ المعاملة' : 'Start Transaction'}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center mt-16 pb-8">
+          <p className="text-gray-500 text-sm">
+            {language === 'ar' 
+              ? 'نظام إدارة محترف لمعاملات الذهب'
+              : 'Professional Gold Transaction Management System'
+            }
+          </p>
         </div>
       </div>
     </div>

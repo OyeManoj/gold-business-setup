@@ -2,38 +2,32 @@ import { Transaction } from '@/types/transaction';
 import { supabase } from '@/integrations/supabase/client';
 
 const STORAGE_KEY = 'gold_transactions';
-const MAX_TRANSACTIONS = 10;
+const MAX_TRANSACTIONS = 100;
 
 export async function saveTransaction(transaction: Transaction): Promise<void> {
   try {
-    const currentUser = localStorage.getItem('current_user');
+    // Save to Supabase without user authentication
+    const { error } = await supabase
+      .from('transactions')
+      .insert({
+        id: transaction.id,
+        type: transaction.type,
+        weight: transaction.weight,
+        purity: transaction.purity,
+        reduction: transaction.reduction,
+        rate: transaction.rate,
+        fine_gold: transaction.fineGold,
+        amount: transaction.amount,
+        remaining_fine_gold: transaction.remainingFineGold,
+      });
     
-    if (currentUser) {
-      const user = JSON.parse(currentUser);
-      // Save to Supabase
-      const { error } = await supabase
-        .from('transactions')
-        .insert({
-          id: transaction.id,
-          user_id: user.id,
-          type: transaction.type,
-          weight: transaction.weight,
-          purity: transaction.purity,
-          reduction: transaction.reduction,
-          rate: transaction.rate,
-          fine_gold: transaction.fineGold,
-          amount: transaction.amount,
-          remaining_fine_gold: transaction.remainingFineGold,
-        });
-      
-      if (error) throw error;
-    } else {
-      // Fallback to localStorage if not authenticated
-      const transactions = await getTransactions();
-      transactions.unshift(transaction);
-      const limitedTransactions = transactions.slice(0, MAX_TRANSACTIONS);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(limitedTransactions));
-    }
+    if (error) throw error;
+    
+    // Also save to localStorage as backup
+    const transactions = await getTransactions();
+    transactions.unshift(transaction);
+    const limitedTransactions = transactions.slice(0, MAX_TRANSACTIONS);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(limitedTransactions));
   } catch (error) {
     console.error('Failed to save transaction:', error);
     // Fallback to localStorage on error
@@ -46,20 +40,16 @@ export async function saveTransaction(transaction: Transaction): Promise<void> {
 
 export async function getTransactions(): Promise<Transaction[]> {
   try {
-    const currentUser = localStorage.getItem('current_user');
+    // Get from Supabase
+    const { data, error } = await supabase
+      .from('transactions')
+      .select('*')
+      .order('created_at', { ascending: false });
     
-    if (currentUser) {
-      const user = JSON.parse(currentUser);
-      // Get from Supabase
-      const { data, error } = await supabase
-        .from('transactions')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-      
-      if (error) throw error;
-      
-      return data?.map(t => ({
+    if (error) throw error;
+    
+    if (data && data.length > 0) {
+      return data.map(t => ({
         id: t.id,
         type: t.type as 'EXCHANGE' | 'PURCHASE' | 'SALE',
         weight: Number(t.weight),
@@ -70,18 +60,18 @@ export async function getTransactions(): Promise<Transaction[]> {
         amount: Number(t.amount),
         remainingFineGold: t.remaining_fine_gold ? Number(t.remaining_fine_gold) : undefined,
         date: new Date(t.created_at),
-      })) || [];
-    } else {
-      // Fallback to localStorage if not authenticated
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (!stored) return [];
-      
-      const transactions = JSON.parse(stored);
-      return transactions.map((t: any) => ({
-        ...t,
-        date: new Date(t.date)
       }));
     }
+    
+    // Fallback to localStorage if no data in Supabase
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return [];
+    
+    const transactions = JSON.parse(stored);
+    return transactions.map((t: any) => ({
+      ...t,
+      date: new Date(t.date)
+    }));
   } catch (error) {
     console.error('Failed to load transactions:', error);
     // Fallback to localStorage on error
@@ -98,36 +88,30 @@ export async function getTransactions(): Promise<Transaction[]> {
 
 export async function updateTransaction(updatedTransaction: Transaction): Promise<void> {
   try {
-    const currentUser = localStorage.getItem('current_user');
+    // Update in Supabase
+    const { error } = await supabase
+      .from('transactions')
+      .update({
+        type: updatedTransaction.type,
+        weight: updatedTransaction.weight,
+        purity: updatedTransaction.purity,
+        reduction: updatedTransaction.reduction,
+        rate: updatedTransaction.rate,
+        fine_gold: updatedTransaction.fineGold,
+        amount: updatedTransaction.amount,
+        remaining_fine_gold: updatedTransaction.remainingFineGold,
+      })
+      .eq('id', updatedTransaction.id);
     
-    if (currentUser) {
-      const user = JSON.parse(currentUser);
-      // Update in Supabase
-      const { error } = await supabase
-        .from('transactions')
-        .update({
-          type: updatedTransaction.type,
-          weight: updatedTransaction.weight,
-          purity: updatedTransaction.purity,
-          reduction: updatedTransaction.reduction,
-          rate: updatedTransaction.rate,
-          fine_gold: updatedTransaction.fineGold,
-          amount: updatedTransaction.amount,
-          remaining_fine_gold: updatedTransaction.remainingFineGold,
-        })
-        .eq('id', updatedTransaction.id)
-        .eq('user_id', user.id);
-      
-      if (error) throw error;
-    } else {
-      // Fallback to localStorage if not authenticated
-      const transactions = await getTransactions();
-      const index = transactions.findIndex(t => t.id === updatedTransaction.id);
-      
-      if (index !== -1) {
-        transactions[index] = updatedTransaction;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
-      }
+    if (error) throw error;
+    
+    // Also update localStorage
+    const transactions = await getTransactions();
+    const index = transactions.findIndex(t => t.id === updatedTransaction.id);
+    
+    if (index !== -1) {
+      transactions[index] = updatedTransaction;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
     }
   } catch (error) {
     console.error('Failed to update transaction:', error);
@@ -144,18 +128,13 @@ export async function updateTransaction(updatedTransaction: Transaction): Promis
 
 export async function clearTransactions(): Promise<void> {
   try {
-    const currentUser = localStorage.getItem('current_user');
+    // Clear from Supabase
+    const { error } = await supabase
+      .from('transactions')
+      .delete()
+      .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all records
     
-    if (currentUser) {
-      const user = JSON.parse(currentUser);
-      // Clear from Supabase
-      const { error } = await supabase
-        .from('transactions')
-        .delete()
-        .eq('user_id', user.id);
-      
-      if (error) throw error;
-    }
+    if (error) throw error;
     
     // Also clear localStorage
     localStorage.removeItem(STORAGE_KEY);

@@ -47,10 +47,6 @@ export function generateReceiptText(
       receipt += `${centerText(businessName)}\n`;
     }
     
-    if (receiptSettings.showBusinessPhone && businessProfile.phone) {
-      const phoneText = `TEL: ${businessProfile.phone}`;
-      receipt += `${centerText(phoneText)}\n`;
-    }
     
     if (receiptSettings.showBusinessAddress && businessProfile.address) {
       // Split address into lines for 3-inch paper and center each line
@@ -74,7 +70,7 @@ export function generateReceiptText(
       }
     }
     
-    if (receiptSettings.showBusinessName || receiptSettings.showBusinessPhone || receiptSettings.showBusinessAddress) {
+    if (receiptSettings.showBusinessName || receiptSettings.showBusinessAddress) {
       receipt += `================================\n`;
     }
   }

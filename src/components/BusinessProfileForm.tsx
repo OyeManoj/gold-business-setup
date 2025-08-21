@@ -16,7 +16,6 @@ interface BusinessProfileFormProps {
 export function BusinessProfileForm({ language }: BusinessProfileFormProps) {
   const [profile, setProfile] = useState<BusinessProfile>({
     name: '',
-    phone: '',
     address: ''
   });
 
@@ -68,19 +67,6 @@ export function BusinessProfileForm({ language }: BusinessProfileFormProps) {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="phone" className="flex items-center gap-2">
-              <Phone className="h-4 w-4" />
-              {language === 'ar' ? 'رقم الهاتف' : 'Phone Number'}
-            </Label>
-            <Input
-              id="phone"
-              value={profile.phone}
-              onChange={(e) => handleInputChange('phone', e.target.value)}
-              placeholder={language === 'ar' ? 'أدخل رقم الهاتف' : 'Enter phone number'}
-              className="w-full"
-            />
-          </div>
 
           <div className="space-y-2">
             <Label htmlFor="address" className="flex items-center gap-2">

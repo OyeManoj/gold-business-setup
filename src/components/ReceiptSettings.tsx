@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Receipt, Building2, Phone, MapPin } from 'lucide-react';
+import { Receipt, Building2, MapPin } from 'lucide-react';
 import { ReceiptSettings } from '@/types/receiptSettings';
 import { getReceiptSettings, saveReceiptSettings } from '@/utils/receiptSettingsStorage';
 import { toast } from '@/hooks/use-toast';
@@ -14,7 +14,6 @@ interface ReceiptSettingsProps {
 export function ReceiptSettingsComponent({ language }: ReceiptSettingsProps) {
   const [settings, setSettings] = useState<ReceiptSettings>({
     showBusinessName: true,
-    showBusinessPhone: false,
     showBusinessAddress: false,
   });
 
@@ -78,17 +77,6 @@ export function ReceiptSettingsComponent({ language }: ReceiptSettingsProps) {
               />
             </div>
 
-            <div className="flex items-center justify-between">
-              <Label htmlFor="business-phone" className="flex items-center gap-2 cursor-pointer">
-                <Phone className="h-4 w-4" />
-                {language === 'ar' ? 'رقم الهاتف' : 'Phone Number'}
-              </Label>
-              <Switch
-                id="business-phone"
-                checked={settings.showBusinessPhone}
-                onCheckedChange={(checked) => handleSettingChange('showBusinessPhone', checked)}
-              />
-            </div>
 
             <div className="flex items-center justify-between">
               <Label htmlFor="business-address" className="flex items-center gap-2 cursor-pointer">

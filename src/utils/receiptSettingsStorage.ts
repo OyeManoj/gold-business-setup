@@ -5,7 +5,6 @@ const STORAGE_KEY = 'receiptSettings';
 
 const defaultSettings: ReceiptSettings = {
   showBusinessName: true,
-  showBusinessPhone: false,
   showBusinessAddress: false,
 };
 

@@ -16,7 +16,6 @@ export async function getBusinessProfile(): Promise<BusinessProfile> {
   
   return {
     name: '',
-    phone: '',
     address: ''
   };
 }

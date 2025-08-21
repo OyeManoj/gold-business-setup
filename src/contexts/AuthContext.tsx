@@ -6,9 +6,8 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  signUp: (email: string, password: string) => Promise<{ error: any }>;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
-  verifyOTP: (email: string, token: string) => Promise<{ error: any }>;
+  signUp: (userId: string, pin: string) => Promise<{ error: any }>;
+  signIn: (userId: string, pin: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
 }
 
@@ -18,7 +17,6 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   signUp: async () => ({ error: null }),
   signIn: async () => ({ error: null }),
-  verifyOTP: async () => ({ error: null }),
   signOut: async () => {},
 });
 
@@ -55,32 +53,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string) => {
-    const redirectUrl = `${window.location.origin}/`;
+  const signUp = async (userId: string, pin: string) => {
+    // Create email from userId for Supabase auth
+    const email = `${userId}@goldease.app`;
     
     const { error } = await supabase.auth.signUp({
       email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl
-      }
+      password: pin,
     });
     return { error };
   };
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (userId: string, pin: string) => {
+    // Create email from userId for Supabase auth
+    const email = `${userId}@goldease.app`;
+    
     const { error } = await supabase.auth.signInWithPassword({
       email,
-      password,
-    });
-    return { error };
-  };
-
-  const verifyOTP = async (email: string, token: string) => {
-    const { error } = await supabase.auth.verifyOtp({
-      email: email,
-      token: token,
-      type: 'email'
+      password: pin,
     });
     return { error };
   };
@@ -95,7 +85,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     loading,
     signUp,
     signIn,
-    verifyOTP,
     signOut,
   };
 

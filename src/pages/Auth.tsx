@@ -6,39 +6,49 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Phone, Shield } from 'lucide-react';
+import { Loader2, Mail, Shield, Eye, EyeOff } from 'lucide-react';
 
 const Auth = () => {
-  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [otp, setOtp] = useState('');
-  const [step, setStep] = useState<'phone' | 'verify'>('phone');
+  const [step, setStep] = useState<'auth' | 'verify'>('auth');
+  const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [isLoading, setIsLoading] = useState(false);
-  const { sendOTP, verifyOTP } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+  const { signUp, signIn, verifyOTP } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const handleSendOTP = async (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Format phone number to include country code if not provided
-    const formattedPhone = phone.startsWith('+') ? phone : `+1${phone.replace(/\D/g, '')}`;
     
     setIsLoading(true);
     
-    const { error } = await sendOTP(formattedPhone);
+    const { error } = mode === 'signup' 
+      ? await signUp(email, password)
+      : await signIn(email, password);
     
     if (error) {
       toast({
-        title: "Failed to Send Code",
+        title: mode === 'signup' ? "Signup Failed" : "Sign In Failed",
         description: error.message,
         variant: "destructive",
       });
     } else {
-      toast({
-        title: "Code Sent!",
-        description: "Please check your phone for the 4-digit verification code.",
-      });
-      setStep('verify');
+      if (mode === 'signup') {
+        toast({
+          title: "Check Your Email!",
+          description: "Please check your email for the 4-digit verification code.",
+        });
+        setStep('verify');
+      } else {
+        toast({
+          title: "Welcome back!",
+          description: "You have successfully signed in.",
+        });
+        navigate('/');
+      }
     }
     
     setIsLoading(false);
@@ -56,11 +66,9 @@ const Auth = () => {
       return;
     }
     
-    const formattedPhone = phone.startsWith('+') ? phone : `+1${phone.replace(/\D/g, '')}`;
-    
     setIsLoading(true);
     
-    const { error } = await verifyOTP(formattedPhone, otp);
+    const { error } = await verifyOTP(email, otp);
     
     if (error) {
       toast({
@@ -71,7 +79,7 @@ const Auth = () => {
     } else {
       toast({
         title: "Welcome!",
-        description: "You have successfully signed in.",
+        description: "You have successfully signed up.",
       });
       navigate('/');
     }
@@ -79,8 +87,8 @@ const Auth = () => {
     setIsLoading(false);
   };
 
-  const handleBackToPhone = () => {
-    setStep('phone');
+  const handleBackToAuth = () => {
+    setStep('auth');
     setOtp('');
   };
 
@@ -90,36 +98,68 @@ const Auth = () => {
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Gold Ease Receipt</CardTitle>
           <CardDescription>
-            {step === 'phone' 
-              ? 'Enter your phone number to get started'
-              : 'Enter the 4-digit code sent to your phone'
+            {step === 'auth' 
+              ? (mode === 'signin' ? 'Sign in to your account' : 'Create a new account')
+              : 'Enter the 4-digit code sent to your email'
             }
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {step === 'phone' ? (
-            <form onSubmit={handleSendOTP} className="space-y-4">
+          {step === 'auth' ? (
+            <form onSubmit={handleAuth} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
+                <Label htmlFor="email">Email</Label>
                 <div className="relative">
-                  <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="+1 (555) 123-4567"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    id="email"
+                    type="email"
+                    placeholder="your@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="pl-10"
                     required
                   />
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  We'll send you a 4-digit verification code
-                </p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pr-10"
+                    required
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
               </div>
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Send Code
+                {mode === 'signin' ? 'Sign In' : 'Sign Up'}
+              </Button>
+              <Button 
+                type="button" 
+                variant="outline" 
+                className="w-full" 
+                onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
+              >
+                {mode === 'signin' ? 'Need an account? Sign up' : 'Already have an account? Sign in'}
               </Button>
             </form>
           ) : (
@@ -143,7 +183,7 @@ const Auth = () => {
                   />
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Code sent to {phone}
+                  Code sent to {email}
                 </p>
               </div>
               <div className="space-y-2">
@@ -151,8 +191,8 @@ const Auth = () => {
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Verify Code
                 </Button>
-                <Button type="button" variant="outline" className="w-full" onClick={handleBackToPhone}>
-                  Change Phone Number
+                <Button type="button" variant="outline" className="w-full" onClick={handleBackToAuth}>
+                  Back to Sign In
                 </Button>
               </div>
             </form>

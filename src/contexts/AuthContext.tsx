@@ -6,8 +6,9 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  sendOTP: (phone: string) => Promise<{ error: any }>;
-  verifyOTP: (phone: string, token: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string) => Promise<{ error: any }>;
+  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  verifyOTP: (email: string, token: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
 }
 
@@ -15,7 +16,8 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   session: null,
   loading: true,
-  sendOTP: async () => ({ error: null }),
+  signUp: async () => ({ error: null }),
+  signIn: async () => ({ error: null }),
   verifyOTP: async () => ({ error: null }),
   signOut: async () => {},
 });
@@ -53,21 +55,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => subscription.unsubscribe();
   }, []);
 
-  const sendOTP = async (phone: string) => {
-    const { error } = await supabase.auth.signInWithOtp({
-      phone: phone,
+  const signUp = async (email: string, password: string) => {
+    const redirectUrl = `${window.location.origin}/`;
+    
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
       options: {
-        channel: 'sms',
+        emailRedirectTo: redirectUrl
       }
     });
     return { error };
   };
 
-  const verifyOTP = async (phone: string, token: string) => {
+  const signIn = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    return { error };
+  };
+
+  const verifyOTP = async (email: string, token: string) => {
     const { error } = await supabase.auth.verifyOtp({
-      phone: phone,
+      email: email,
       token: token,
-      type: 'sms'
+      type: 'email'
     });
     return { error };
   };
@@ -80,7 +93,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     user,
     session,
     loading,
-    sendOTP,
+    signUp,
+    signIn,
     verifyOTP,
     signOut,
   };

@@ -55,18 +55,18 @@ export default function History() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-off-white to-background">
-      <div className="container mx-auto px-6 py-12">
-        {/* Header with perfect alignment */}
-        <div className="flex items-center justify-between mb-16">
+      <div className="container mx-auto px-4 py-6">
+        {/* Compact Header */}
+        <div className="flex items-center justify-between mb-8">
           <div className="flex items-center">
             <Button
               variant="ghost"
-              size="default"
+              size="sm"
               onClick={() => navigate('/')}
-              className="flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-white/80 hover:shadow-md transition-all duration-200"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/80 hover:shadow-sm transition-all duration-200"
             >
-              <ArrowLeft size={20} />
-              <span className="font-medium text-lg">{t.back}</span>
+              <ArrowLeft size={18} />
+              <span className="font-medium">{t.back}</span>
             </Button>
           </div>
           
@@ -76,11 +76,11 @@ export default function History() {
           />
         </div>
 
-        {/* Main Content Card with enhanced design */}
-        <Card className="max-w-7xl mx-auto shadow-xl border-2 border-border/60 bg-white/95 backdrop-blur-sm rounded-2xl">
-          <CardHeader className="bg-gradient-to-r from-white/80 to-off-white/80 rounded-t-2xl border-b-2 border-border/30 px-8 py-8">
+        {/* Compact Main Content Card */}
+        <Card className="max-w-7xl mx-auto shadow-lg border border-border/60 bg-white/95 backdrop-blur-sm rounded-xl">
+          <CardHeader className="bg-gradient-to-r from-white/80 to-off-white/80 rounded-t-xl border-b border-border/30 px-6 py-4">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-3xl font-bold text-dark tracking-tight">{t.history}</CardTitle>
+              <CardTitle className="text-2xl font-bold text-dark tracking-tight">{t.history}</CardTitle>
               <ExportControls
                 transactions={transactions}
                 filteredTransactions={filteredTransactions}
@@ -94,7 +94,7 @@ export default function History() {
             </div>
             
             {showFilters && (
-              <div className="mt-8 p-6 bg-white/60 rounded-xl border border-border/40 shadow-inner">
+              <div className="mt-4 p-4 bg-white/60 rounded-lg border border-border/40 shadow-inner">
                 <FilterSection
                   filters={filters}
                   onFilterChange={updateFilter}
@@ -103,46 +103,46 @@ export default function History() {
             )}
           </CardHeader>
           
-          <CardContent className="px-8 py-8">
-            {/* Enhanced Summary Section */}
+          <CardContent className="px-6 py-4">
+            {/* Compact Summary Section */}
             {filteredTransactions.length > 0 && (
-              <div className="mb-10">
-                <div className="bg-gradient-to-r from-primary/5 to-accent/5 rounded-xl p-6 border border-border/50 shadow-inner">
+              <div className="mb-6">
+                <div className="bg-gradient-to-r from-primary/5 to-accent/5 rounded-lg p-4 border border-border/50 shadow-inner">
                   <TransactionSummaryCard summary={summary} />
                 </div>
               </div>
             )}
             
             {filteredTransactions.length === 0 ? (
-              <div className="text-center py-20">
+              <div className="text-center py-12">
                 <div className="max-w-md mx-auto">
-                  <div className="w-20 h-20 bg-muted/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <HistoryIcon size={40} className="text-muted-foreground/50" />
+                  <div className="w-16 h-16 bg-muted/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <HistoryIcon size={32} className="text-muted-foreground/50" />
                   </div>
-                  <p className="text-muted-foreground text-xl font-medium">
+                  <p className="text-muted-foreground text-lg font-medium">
                     {transactions.length === 0 ? 'No transactions yet' : 'No transactions match the selected filters'}
                   </p>
-                  <p className="text-muted-foreground/70 text-sm mt-2">
+                  <p className="text-muted-foreground/70 text-sm mt-1">
                     {transactions.length === 0 ? 'Start by creating your first transaction' : 'Try adjusting your filter criteria'}
                   </p>
                 </div>
               </div>
             ) : (
               <>
-                {/* Enhanced Transaction Table */}
-                <div className="bg-white rounded-xl border-2 border-border/40 shadow-lg overflow-hidden">
+                {/* Compact Transaction Table */}
+                <div className="bg-white rounded-lg border border-border/40 shadow-md overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="bg-gradient-to-r from-primary/5 to-accent/5 border-b-2 border-border/50">
-                          <th className="text-left py-5 px-4 font-bold text-foreground text-sm tracking-wide">Date & Time</th>
-                          <th className="text-left py-5 px-4 font-bold text-foreground text-sm tracking-wide">Type</th>
-                          <th className="text-right py-5 px-4 font-bold text-foreground text-sm tracking-wide">Weight (g)</th>
-                          <th className="text-right py-5 px-4 font-bold text-foreground text-sm tracking-wide">Purity (%)</th>
-                          <th className="text-right py-5 px-4 font-bold text-foreground text-sm tracking-wide">Rate (₹/g)</th>
-                          <th className="text-right py-5 px-4 font-bold text-foreground text-sm tracking-wide">Fine Gold (g)</th>
-                          <th className="text-right py-5 px-4 font-bold text-foreground text-sm tracking-wide">Amount (₹)</th>
-                          <th className="text-center py-5 px-4 font-bold text-foreground text-sm tracking-wide">Actions</th>
+                        <tr className="bg-gradient-to-r from-primary/5 to-accent/5 border-b border-border/50">
+                          <th className="text-left py-3 px-3 font-bold text-foreground text-xs tracking-wide">Date & Time</th>
+                          <th className="text-left py-3 px-3 font-bold text-foreground text-xs tracking-wide">Type</th>
+                          <th className="text-right py-3 px-3 font-bold text-foreground text-xs tracking-wide">Weight (g)</th>
+                          <th className="text-right py-3 px-3 font-bold text-foreground text-xs tracking-wide">Purity (%)</th>
+                          <th className="text-right py-3 px-3 font-bold text-foreground text-xs tracking-wide">Rate (₹/g)</th>
+                          <th className="text-right py-3 px-3 font-bold text-foreground text-xs tracking-wide">Fine Gold (g)</th>
+                          <th className="text-right py-3 px-3 font-bold text-foreground text-xs tracking-wide">Amount (₹)</th>
+                          <th className="text-center py-3 px-3 font-bold text-foreground text-xs tracking-wide">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -153,14 +153,14 @@ export default function History() {
                               index % 2 === 0 ? 'bg-white' : 'bg-muted/10'
                             }`}
                           >
-                            <td className="py-5 px-4">
-                              <div className="text-sm">
+                            <td className="py-3 px-3">
+                              <div className="text-xs">
                                 <div className="font-semibold text-foreground">{transaction.date.toLocaleDateString('en-IN')}</div>
                                 <div className="text-muted-foreground text-xs font-medium">{transaction.date.toLocaleTimeString('en-IN', { hour12: true })}</div>
                               </div>
                             </td>
-                            <td className="py-5 px-4">
-                              <span className={`inline-flex px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm ${
+                            <td className="py-3 px-3">
+                              <span className={`inline-flex px-2 py-1 rounded-md text-xs font-bold shadow-sm ${
                                 transaction.type === 'PURCHASE' 
                                   ? 'bg-green-100 text-green-800 border border-green-200 dark:bg-green-900/30 dark:text-green-400' 
                                   : transaction.type === 'SALE'
@@ -170,19 +170,19 @@ export default function History() {
                                 {formatTransactionType(transaction.type, language)}
                               </span>
                             </td>
-                            <td className="py-5 px-4 text-right font-mono text-sm font-medium">{formatWeight(transaction.weight)}</td>
-                            <td className="py-5 px-4 text-right font-mono text-sm font-medium">{formatPercentage(transaction.purity)}</td>
-                            <td className="py-5 px-4 text-right font-mono text-sm font-medium">{formatIndianRate(transaction.rate).replace('₹', '').replace('/g', '')}</td>
-                            <td className="py-5 px-4 text-right font-mono text-sm font-semibold text-primary">{formatWeight(transaction.fineGold)}</td>
-                            <td className="py-5 px-4 text-right font-mono text-sm font-bold text-green-700 dark:text-green-400">{formatIndianCurrency(transaction.amount)}</td>
-                            <td className="py-5 px-4 text-center">
+                            <td className="py-3 px-3 text-right font-mono text-xs font-medium">{formatWeight(transaction.weight)}</td>
+                            <td className="py-3 px-3 text-right font-mono text-xs font-medium">{formatPercentage(transaction.purity)}</td>
+                            <td className="py-3 px-3 text-right font-mono text-xs font-medium">{formatIndianRate(transaction.rate).replace('₹', '').replace('/g', '')}</td>
+                            <td className="py-3 px-3 text-right font-mono text-xs font-semibold text-primary">{formatWeight(transaction.fineGold)}</td>
+                            <td className="py-3 px-3 text-right font-mono text-xs font-bold text-green-700 dark:text-green-400">{formatIndianCurrency(transaction.amount)}</td>
+                            <td className="py-3 px-3 text-center">
                               <Button
                                 variant="outline"
                                 size="sm"
                                 onClick={() => handleEditTransaction(transaction)}
-                                className="h-9 w-9 p-0 rounded-lg border-2 hover:border-primary/30 hover:bg-primary/5 hover:shadow-md transition-all duration-200"
+                                className="h-7 w-7 p-0 rounded-md border hover:border-primary/30 hover:bg-primary/5 hover:shadow-sm transition-all duration-200"
                               >
-                                <Edit size={16} />
+                                <Edit size={14} />
                               </Button>
                             </td>
                           </tr>

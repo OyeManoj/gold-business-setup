@@ -7,11 +7,11 @@ interface TransactionSummaryCardProps {
 
 export function TransactionSummaryCard({ summary }: TransactionSummaryCardProps) {
   return (
-    <div className="mt-4 space-y-4">
+    <div className="space-y-3">
       {/* Basic Summary */}
-      <div className="p-4 bg-primary/10 rounded-lg">
-        <h3 className="font-medium mb-2">Summary</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+      <div className="p-3 bg-primary/10 rounded-lg">
+        <h3 className="font-medium mb-2 text-sm">Summary</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
           <div>
             <span className="text-muted-foreground">Transactions: </span>
             <span className="font-medium">{summary.totalTransactions}</span>

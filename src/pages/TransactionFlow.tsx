@@ -151,18 +151,18 @@ export default function TransactionFlow() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-off-white to-background">
-      <div className="container mx-auto px-6 py-12">
-        {/* Header with perfect symmetry */}
-        <div className="flex items-center justify-between mb-16">
+      <div className="container mx-auto px-4 py-6">
+        {/* Compact Header */}
+        <div className="flex items-center justify-between mb-8">
           <div className="flex items-center">
             <Button
               variant="ghost"
-              size="default"
+              size="sm"
               onClick={() => navigate('/')}
-              className="flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-white/80 hover:shadow-md transition-all duration-200"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/80 hover:shadow-sm transition-all duration-200"
             >
-              <ArrowLeft size={20} />
-              <span className="font-medium text-lg">{t.back}</span>
+              <ArrowLeft size={18} />
+              <span className="font-medium">{t.back}</span>
             </Button>
           </div>
           
@@ -173,20 +173,20 @@ export default function TransactionFlow() {
         </div>
 
         <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-10">
-            {/* Enhanced Input Form */}
-            <Card className="h-fit border-2 border-border/60 shadow-xl bg-white/95 backdrop-blur-sm rounded-2xl">
-              <CardHeader className="pb-8 bg-gradient-to-r from-white/80 to-off-white/80 rounded-t-2xl border-b-2 border-border/30">
-                <div className="flex items-center gap-4 mb-6">
-                  <Badge className={`${getTransactionColor(transactionType)} text-white px-4 py-2 text-sm font-bold rounded-xl shadow-md border-2 border-white/20`}>
+          <div className="grid lg:grid-cols-2 gap-6">
+            {/* Compact Input Form */}
+            <Card className="h-fit border border-border/60 shadow-lg bg-white/95 backdrop-blur-sm rounded-xl">
+              <CardHeader className="pb-4 bg-gradient-to-r from-white/80 to-off-white/80 rounded-t-xl border-b border-border/30 px-6 py-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <Badge className={`${getTransactionColor(transactionType)} text-white px-3 py-1.5 text-sm font-bold rounded-lg shadow-sm border border-white/20`}>
                     {t[transactionType.toLowerCase() as keyof typeof t]}
                   </Badge>
                 </div>
-                <CardTitle className="text-2xl font-bold text-dark tracking-tight">
+                <CardTitle className="text-xl font-bold text-dark tracking-tight">
                   {isEditMode ? 'Edit Transaction' : 'Transaction Details'}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-8 p-8">
+              <CardContent className="space-y-5 p-6">
                 {/* Average Prices Display */}
                 <DayAveragePrices transactionType={transactionType} />
                 
@@ -253,18 +253,18 @@ export default function TransactionFlow() {
                   />
                 )}
 
-                {/* Enhanced Calculate Button */}
+                {/* Compact Calculate Button */}
                 <Button
                   variant="default"
                   size="lg"
                   onClick={handleCalculate}
-                  className="w-full py-4 text-lg font-bold rounded-xl bg-gradient-to-r from-dark to-charcoal hover:from-charcoal hover:to-dark shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+                  className="w-full py-3 text-base font-bold rounded-lg bg-gradient-to-r from-dark to-charcoal hover:from-charcoal hover:to-dark shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]"
                   disabled={
                     !formData.weight || 
                     (transactionType !== 'EXCHANGE' && !formData.rate)
                   }
                 >
-                  <Calculator size={20} className="mr-3" />
+                  <Calculator size={18} className="mr-2" />
                   {isEditMode ? 'Update Transaction' : 'Calculate Transaction'}
                 </Button>
               </CardContent>

@@ -14,9 +14,9 @@ export function generateReceiptText(
   const date = transaction.date.toLocaleDateString('en-IN');
   const time = transaction.date.toLocaleTimeString('en-IN', { hour12: true });
 
-  // Helper function for proper alignment for 3x4 inch paper
+  // Helper function for proper alignment for 3-inch paper (24 characters wide)
   const formatLine = (label: string, value: string, unit: string = '') => {
-    const totalWidth = 32; // Optimized for 3x4 inch paper
+    const totalWidth = 24; // Optimized for 3-inch paper width
     const valueUnit = value + unit;
     const spaces = totalWidth - label.length - valueUnit.length;
     return `${label}${' '.repeat(Math.max(1, spaces))}${valueUnit}\n`;
@@ -24,7 +24,7 @@ export function generateReceiptText(
 
   // Special formatting for emphasized lines
   const formatLargeLine = (label: string, value: string, unit: string = '') => {
-    const totalWidth = 32;
+    const totalWidth = 24;
     const valueUnit = value + unit;
     const spaces = totalWidth - label.length - valueUnit.length;
     return `${label}${' '.repeat(Math.max(1, spaces))}${valueUnit}\n`;
@@ -34,7 +34,7 @@ export function generateReceiptText(
   
   // Center text helper function
   const centerText = (text: string) => {
-    const totalWidth = 32;
+    const totalWidth = 24; // 3-inch paper width
     const padding = Math.floor((totalWidth - text.length) / 2);
     return ' '.repeat(Math.max(0, padding)) + text;
   };
@@ -53,8 +53,8 @@ export function generateReceiptText(
     }
     
     if (receiptSettings.showBusinessAddress && businessProfile.address) {
-      // Split address into lines for 3x4 inch paper and center each line
-      const maxLineLength = 32;
+      // Split address into lines for 3-inch paper and center each line
+      const maxLineLength = 24;
       const words = businessProfile.address.split(' ');
       let currentLine = '';
       
@@ -75,23 +75,23 @@ export function generateReceiptText(
     }
     
     if (receiptSettings.showBusinessName || receiptSettings.showBusinessPhone || receiptSettings.showBusinessAddress) {
-      receipt += `================================\n`;
+      receipt += `========================\n`;
     }
   }
   
-  receipt += `${centerText('GOLD EXCHANGE RECEIPT')}\n`;
-  receipt += `================================\n`;
+  receipt += `${centerText('GOLD EXCHANGE')}\n`;
+  receipt += `========================\n`;
   const dateTimeText = `${date} • ${time}`;
   receipt += `${centerText(dateTimeText)}\n`;
-  receipt += `--------------------------------\n`;
-  receipt += formatLine('GROSS WEIGHT', transaction.weight.toFixed(3), 'G');
+  receipt += `------------------------\n`;
+  receipt += formatLine('WEIGHT', transaction.weight.toFixed(3), 'G');
   receipt += formatLine('PURITY', String(transaction.purity), '%');
   
   if (transaction.reduction !== undefined) {
     receipt += formatLine('REDUCTION', String(transaction.reduction), '%');
   }
   
-  receipt += `--------------------------------\n`;
+  receipt += `------------------------\n`;
   receipt += formatLargeLine('FINE GOLD', transaction.fineGold.toFixed(3), 'G');
 
   // Only show payment for non-Exchange transactions
@@ -99,10 +99,10 @@ export function generateReceiptText(
     receipt += formatLargeLine('PAYMENT', `${t.rupees}${transaction.amount.toLocaleString()}`);
   }
   
-  receipt += `\n================================\n`;
+  receipt += `\n========================\n`;
   
-  receipt += `${centerText('THANK YOU FOR BUSINESS')}\n`;
-  receipt += `${centerText('VISIT AGAIN SOON')}\n`;
+  receipt += `${centerText('THANK YOU')}\n`;
+  receipt += `${centerText('VISIT AGAIN')}\n`;
   
   return receipt;
 }

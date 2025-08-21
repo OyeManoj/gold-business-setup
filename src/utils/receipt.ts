@@ -34,18 +34,25 @@ export function generateReceiptText(
   
   // Add business details if provided and enabled
   if (businessProfile && receiptSettings) {
+    // Center text helper function
+    const centerText = (text: string) => {
+      const totalWidth = 32;
+      const padding = Math.floor((totalWidth - text.length) / 2);
+      return ' '.repeat(Math.max(0, padding)) + text;
+    };
+    
     if (receiptSettings.showBusinessName && businessProfile.name) {
       const businessName = businessProfile.name.toUpperCase();
-      receipt += `${businessName}\n`;
+      receipt += `${centerText(businessName)}\n`;
     }
     
     if (receiptSettings.showBusinessPhone && businessProfile.phone) {
       const phoneText = `TEL: ${businessProfile.phone}`;
-      receipt += `${phoneText}\n`;
+      receipt += `${centerText(phoneText)}\n`;
     }
     
     if (receiptSettings.showBusinessAddress && businessProfile.address) {
-      // Split address into lines for 3x4 inch paper
+      // Split address into lines for 3x4 inch paper and center each line
       const maxLineLength = 32;
       const words = businessProfile.address.split(' ');
       let currentLine = '';
@@ -55,14 +62,14 @@ export function generateReceiptText(
           currentLine += (currentLine ? ' ' : '') + word;
         } else {
           if (currentLine) {
-            receipt += `${currentLine}\n`;
+            receipt += `${centerText(currentLine)}\n`;
           }
           currentLine = word;
         }
       }
       
       if (currentLine) {
-        receipt += `${currentLine}\n`;
+        receipt += `${centerText(currentLine)}\n`;
       }
     }
     

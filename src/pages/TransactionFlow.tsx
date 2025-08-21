@@ -17,6 +17,7 @@ import { useLiveCalculation } from '@/hooks/useLiveCalculation';
 import { ArrowLeft, Check, X, Calculator } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
+import { DayAveragePrices } from '@/components/DayAveragePrices';
 
 export default function TransactionFlow() {
   const { type, transactionId } = useParams<{ type: string; transactionId?: string }>();
@@ -183,6 +184,9 @@ export default function TransactionFlow() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
+                {/* Average Prices Display */}
+                <DayAveragePrices transactionType={transactionType} />
+                
                 {/* Weight Input */}
                 <BusinessInput
                   id="weight"

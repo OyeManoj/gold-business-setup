@@ -28,19 +28,17 @@ export function generateReceiptText(
   if (businessProfile && receiptSettings) {
     if (receiptSettings.showBusinessName && businessProfile.name) {
       const businessName = businessProfile.name.toUpperCase();
-      const padding = Math.max(0, Math.floor((23 - businessName.length) / 2));
-      receipt += `        ${' '.repeat(padding)}${businessName}\n`;
+      receipt += `${businessName}\n`;
     }
     
     if (receiptSettings.showBusinessPhone && businessProfile.phone) {
       const phoneText = `TEL: ${businessProfile.phone}`;
-      const padding = Math.max(0, Math.floor((23 - phoneText.length) / 2));
-      receipt += `        ${' '.repeat(padding)}${phoneText}\n`;
+      receipt += `${phoneText}\n`;
     }
     
     if (receiptSettings.showBusinessAddress && businessProfile.address) {
       // Split address into lines if too long
-      const maxLineLength = 23;
+      const maxLineLength = 30;
       const words = businessProfile.address.split(' ');
       let currentLine = '';
       
@@ -49,16 +47,14 @@ export function generateReceiptText(
           currentLine += (currentLine ? ' ' : '') + word;
         } else {
           if (currentLine) {
-            const padding = Math.max(0, Math.floor((23 - currentLine.length) / 2));
-            receipt += `        ${' '.repeat(padding)}${currentLine}\n`;
+            receipt += `${currentLine}\n`;
           }
           currentLine = word;
         }
       }
       
       if (currentLine) {
-        const padding = Math.max(0, Math.floor((23 - currentLine.length) / 2));
-        receipt += `        ${' '.repeat(padding)}${currentLine}\n`;
+        receipt += `${currentLine}\n`;
       }
     }
     
@@ -113,34 +109,53 @@ export function printReceipt(receiptText: string): void {
           <head>
             <title>Receipt</title>
             <style>
+              * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+              }
               body {
                 font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
                 font-size: 9px;
                 font-weight: 300;
                 margin: 0;
-                padding: 2px;
+                padding: 0;
                 white-space: pre-wrap;
                 line-height: 1.1;
-                width: 3in;
-                height: 3in;
                 background: #ffffff;
                 color: #000000;
                 letter-spacing: 0.2px;
-                overflow: hidden;
+                text-align: left;
+                vertical-align: top;
+              }
+              pre {
+                margin: 0;
+                padding: 0;
+                text-align: left;
+                white-space: pre-wrap;
               }
               @media print {
+                * {
+                  margin: 0 !important;
+                  padding: 0 !important;
+                }
                 body { 
-                  margin: 0; 
-                  padding: 2px;
+                  margin: 0 !important;
+                  padding: 0 !important;
                   font-size: 8px;
                   line-height: 1.0;
-                  background: white;
-                  width: 3in;
-                  height: 3in;
+                  background: white !important;
+                  text-align: left !important;
+                  vertical-align: top !important;
+                }
+                pre {
+                  margin: 0 !important;
+                  padding: 0 !important;
+                  text-align: left !important;
                 }
                 @page {
-                  size: 3in 3in;
-                  margin: 0;
+                  size: 3in 4in;
+                  margin: 0 !important;
                 }
               }
             </style>

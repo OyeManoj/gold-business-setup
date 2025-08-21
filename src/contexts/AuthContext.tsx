@@ -54,8 +54,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signUp = async (userId: string, pin: string) => {
-    // Create valid email from userId for Supabase auth
-    const email = `user${userId}@goldease.com`;
+    // Create email from userId for Supabase auth
+    const email = `${userId}@goldease.app`;
     // Pad PIN to meet Supabase 6-character minimum password requirement
     const password = pin.padEnd(6, '0');
     
@@ -67,8 +67,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signIn = async (userId: string, pin: string) => {
-    // Create valid email from userId for Supabase auth
-    const email = `user${userId}@goldease.com`;
+    // Create email from userId for Supabase auth
+    const email = `${userId}@goldease.app`;
     // Pad PIN to meet Supabase 6-character minimum password requirement
     const password = pin.padEnd(6, '0');
     

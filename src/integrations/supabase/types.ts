@@ -22,7 +22,7 @@ export type Database = {
           name: string
           phone: string | null
           updated_at: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           address?: string | null
@@ -31,7 +31,7 @@ export type Database = {
           name: string
           phone?: string | null
           updated_at?: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           address?: string | null
@@ -40,7 +40,7 @@ export type Database = {
           name?: string
           phone?: string | null
           updated_at?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -134,7 +134,7 @@ export type Database = {
           remaining_fine_gold: number | null
           type: string
           updated_at: string
-          user_id: string | null
+          user_id: string
           weight: number
         }
         Insert: {
@@ -148,7 +148,7 @@ export type Database = {
           remaining_fine_gold?: number | null
           type: string
           updated_at?: string
-          user_id?: string | null
+          user_id: string
           weight: number
         }
         Update: {
@@ -162,7 +162,7 @@ export type Database = {
           remaining_fine_gold?: number | null
           type?: string
           updated_at?: string
-          user_id?: string | null
+          user_id?: string
           weight?: number
         }
         Relationships: []

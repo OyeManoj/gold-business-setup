@@ -24,10 +24,12 @@ export function useAuth() {
           .from('user_roles')
           .select('role')
           .eq('user_id', user.id)
-          .single();
+          .maybeSingle();
 
-        if (error && error.code !== 'PGRST116') { // PGRST116 = no rows found
+        if (error) {
           console.error('Error fetching user role:', error);
+          setUserRole('user');
+          return;
         }
 
         setUserRole(data?.role || 'user');

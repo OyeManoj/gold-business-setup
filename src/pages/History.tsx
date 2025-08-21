@@ -137,8 +137,8 @@ export default function History() {
                         >
                           <td className="py-4 px-2">
                             <div className="text-sm">
-                              <div className="font-medium">{transaction.date.toLocaleDateString()}</div>
-                              <div className="text-muted-foreground text-xs">{transaction.date.toLocaleTimeString()}</div>
+                              <div className="font-medium">{transaction.date.toLocaleDateString('en-IN')}</div>
+                              <div className="text-muted-foreground text-xs">{transaction.date.toLocaleTimeString('en-IN', { hour12: true })}</div>
                             </div>
                           </td>
                           <td className="py-4 px-2">

@@ -143,7 +143,7 @@ export function exportTransactionsToExcel(
     'Sr. No.': index + 1,
     'Transaction ID': transaction.id,
     'Date': transaction.date.toLocaleDateString('en-IN'),
-    'Time': transaction.date.toLocaleTimeString('en-IN', { hour12: false }),
+    'Time': transaction.date.toLocaleTimeString('en-IN', { hour12: true }),
     'Type': formatTransactionType(transaction.type, language),
     'Gross Weight (g)': Number(transaction.weight.toFixed(3)),
     'Purity (%)': Number(transaction.purity.toFixed(2)),

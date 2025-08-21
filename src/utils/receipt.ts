@@ -11,8 +11,8 @@ export function generateReceiptText(
   receiptSettings?: ReceiptSettings
 ): string {
   const t = translations[language];
-  const date = transaction.date.toLocaleDateString();
-  const time = transaction.date.toLocaleTimeString();
+  const date = transaction.date.toLocaleDateString('en-IN');
+  const time = transaction.date.toLocaleTimeString('en-IN', { hour12: true });
 
   // Helper function for proper alignment
   const formatLine = (label: string, value: string, unit: string = '') => {

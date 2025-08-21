@@ -16,10 +16,10 @@ export function generateReceiptText(
 
   // Helper function for proper alignment for 3x4 inch paper
   const formatLine = (label: string, value: string, unit: string = '') => {
+    const totalWidth = 32; // Optimized for 3x4 inch paper
     const valueUnit = value + unit;
-    const totalContentWidth = 28; // Account for border
-    const spaces = totalContentWidth - label.length - valueUnit.length;
-    return ` ║ ${label}${' '.repeat(Math.max(1, spaces))}${valueUnit} ║\n`;
+    const spaces = totalWidth - label.length - valueUnit.length;
+    return `${label}${' '.repeat(Math.max(1, spaces))}${valueUnit}\n`;
   };
 
   let receipt = `\n`;
@@ -28,12 +28,12 @@ export function generateReceiptText(
   if (businessProfile && receiptSettings) {
     if (receiptSettings.showBusinessName && businessProfile.name) {
       const businessName = businessProfile.name.toUpperCase();
-      receipt += `        ★ ${businessName} ★\n`;
+      receipt += `        ${businessName}\n`;
     }
     
     if (receiptSettings.showBusinessPhone && businessProfile.phone) {
-      const phoneText = `📞 ${businessProfile.phone}`;
-      receipt += `         ${phoneText}\n`;
+      const phoneText = `TEL: ${businessProfile.phone}`;
+      receipt += `        ${phoneText}\n`;
     }
     
     if (receiptSettings.showBusinessAddress && businessProfile.address) {
@@ -47,45 +47,45 @@ export function generateReceiptText(
           currentLine += (currentLine ? ' ' : '') + word;
         } else {
           if (currentLine) {
-            receipt += `         📍 ${currentLine}\n`;
+            receipt += `        ${currentLine}\n`;
           }
           currentLine = word;
         }
       }
       
       if (currentLine) {
-        receipt += `         📍 ${currentLine}\n`;
+        receipt += `        ${currentLine}\n`;
       }
     }
     
     if (receiptSettings.showBusinessName || receiptSettings.showBusinessPhone || receiptSettings.showBusinessAddress) {
-      receipt += `\n ╔══════════════════════════════╗\n`;
+      receipt += `================================\n`;
     }
   }
   
-  receipt += ` ║    🏆 GOLD EXCHANGE RECEIPT 🏆  ║\n`;
-  receipt += ` ╠══════════════════════════════╣\n`;
-  receipt += ` ║ ID: ${transaction.id.padEnd(24)} ║\n`;
-  receipt += ` ║ ${date} • ${time.padEnd(11)} ║\n`;
-  receipt += ` ╠══════════════════════════════╣\n`;
-  receipt += formatLine('⚖️  GROSS WT', String(transaction.weight), 'G');
-  receipt += formatLine('✨ PURITY', String(transaction.purity), '%');
+  receipt += `      GOLD EXCHANGE RECEIPT\n`;
+  receipt += `================================\n`;
+  receipt += `ID: ${transaction.id}\n`;
+  receipt += `${date} • ${time}\n`;
+  receipt += `--------------------------------\n`;
+  receipt += formatLine('GROSS WEIGHT', String(transaction.weight), 'G');
+  receipt += formatLine('PURITY', String(transaction.purity), '%');
   
   if (transaction.reduction !== undefined) {
-    receipt += formatLine('📉 REDUCTION', String(transaction.reduction), '%');
+    receipt += formatLine('REDUCTION', String(transaction.reduction), '%');
   }
   
-  receipt += ` ╠══════════════════════════════╣\n`;
-  receipt += formatLine('💎 FINE GOLD', String(transaction.fineGold), 'G');
+  receipt += `--------------------------------\n`;
+  receipt += formatLine('FINE GOLD', String(transaction.fineGold), 'G');
 
   // Only show payment for non-Exchange transactions
   if (transaction.type !== 'EXCHANGE') {
-    receipt += formatLine('💰 PAYMENT', `${t.rupees}${transaction.amount.toLocaleString()}`);
+    receipt += formatLine('PAYMENT', `${t.rupees}${transaction.amount.toLocaleString()}`);
   }
   
-  receipt += ` ╚══════════════════════════════╝\n`;
-  receipt += `\n   ⭐ THANK YOU FOR BUSINESS ⭐\n`;
-  receipt += `      🙏 VISIT AGAIN SOON 🙏\n\n`;
+  receipt += `\n================================\n`;
+  receipt += `     THANK YOU FOR BUSINESS\n`;
+  receipt += `       VISIT AGAIN SOON\n\n`;
   
   return receipt;
 }

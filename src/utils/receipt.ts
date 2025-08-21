@@ -71,9 +71,17 @@ export function generateReceiptText(
     }
   }
   
-  receipt += `GOLD EXCHANGE RECEIPT\n`;
+  // Center text helper function
+  const centerText = (text: string) => {
+    const totalWidth = 32;
+    const padding = Math.floor((totalWidth - text.length) / 2);
+    return ' '.repeat(Math.max(0, padding)) + text;
+  };
+  
+  receipt += `${centerText('GOLD EXCHANGE RECEIPT')}\n`;
   receipt += `================================\n`;
-  receipt += `${date} • ${time}\n`;
+  const dateTimeText = `${date} • ${time}`;
+  receipt += `${centerText(dateTimeText)}\n`;
   receipt += `--------------------------------\n`;
   receipt += formatLine('GROSS WEIGHT', String(transaction.weight), 'G');
   receipt += formatLine('PURITY', String(transaction.purity), '%');
@@ -91,13 +99,6 @@ export function generateReceiptText(
   }
   
   receipt += `\n================================\n`;
-  
-  // Center the thank you messages
-  const centerText = (text: string) => {
-    const totalWidth = 32;
-    const padding = Math.floor((totalWidth - text.length) / 2);
-    return ' '.repeat(Math.max(0, padding)) + text;
-  };
   
   receipt += `${centerText('THANK YOU FOR BUSINESS')}\n`;
   receipt += `${centerText('VISIT AGAIN SOON')}\n`;

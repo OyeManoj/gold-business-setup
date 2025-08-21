@@ -9,6 +9,8 @@ import { TransactionType, Transaction } from '@/types/transaction';
 import { calculateTransaction } from '@/utils/calculations';
 import { saveTransaction, updateTransaction, getTransactions } from '@/utils/storage';
 import { generateReceiptText, printReceipt } from '@/utils/receipt';
+import { getBusinessProfile } from '@/utils/businessStorage';
+import { getReceiptSettings } from '@/utils/receiptSettingsStorage';
 import { useTranslation } from '@/utils/translations';
 import { validateTransactionForm, FormData } from '@/utils/formValidation';
 import { useLiveCalculation } from '@/hooks/useLiveCalculation';
@@ -107,7 +109,12 @@ export default function TransactionFlow() {
       });
     } else {
       await saveTransaction(transaction);
-      const receiptText = generateReceiptText(transaction, language);
+      
+      // Get business profile and receipt settings for receipt generation
+      const businessProfile = await getBusinessProfile();
+      const receiptSettings = await getReceiptSettings();
+      
+      const receiptText = generateReceiptText(transaction, language, businessProfile, receiptSettings);
       printReceipt(receiptText);
       toast({
         title: "Success",

@@ -1,8 +1,15 @@
 import { Transaction } from '@/types/transaction';
 import { Language } from '@/components/LanguageToggle';
+import { BusinessProfile } from '@/types/business';
+import { ReceiptSettings } from '@/types/receiptSettings';
 import { translations } from './translations';
 
-export function generateReceiptText(transaction: Transaction, language: Language = 'en'): string {
+export function generateReceiptText(
+  transaction: Transaction, 
+  language: Language = 'en',
+  businessProfile?: BusinessProfile,
+  receiptSettings?: ReceiptSettings
+): string {
   const t = translations[language];
   const date = transaction.date.toLocaleDateString();
   const time = transaction.date.toLocaleTimeString();
@@ -16,6 +23,50 @@ export function generateReceiptText(transaction: Transaction, language: Language
   };
 
   let receipt = `\n`;
+  
+  // Add business details if provided and enabled
+  if (businessProfile && receiptSettings) {
+    if (receiptSettings.showBusinessName && businessProfile.name) {
+      const businessName = businessProfile.name.toUpperCase();
+      const padding = Math.max(0, Math.floor((23 - businessName.length) / 2));
+      receipt += `        ${' '.repeat(padding)}${businessName}\n`;
+    }
+    
+    if (receiptSettings.showBusinessPhone && businessProfile.phone) {
+      const phoneText = `TEL: ${businessProfile.phone}`;
+      const padding = Math.max(0, Math.floor((23 - phoneText.length) / 2));
+      receipt += `        ${' '.repeat(padding)}${phoneText}\n`;
+    }
+    
+    if (receiptSettings.showBusinessAddress && businessProfile.address) {
+      // Split address into lines if too long
+      const maxLineLength = 23;
+      const words = businessProfile.address.split(' ');
+      let currentLine = '';
+      
+      for (const word of words) {
+        if ((currentLine + ' ' + word).length <= maxLineLength) {
+          currentLine += (currentLine ? ' ' : '') + word;
+        } else {
+          if (currentLine) {
+            const padding = Math.max(0, Math.floor((23 - currentLine.length) / 2));
+            receipt += `        ${' '.repeat(padding)}${currentLine}\n`;
+          }
+          currentLine = word;
+        }
+      }
+      
+      if (currentLine) {
+        const padding = Math.max(0, Math.floor((23 - currentLine.length) / 2));
+        receipt += `        ${' '.repeat(padding)}${currentLine}\n`;
+      }
+    }
+    
+    if (receiptSettings.showBusinessName || receiptSettings.showBusinessPhone || receiptSettings.showBusinessAddress) {
+      receipt += `        ───────────────────────\n`;
+    }
+  }
+  
   receipt += `        GOLD EXCHANGE RECEIPT\n`;
   receipt += `        ═══════════════════════\n`;
   receipt += `        ID: ${transaction.id}\n`;

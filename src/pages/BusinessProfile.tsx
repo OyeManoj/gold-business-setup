@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { BusinessProfileForm } from '@/components/BusinessProfileForm';
+import { ReceiptSettingsComponent } from '@/components/ReceiptSettings';
 import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { ArrowLeft } from 'lucide-react';
 
@@ -35,7 +36,10 @@ const BusinessProfile = () => {
         </div>
 
         {/* Business Profile Form */}
-        <BusinessProfileForm language={language} />
+        <div className="space-y-8">
+          <BusinessProfileForm language={language} />
+          <ReceiptSettingsComponent language={language} />
+        </div>
       </div>
     </div>
   );

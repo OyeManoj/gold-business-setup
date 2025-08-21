@@ -14,9 +14,9 @@ export function generateReceiptText(
   const date = transaction.date.toLocaleDateString('en-IN');
   const time = transaction.date.toLocaleTimeString('en-IN', { hour12: true });
 
-  // Helper function for proper alignment for 72mm paper (20 characters wide)
+  // Helper function for proper alignment for 3-inch paper (24 characters wide)
   const formatLine = (label: string, value: string, unit: string = '') => {
-    const totalWidth = 20; // Optimized for 72mm paper width
+    const totalWidth = 42; // Optimized for 3-inch paper width
     const valueUnit = value + unit;
     const spaces = totalWidth - label.length - valueUnit.length;
     return `${label}${' '.repeat(Math.max(1, spaces))}${valueUnit}\n`;
@@ -24,7 +24,7 @@ export function generateReceiptText(
 
   // Special formatting for emphasized lines
   const formatLargeLine = (label: string, value: string, unit: string = '') => {
-    const totalWidth = 20;
+    const totalWidth = 42;
     const valueUnit = value + unit;
     const spaces = totalWidth - label.length - valueUnit.length;
     return `${label}${' '.repeat(Math.max(1, spaces))}${valueUnit}\n`;
@@ -34,7 +34,7 @@ export function generateReceiptText(
   
   // Center text helper function
   const centerText = (text: string) => {
-    const totalWidth = 20; // 72mm paper width
+    const totalWidth = 42; // 3-inch paper width
     const padding = Math.floor((totalWidth - text.length) / 2);
     return ' '.repeat(Math.max(0, padding)) + text;
   };
@@ -53,8 +53,8 @@ export function generateReceiptText(
     }
     
     if (receiptSettings.showBusinessAddress && businessProfile.address) {
-      // Split address into lines for 72mm paper and center each line
-      const maxLineLength = 20;
+      // Split address into lines for 3-inch paper and center each line
+      const maxLineLength = 42;
       const words = businessProfile.address.split(' ');
       let currentLine = '';
       
@@ -75,15 +75,15 @@ export function generateReceiptText(
     }
     
     if (receiptSettings.showBusinessName || receiptSettings.showBusinessPhone || receiptSettings.showBusinessAddress) {
-      receipt += `====================\n`;
+      receipt += `========================\n`;
     }
   }
   
   receipt += `${centerText('GOLD EXCHANGE')}\n`;
-  receipt += `====================\n`;
+  receipt += `========================\n`;
   const dateTimeText = `${date} • ${time}`;
   receipt += `${centerText(dateTimeText)}\n`;
-  receipt += `--------------------\n`;
+  receipt += `------------------------\n`;
   receipt += formatLine('WEIGHT', transaction.weight.toFixed(3), 'G');
   receipt += formatLine('PURITY', String(transaction.purity), '%');
   
@@ -91,15 +91,15 @@ export function generateReceiptText(
     receipt += formatLine('REDUCTION', String(transaction.reduction), '%');
   }
   
-  receipt += `--------------------\n`;
-  receipt += formatLargeLine('FINE', transaction.fineGold.toFixed(3), 'G');
+  receipt += `------------------------\n`;
+  receipt += formatLargeLine('FINE GOLD', transaction.fineGold.toFixed(3), 'G');
 
   // Only show payment for non-Exchange transactions
   if (transaction.type !== 'EXCHANGE') {
     receipt += formatLargeLine('PAYMENT', `${t.rupees}${transaction.amount.toLocaleString()}`);
   }
   
-  receipt += `\n====================\n`;
+  receipt += `\n========================\n`;
   
   receipt += `${centerText('THANK YOU')}\n`;
   receipt += `${centerText('VISIT AGAIN')}\n`;
@@ -158,7 +158,7 @@ export function printReceipt(receiptText: string): void {
                 body { 
                   margin: 0 !important;
                   padding: 0 !important;
-                  font-size: 9px;
+                  font-size: 13px;
                   font-weight: 700;
                   line-height: 1.1;
                   background: white !important;
@@ -173,7 +173,7 @@ export function printReceipt(receiptText: string): void {
                   font-weight: 700;
                 }
                 @page {
-                  size: 72mm 85mm;
+                  size: 3in 4in;
                   margin: 0 !important;
               }
             </style>
@@ -234,14 +234,14 @@ export function printReceipt(receiptText: string): void {
                 body { 
                   margin: 0 !important; 
                   padding: 0 !important;
-                  font-size: 9px;
+                  font-size: 13px;
                   font-weight: 700;
                   line-height: 1.1;
                   background: white;
                   letter-spacing: 0.2px;
                 }
                 @page {
-                  size: 72mm 85mm;
+                  size: 3in 4in;
                   margin: 0 !important;
               }
             </style>

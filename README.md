@@ -74,6 +74,35 @@ gold-ease-receipt/
 - **Authentication**: Secure email/password authentication with Supabase Auth
 - **Data Persistence**: User data persists across devices and sessions
 
+## Deployment
+
+### Deploy to Netlify
+
+1. **Quick Deploy**: 
+   - Fork this repository to your GitHub account
+   - Connect your GitHub repo to Netlify
+   - Netlify will auto-detect build settings from `netlify.toml`
+
+2. **Manual Configuration** (if needed):
+   - Build command: `npm run build`
+   - Publish directory: `dist`
+   - Node version: 18
+
+3. **Post-Deployment Setup**:
+   - Copy your deployed URL (e.g., `https://your-app.netlify.app`)
+   - Go to [Supabase Auth Settings](https://supabase.com/dashboard/project/zjwpcnsmkbestuhalqps/auth/url-configuration)
+   - Add your Netlify URL to:
+     - Site URL: `https://your-app.netlify.app`
+     - Redirect URLs: `https://your-app.netlify.app/**`
+
+### Deploy to Other Platforms
+
+For Vercel, Railway, or other static hosts:
+1. Build command: `npm run build`
+2. Output directory: `dist`
+3. Node version: 18+
+4. Add your domain to Supabase Auth settings
+
 ## Support
 
 For issues or questions, please open an issue in the repository.

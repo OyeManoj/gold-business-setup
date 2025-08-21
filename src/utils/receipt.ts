@@ -65,7 +65,6 @@ export function generateReceiptText(
   
   receipt += `      GOLD EXCHANGE RECEIPT\n`;
   receipt += `================================\n`;
-  receipt += `ID: ${transaction.id}\n`;
   receipt += `${date} • ${time}\n`;
   receipt += `--------------------------------\n`;
   receipt += formatLine('GROSS WEIGHT', String(transaction.weight), 'G');

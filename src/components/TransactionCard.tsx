@@ -20,16 +20,16 @@ export function TransactionCard({
   return (
     <Card 
       className={cn(
-        "cursor-pointer border-0 shadow-elegant hover:shadow-lg transform hover:-translate-y-2 bg-gradient-to-br from-card via-card to-muted/50 backdrop-blur-sm transition-all duration-500",
+        "cursor-pointer border-border shadow-elegant hover:shadow-xl transform hover:-translate-y-2 bg-card backdrop-blur-sm transition-all duration-500",
         className
       )}
       onClick={onClick}
     >
       <CardHeader className="text-center pb-3">
         <div className="relative mx-auto w-20 h-20 mb-6">
-          <div className="absolute inset-0 bg-gradient-to-br from-gold/20 to-gold-dark/30 rounded-2xl shadow-lg"></div>
+          <div className="absolute inset-0 bg-primary rounded-2xl shadow-lg"></div>
           <div className="relative w-full h-full flex items-center justify-center">
-            <Icon size={32} className="text-gold-dark" />
+            <Icon size={32} className="text-primary-foreground" />
           </div>
         </div>
         <CardTitle className="text-xl font-medium text-foreground">{title}</CardTitle>

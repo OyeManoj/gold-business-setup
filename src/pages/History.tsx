@@ -79,7 +79,7 @@ export default function History() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-off-white to-background">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-6">
         {/* Compact Header */}
         <div className="flex items-center justify-between mb-8">
@@ -88,7 +88,7 @@ export default function History() {
               variant="ghost"
               size="sm"
               onClick={() => navigate('/')}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/80 hover:shadow-sm transition-all duration-200"
+              className="flex items-center gap-2"
             >
               <ArrowLeft size={18} />
               <span className="font-medium">{t.back}</span>
@@ -102,10 +102,10 @@ export default function History() {
         </div>
 
         {/* Compact Main Content Card */}
-        <Card className="max-w-7xl mx-auto shadow-lg border border-border/60 bg-white/95 backdrop-blur-sm rounded-xl">
-          <CardHeader className="bg-gradient-to-r from-white/80 to-off-white/80 rounded-t-xl border-b border-border/30 px-6 py-4">
+        <Card className="max-w-7xl mx-auto shadow-lg border border-border bg-card backdrop-blur-sm rounded-xl">
+          <CardHeader className="bg-card rounded-t-xl border-b border-border px-6 py-4">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-2xl font-bold text-dark tracking-tight">{t.history}</CardTitle>
+              <CardTitle className="text-2xl font-bold text-foreground tracking-tight">{t.history}</CardTitle>
               <ExportControls
                 transactions={transactions}
                 filteredTransactions={filteredTransactions}
@@ -119,7 +119,7 @@ export default function History() {
             </div>
             
             {showFilters && (
-              <div className="mt-4 p-4 bg-white/60 rounded-lg border border-border/40 shadow-inner">
+              <div className="mt-4 p-4 bg-muted/20 rounded-lg border border-border shadow-inner">
                 <FilterSection
                   filters={filters}
                   onFilterChange={updateFilter}
@@ -132,7 +132,7 @@ export default function History() {
             {/* Compact Summary Section */}
             {filteredTransactions.length > 0 && (
               <div className="mb-6">
-                <div className="bg-gradient-to-r from-primary/5 to-accent/5 rounded-lg p-4 border border-border/50 shadow-inner">
+                <div className="bg-muted/10 rounded-lg p-4 border border-border shadow-inner">
                   <TransactionSummaryCard summary={summary} />
                 </div>
               </div>
@@ -155,11 +155,11 @@ export default function History() {
             ) : (
               <>
                 {/* Compact Transaction Table */}
-                <div className="bg-white rounded-lg border border-border/40 shadow-md overflow-hidden">
+                <div className="bg-card rounded-lg border border-border shadow-md overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="bg-gradient-to-r from-primary/5 to-accent/5 border-b border-border/50">
+                        <tr className="bg-muted/10 border-b border-border">
                           <th className="text-left py-3 px-3 font-bold text-foreground text-xs tracking-wide">Date & Time</th>
                           <th className="text-left py-3 px-3 font-bold text-foreground text-xs tracking-wide">Type</th>
                           <th className="text-right py-3 px-3 font-bold text-foreground text-xs tracking-wide">Weight (g)</th>
@@ -174,8 +174,8 @@ export default function History() {
                         {filteredTransactions.map((transaction, index) => (
                           <tr 
                             key={transaction.id}
-                            className={`border-b border-border/30 hover:bg-gradient-to-r hover:from-primary/5 hover:to-transparent transition-all duration-200 ${
-                              index % 2 === 0 ? 'bg-white' : 'bg-muted/10'
+                            className={`border-b border-border hover:bg-muted/5 transition-all duration-200 ${
+                              index % 2 === 0 ? 'bg-card' : 'bg-muted/5'
                             }`}
                           >
                             <td className="py-3 px-3">

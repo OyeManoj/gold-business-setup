@@ -75,8 +75,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signOut = async () => {
-    // Clear sensitive data from localStorage before signing out
-    const keysToRemove = ['business_profile', 'receipt_settings'];
+    // Security: Clear all sensitive data from localStorage before signing out
+    const keysToRemove = ['business_profile', 'receipt_settings', 'gold_transactions'];
     keysToRemove.forEach(key => localStorage.removeItem(key));
     
     await supabase.auth.signOut();

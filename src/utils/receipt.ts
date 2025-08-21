@@ -108,7 +108,8 @@ export function generateReceiptText(
 }
 
 export function printReceipt(receiptText: string): void {
-  console.log('printReceipt called with text:', receiptText);
+  // Security: Log only that function was called, not sensitive receipt data
+  console.log('printReceipt called');
   
   // Try multiple approaches for printing
   
@@ -286,9 +287,16 @@ export function printReceipt(receiptText: string): void {
               }
             </style>
           </head>
-          <body><pre>${receiptText}</pre></body>
+          <body><pre id="iframe-receipt"></pre></body>
         </html>
       `);
+      iframe.contentWindow.document.close();
+      
+      // Security: Use textContent instead of innerHTML to prevent XSS
+      const receiptElement = iframe.contentWindow.document.getElementById('iframe-receipt');
+      if (receiptElement) {
+        receiptElement.textContent = receiptText;
+      }
       iframe.contentWindow.document.close();
       
       setTimeout(() => {
@@ -314,13 +322,12 @@ export function printReceipt(receiptText: string): void {
   
   // Method 3: Last resort - show alert with instructions
   console.error('All print methods failed');
+  // Security: Don't include sensitive receipt text in alert
   alert(`Print failed: Popup might be blocked. 
 
 Please:
 1. Enable popups for this site in your browser
-2. Or copy the receipt text below and print manually:
-
-${receiptText}`);
+2. Or use your browser's print function (Ctrl+P) on the main page to print the transaction details manually`);
 }
 
 // For future Bluetooth thermal printer integration

@@ -56,10 +56,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signUp = async (userId: string, pin: string) => {
     // Create email from userId for Supabase auth
     const email = `${userId}@goldease.app`;
+    // Pad PIN to meet Supabase 6-character minimum password requirement
+    const password = pin.padEnd(6, '0');
     
     const { error } = await supabase.auth.signUp({
       email,
-      password: pin,
+      password,
     });
     return { error };
   };
@@ -67,10 +69,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signIn = async (userId: string, pin: string) => {
     // Create email from userId for Supabase auth
     const email = `${userId}@goldease.app`;
+    // Pad PIN to meet Supabase 6-character minimum password requirement
+    const password = pin.padEnd(6, '0');
     
     const { error } = await supabase.auth.signInWithPassword({
       email,
-      password: pin,
+      password,
     });
     return { error };
   };

@@ -41,18 +41,9 @@ const Index = () => {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-primary rounded-2xl mb-6 shadow-elegant">
-            <TrendingUp className="w-10 h-10 text-primary-foreground" />
-          </div>
           <h1 className="text-4xl font-bold text-foreground mb-3">
             {language === 'ar' ? 'سهولة الذهب' : 'Gold Ease Receipt'}
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            {language === 'ar' 
-              ? 'نظام إدارة معاملات الذهب المتخصص لإنشاء الفواتير والحسابات الدقيقة'
-              : 'Professional gold transaction management system for accurate receipts and calculations'
-            }
-          </p>
         </div>
 
         {/* Compact Navigation */}

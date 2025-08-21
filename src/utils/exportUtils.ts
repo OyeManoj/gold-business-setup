@@ -8,6 +8,60 @@ export interface ExportSummary {
   totalFineGold: number;
   totalAmount: number;
   typeBreakdown: Record<string, number>;
+  averagePrices: {
+    purchase: {
+      day: number;
+      week: number;
+      month: number;
+    };
+    sale: {
+      day: number;
+      week: number;
+      month: number;
+    };
+  };
+  pnl: {
+    day: number;
+    week: number;
+    month: number;
+  };
+}
+
+function calculateAveragePrices(transactions: Transaction[], periodDays: number) {
+  const cutoffDate = new Date();
+  cutoffDate.setDate(cutoffDate.getDate() - periodDays);
+  
+  const periodTransactions = transactions.filter(t => t.date >= cutoffDate);
+  
+  const purchaseTransactions = periodTransactions.filter(t => t.type === 'PURCHASE');
+  const saleTransactions = periodTransactions.filter(t => t.type === 'SALE');
+  
+  const avgPurchasePrice = purchaseTransactions.length > 0
+    ? purchaseTransactions.reduce((sum, t) => sum + t.rate, 0) / purchaseTransactions.length
+    : 0;
+    
+  const avgSalePrice = saleTransactions.length > 0
+    ? saleTransactions.reduce((sum, t) => sum + t.rate, 0) / saleTransactions.length
+    : 0;
+    
+  return { purchase: avgPurchasePrice, sale: avgSalePrice };
+}
+
+function calculatePnL(transactions: Transaction[], periodDays: number) {
+  const cutoffDate = new Date();
+  cutoffDate.setDate(cutoffDate.getDate() - periodDays);
+  
+  const periodTransactions = transactions.filter(t => t.date >= cutoffDate);
+  
+  const purchaseAmount = periodTransactions
+    .filter(t => t.type === 'PURCHASE')
+    .reduce((sum, t) => sum + t.amount, 0);
+    
+  const saleAmount = periodTransactions
+    .filter(t => t.type === 'SALE')
+    .reduce((sum, t) => sum + t.amount, 0);
+    
+  return saleAmount - purchaseAmount;
 }
 
 export function calculateSummary(transactions: Transaction[]): ExportSummary {
@@ -20,12 +74,39 @@ export function calculateSummary(transactions: Transaction[]): ExportSummary {
     return acc;
   }, {} as Record<string, number>);
 
+  // Calculate average prices for different periods
+  const dayPrices = calculateAveragePrices(transactions, 1);
+  const weekPrices = calculateAveragePrices(transactions, 7);
+  const monthPrices = calculateAveragePrices(transactions, 30);
+
+  // Calculate PnL for different periods
+  const dayPnL = calculatePnL(transactions, 1);
+  const weekPnL = calculatePnL(transactions, 7);
+  const monthPnL = calculatePnL(transactions, 30);
+
   return {
     totalTransactions: transactions.length,
     totalWeight: Number(totalWeight.toFixed(3)),
     totalFineGold: Number(totalFineGold.toFixed(3)),
     totalAmount: Number(totalAmount.toFixed(2)),
-    typeBreakdown
+    typeBreakdown,
+    averagePrices: {
+      purchase: {
+        day: Number(dayPrices.purchase.toFixed(2)),
+        week: Number(weekPrices.purchase.toFixed(2)),
+        month: Number(monthPrices.purchase.toFixed(2))
+      },
+      sale: {
+        day: Number(dayPrices.sale.toFixed(2)),
+        week: Number(weekPrices.sale.toFixed(2)),
+        month: Number(monthPrices.sale.toFixed(2))
+      }
+    },
+    pnl: {
+      day: Number(dayPnL.toFixed(2)),
+      week: Number(weekPnL.toFixed(2)),
+      month: Number(monthPnL.toFixed(2))
+    }
   };
 }
 
@@ -94,6 +175,41 @@ export function exportTransactionsToExcel(
       'Total Amount (₹)': ''
     });
   });
+
+  // Add average prices section
+  summaryData.push(
+    { 'Sr. No.': '', 'Transaction ID': '', 'Date': '', 'Time': '', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
+    { 'Sr. No.': '', 'Transaction ID': '═══ AVERAGE PRICES ═══', 'Date': '', 'Time': '', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
+    { 'Sr. No.': '', 'Transaction ID': '', 'Date': '', 'Time': '', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' }
+  );
+
+  // Purchase average prices
+  if (summary.averagePrices.purchase.day > 0) {
+    summaryData.push(
+      { 'Sr. No.': '', 'Transaction ID': 'Purchase Avg (Day):', 'Date': summary.averagePrices.purchase.day, 'Time': '₹/g', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
+      { 'Sr. No.': '', 'Transaction ID': 'Purchase Avg (Week):', 'Date': summary.averagePrices.purchase.week, 'Time': '₹/g', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
+      { 'Sr. No.': '', 'Transaction ID': 'Purchase Avg (Month):', 'Date': summary.averagePrices.purchase.month, 'Time': '₹/g', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' }
+    );
+  }
+
+  // Sale average prices
+  if (summary.averagePrices.sale.day > 0) {
+    summaryData.push(
+      { 'Sr. No.': '', 'Transaction ID': 'Sale Avg (Day):', 'Date': summary.averagePrices.sale.day, 'Time': '₹/g', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
+      { 'Sr. No.': '', 'Transaction ID': 'Sale Avg (Week):', 'Date': summary.averagePrices.sale.week, 'Time': '₹/g', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
+      { 'Sr. No.': '', 'Transaction ID': 'Sale Avg (Month):', 'Date': summary.averagePrices.sale.month, 'Time': '₹/g', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' }
+    );
+  }
+
+  // Add PnL section
+  summaryData.push(
+    { 'Sr. No.': '', 'Transaction ID': '', 'Date': '', 'Time': '', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
+    { 'Sr. No.': '', 'Transaction ID': '═══ PROFIT & LOSS ═══', 'Date': '', 'Time': '', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
+    { 'Sr. No.': '', 'Transaction ID': '', 'Date': '', 'Time': '', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
+    { 'Sr. No.': '', 'Transaction ID': 'PnL (Day):', 'Date': summary.pnl.day, 'Time': '₹', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
+    { 'Sr. No.': '', 'Transaction ID': 'PnL (Week):', 'Date': summary.pnl.week, 'Time': '₹', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
+    { 'Sr. No.': '', 'Transaction ID': 'PnL (Month):', 'Date': summary.pnl.month, 'Time': '₹', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' }
+  );
 
   // Add filter information
   summaryData.push(

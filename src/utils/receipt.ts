@@ -16,10 +16,10 @@ export function generateReceiptText(
 
   // Helper function for proper alignment for 3x4 inch paper
   const formatLine = (label: string, value: string, unit: string = '') => {
-    const totalWidth = 32; // Optimized for 3x4 inch paper
     const valueUnit = value + unit;
-    const spaces = totalWidth - label.length - valueUnit.length;
-    return `${label}${' '.repeat(Math.max(1, spaces))}${valueUnit}\n`;
+    const totalContentWidth = 28; // Account for border
+    const spaces = totalContentWidth - label.length - valueUnit.length;
+    return ` ║ ${label}${' '.repeat(Math.max(1, spaces))}${valueUnit} ║\n`;
   };
 
   let receipt = `\n`;
@@ -28,12 +28,12 @@ export function generateReceiptText(
   if (businessProfile && receiptSettings) {
     if (receiptSettings.showBusinessName && businessProfile.name) {
       const businessName = businessProfile.name.toUpperCase();
-      receipt += `${businessName}\n`;
+      receipt += `        ★ ${businessName} ★\n`;
     }
     
     if (receiptSettings.showBusinessPhone && businessProfile.phone) {
-      const phoneText = `TEL: ${businessProfile.phone}`;
-      receipt += `${phoneText}\n`;
+      const phoneText = `📞 ${businessProfile.phone}`;
+      receipt += `         ${phoneText}\n`;
     }
     
     if (receiptSettings.showBusinessAddress && businessProfile.address) {
@@ -47,44 +47,45 @@ export function generateReceiptText(
           currentLine += (currentLine ? ' ' : '') + word;
         } else {
           if (currentLine) {
-            receipt += `${currentLine}\n`;
+            receipt += `         📍 ${currentLine}\n`;
           }
           currentLine = word;
         }
       }
       
       if (currentLine) {
-        receipt += `${currentLine}\n`;
+        receipt += `         📍 ${currentLine}\n`;
       }
     }
     
     if (receiptSettings.showBusinessName || receiptSettings.showBusinessPhone || receiptSettings.showBusinessAddress) {
-      receipt += `────────────────────────────────\n`;
+      receipt += `\n ╔══════════════════════════════╗\n`;
     }
   }
   
-  receipt += `     GOLD EXCHANGE RECEIPT\n`;
-  receipt += `════════════════════════════════\n`;
-  receipt += `ID: ${transaction.id}\n`;
-  receipt += `${date} • ${time}\n`;
-  receipt += `────────────────────────────────\n`;
-  receipt += formatLine('GROSS WEIGHT', String(transaction.weight), 'G');
-  receipt += formatLine('PURITY', String(transaction.purity), '%');
+  receipt += ` ║    🏆 GOLD EXCHANGE RECEIPT 🏆  ║\n`;
+  receipt += ` ╠══════════════════════════════╣\n`;
+  receipt += ` ║ ID: ${transaction.id.padEnd(24)} ║\n`;
+  receipt += ` ║ ${date} • ${time.padEnd(11)} ║\n`;
+  receipt += ` ╠══════════════════════════════╣\n`;
+  receipt += formatLine('⚖️  GROSS WT', String(transaction.weight), 'G');
+  receipt += formatLine('✨ PURITY', String(transaction.purity), '%');
   
   if (transaction.reduction !== undefined) {
-    receipt += formatLine('REDUCTION', String(transaction.reduction), '%');
+    receipt += formatLine('📉 REDUCTION', String(transaction.reduction), '%');
   }
   
-  receipt += `────────────────────────────────\n`;
-  receipt += formatLine('FINE WEIGHT', String(transaction.fineGold), 'G');
+  receipt += ` ╠══════════════════════════════╣\n`;
+  receipt += formatLine('💎 FINE GOLD', String(transaction.fineGold), 'G');
 
   // Only show payment for non-Exchange transactions
   if (transaction.type !== 'EXCHANGE') {
-    receipt += formatLine('PAYMENT', `${t.rupees}${transaction.amount.toLocaleString()}`);
+    receipt += formatLine('💰 PAYMENT', `${t.rupees}${transaction.amount.toLocaleString()}`);
   }
   
-  receipt += `\n────────────────────────────────\n`;
-  receipt += `    THANK YOU FOR YOUR BUSINESS\n\n`;
+  receipt += ` ╚══════════════════════════════╝\n`;
+  receipt += `\n   ⭐ THANK YOU FOR BUSINESS ⭐\n`;
+  receipt += `      🙏 VISIT AGAIN SOON 🙏\n\n`;
   
   return receipt;
 }
@@ -116,15 +117,15 @@ export function printReceipt(receiptText: string): void {
               }
               body {
                 font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-                font-size: 9px;
-                font-weight: 300;
+                font-size: 10px;
+                font-weight: 600;
                 margin: 0;
-                padding: 0;
+                padding: 4px;
                 white-space: pre-wrap;
-                line-height: 1.1;
+                line-height: 1.2;
                 background: #ffffff;
                 color: #000000;
-                letter-spacing: 0.2px;
+                letter-spacing: 0.3px;
                 text-align: left;
                 vertical-align: top;
               }
@@ -133,6 +134,7 @@ export function printReceipt(receiptText: string): void {
                 padding: 0;
                 text-align: left;
                 white-space: pre-wrap;
+                font-weight: 600;
               }
               @media print {
                 * {
@@ -141,17 +143,20 @@ export function printReceipt(receiptText: string): void {
                 }
                 body { 
                   margin: 0 !important;
-                  padding: 0 !important;
-                  font-size: 8px;
-                  line-height: 1.0;
+                  padding: 4px !important;
+                  font-size: 9px;
+                  font-weight: 700;
+                  line-height: 1.1;
                   background: white !important;
                   text-align: left !important;
                   vertical-align: top !important;
+                  letter-spacing: 0.2px;
                 }
                 pre {
                   margin: 0 !important;
                   padding: 0 !important;
                   text-align: left !important;
+                  font-weight: 700;
                 }
                 @page {
                   size: 3in 4in;
@@ -214,28 +219,30 @@ export function printReceipt(receiptText: string): void {
             <style>
               body {
                 font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-                font-size: 9px;
-                font-weight: 300;
+                font-size: 10px;
+                font-weight: 600;
                 margin: 0;
-                padding: 2px;
+                padding: 4px;
                 white-space: pre-wrap;
-                line-height: 1.1;
+                line-height: 1.2;
                 width: 3in;
                 height: 4in;
                 background: #ffffff;
                 color: #000000;
-                letter-spacing: 0.2px;
+                letter-spacing: 0.3px;
                 overflow: hidden;
               }
               @media print {
                 body { 
                   margin: 0; 
-                  padding: 2px;
-                  font-size: 8px;
-                  line-height: 1.0;
+                  padding: 4px;
+                  font-size: 9px;
+                  font-weight: 700;
+                  line-height: 1.1;
                   background: white;
                   width: 3in;
                   height: 4in;
+                  letter-spacing: 0.2px;
                 }
                 @page {
                   size: 3in 4in;

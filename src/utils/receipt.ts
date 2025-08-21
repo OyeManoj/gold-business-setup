@@ -75,11 +75,11 @@ export function generateReceiptText(
   }
   
   receipt += `--------------------------------\n`;
-  receipt += formatLine('FINE GOLD', String(transaction.fineGold), 'G');
+  receipt += `<span class="large-text">${formatLine('FINE GOLD', String(transaction.fineGold), 'G').trim()}</span>\n`;
 
   // Only show payment for non-Exchange transactions
   if (transaction.type !== 'EXCHANGE') {
-    receipt += formatLine('PAYMENT', `${t.rupees}${transaction.amount.toLocaleString()}`);
+    receipt += `<span class="large-text">${formatLine('PAYMENT', `${t.rupees}${transaction.amount.toLocaleString()}`).trim()}</span>\n`;
   }
   
   receipt += `\n================================\n`;
@@ -135,6 +135,12 @@ export function printReceipt(receiptText: string): void {
                 white-space: pre-wrap;
                 font-weight: 600;
               }
+              .large-text {
+                font-size: 14px;
+                font-weight: 800;
+                display: block;
+                margin: 2px 0;
+              }
               @media print {
                 * {
                   margin: 0 !important;
@@ -157,6 +163,12 @@ export function printReceipt(receiptText: string): void {
                   text-align: left !important;
                   font-weight: 700;
                 }
+                .large-text {
+                  font-size: 12px !important;
+                  font-weight: 900 !important;
+                  display: block !important;
+                  margin: 2px 0 !important;
+                }
                 @page {
                   size: 3in 4in;
                   margin: 0 !important;
@@ -169,12 +181,12 @@ export function printReceipt(receiptText: string): void {
       `);
       printWindow.document.close();
       
-      // Safely inject receipt text using textContent to prevent XSS
+      // Safely inject receipt text using innerHTML to support HTML formatting
       const receiptElement = printWindow.document.getElementById('receipt');
       console.log('Receipt element found:', receiptElement);
       
       if (receiptElement) {
-        receiptElement.textContent = receiptText;
+        receiptElement.innerHTML = receiptText;
         console.log('Receipt text set successfully');
       } else {
         console.error('Receipt element not found');
@@ -231,6 +243,12 @@ export function printReceipt(receiptText: string): void {
                 letter-spacing: 0.3px;
                 overflow: hidden;
               }
+              .large-text {
+                font-size: 14px;
+                font-weight: 800;
+                display: block;
+                margin: 2px 0;
+              }
               @media print {
                 body { 
                   margin: 0; 
@@ -242,6 +260,12 @@ export function printReceipt(receiptText: string): void {
                   width: 3in;
                   height: 4in;
                   letter-spacing: 0.2px;
+                }
+                .large-text {
+                  font-size: 12px !important;
+                  font-weight: 900 !important;
+                  display: block !important;
+                  margin: 2px 0 !important;
                 }
                 @page {
                   size: 3in 4in;

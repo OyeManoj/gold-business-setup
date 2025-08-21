@@ -32,14 +32,15 @@ export function generateReceiptText(
 
   let receipt = ``;
   
+  // Center text helper function
+  const centerText = (text: string) => {
+    const totalWidth = 32;
+    const padding = Math.floor((totalWidth - text.length) / 2);
+    return ' '.repeat(Math.max(0, padding)) + text;
+  };
+  
   // Add business details if provided and enabled
   if (businessProfile && receiptSettings) {
-    // Center text helper function
-    const centerText = (text: string) => {
-      const totalWidth = 32;
-      const padding = Math.floor((totalWidth - text.length) / 2);
-      return ' '.repeat(Math.max(0, padding)) + text;
-    };
     
     if (receiptSettings.showBusinessName && businessProfile.name) {
       const businessName = businessProfile.name.toUpperCase();
@@ -78,19 +79,12 @@ export function generateReceiptText(
     }
   }
   
-  // Center text helper function
-  const centerText = (text: string) => {
-    const totalWidth = 32;
-    const padding = Math.floor((totalWidth - text.length) / 2);
-    return ' '.repeat(Math.max(0, padding)) + text;
-  };
-  
   receipt += `${centerText('GOLD EXCHANGE RECEIPT')}\n`;
   receipt += `================================\n`;
   const dateTimeText = `${date} • ${time}`;
   receipt += `${centerText(dateTimeText)}\n`;
   receipt += `--------------------------------\n`;
-  receipt += formatLine('GROSS WEIGHT', String(transaction.weight), 'G');
+  receipt += formatLine('GROSS WEIGHT', transaction.weight.toFixed(3), 'G');
   receipt += formatLine('PURITY', String(transaction.purity), '%');
   
   if (transaction.reduction !== undefined) {
@@ -98,7 +92,7 @@ export function generateReceiptText(
   }
   
   receipt += `--------------------------------\n`;
-  receipt += formatLargeLine('FINE GOLD', String(transaction.fineGold), 'G');
+  receipt += formatLargeLine('FINE GOLD', transaction.fineGold.toFixed(3), 'G');
 
   // Only show payment for non-Exchange transactions
   if (transaction.type !== 'EXCHANGE') {

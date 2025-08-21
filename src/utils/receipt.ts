@@ -128,7 +128,7 @@ export function printReceipt(receiptText: string): void {
   try {
     const printWindow = window.open('', '_blank', 'width=400,height=600,noopener');
     
-    if (printWindow) {
+    if (printWindow && printWindow.document) {
       // Prevent access to opener window for security
       printWindow.opener = null;
       

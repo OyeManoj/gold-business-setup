@@ -22,7 +22,7 @@ export type Database = {
           name: string
           phone: string | null
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           address?: string | null
@@ -31,7 +31,7 @@ export type Database = {
           name: string
           phone?: string | null
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           address?: string | null
@@ -40,17 +40,9 @@ export type Database = {
           name?: string
           phone?: string | null
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "business_profiles_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "user_auth"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       subscribers: {
         Row: {
@@ -83,15 +75,7 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "subscribers_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "user_auth"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       subscription_plans: {
         Row: {
@@ -147,7 +131,7 @@ export type Database = {
           remaining_fine_gold: number | null
           type: string
           updated_at: string
-          user_id: string
+          user_id: string | null
           weight: number
         }
         Insert: {
@@ -161,7 +145,7 @@ export type Database = {
           remaining_fine_gold?: number | null
           type: string
           updated_at?: string
-          user_id: string
+          user_id?: string | null
           weight: number
         }
         Update: {
@@ -175,43 +159,8 @@ export type Database = {
           remaining_fine_gold?: number | null
           type?: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
           weight?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "transactions_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "user_auth"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      user_auth: {
-        Row: {
-          created_at: string
-          id: string
-          last_login: string | null
-          pin_code: string
-          updated_at: string
-          user_id_pin: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          last_login?: string | null
-          pin_code: string
-          updated_at?: string
-          user_id_pin: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          last_login?: string | null
-          pin_code?: string
-          updated_at?: string
-          user_id_pin?: string
         }
         Relationships: []
       }
@@ -234,42 +183,19 @@ export type Database = {
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "user_roles_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "user_auth"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      authenticate_user: {
-        Args: { pin_code: string; user_id_pin: string }
-        Returns: {
-          success: boolean
-          user_id: string
-        }[]
-      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
-      }
-      register_user: {
-        Args: { pin_code: string; user_id_pin: string }
-        Returns: {
-          message: string
-          success: boolean
-          user_id: string
-        }[]
       }
     }
     Enums: {

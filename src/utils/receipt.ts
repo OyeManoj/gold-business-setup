@@ -30,20 +30,18 @@ export function generateReceiptText(
     return `${label}${' '.repeat(Math.max(1, spaces))}${valueUnit}\n`;
   };
 
-  let receipt = `\n`;
+  let receipt = ``;
   
   // Add business details if provided and enabled
   if (businessProfile && receiptSettings) {
     if (receiptSettings.showBusinessName && businessProfile.name) {
       const businessName = businessProfile.name.toUpperCase();
-      const padding = Math.floor((32 - businessName.length) / 2);
-      receipt += `${' '.repeat(padding)}${businessName}\n`;
+      receipt += `${businessName}\n`;
     }
     
     if (receiptSettings.showBusinessPhone && businessProfile.phone) {
       const phoneText = `TEL: ${businessProfile.phone}`;
-      const padding = Math.floor((32 - phoneText.length) / 2);
-      receipt += `${' '.repeat(padding)}${phoneText}\n`;
+      receipt += `${phoneText}\n`;
     }
     
     if (receiptSettings.showBusinessAddress && businessProfile.address) {
@@ -57,16 +55,14 @@ export function generateReceiptText(
           currentLine += (currentLine ? ' ' : '') + word;
         } else {
           if (currentLine) {
-            const padding = Math.floor((32 - currentLine.length) / 2);
-            receipt += `${' '.repeat(padding)}${currentLine}\n`;
+            receipt += `${currentLine}\n`;
           }
           currentLine = word;
         }
       }
       
       if (currentLine) {
-        const padding = Math.floor((32 - currentLine.length) / 2);
-        receipt += `${' '.repeat(padding)}${currentLine}\n`;
+        receipt += `${currentLine}\n`;
       }
     }
     
@@ -75,7 +71,7 @@ export function generateReceiptText(
     }
   }
   
-  receipt += `      GOLD EXCHANGE RECEIPT\n`;
+  receipt += `GOLD EXCHANGE RECEIPT\n`;
   receipt += `================================\n`;
   receipt += `${date} • ${time}\n`;
   receipt += `--------------------------------\n`;
@@ -95,8 +91,8 @@ export function generateReceiptText(
   }
   
   receipt += `\n================================\n`;
-  receipt += `     THANK YOU FOR BUSINESS\n`;
-  receipt += `       VISIT AGAIN SOON\n\n`;
+  receipt += `THANK YOU FOR BUSINESS\n`;
+  receipt += `VISIT AGAIN SOON\n`;
   
   return receipt;
 }
@@ -131,7 +127,7 @@ export function printReceipt(receiptText: string): void {
                 font-size: 10px;
                 font-weight: 600;
                 margin: 0;
-                padding: 4px;
+                padding: 0;
                 white-space: pre-wrap;
                 line-height: 1.2;
                 background: #ffffff;
@@ -139,6 +135,9 @@ export function printReceipt(receiptText: string): void {
                 letter-spacing: 0.3px;
                 text-align: left;
                 vertical-align: top;
+                position: absolute;
+                top: 0;
+                left: 0;
               }
               pre {
                 margin: 0;
@@ -146,6 +145,9 @@ export function printReceipt(receiptText: string): void {
                 text-align: left;
                 white-space: pre-wrap;
                 font-weight: 600;
+                position: absolute;
+                top: 0;
+                left: 0;
               }
               @media print {
                 * {
@@ -154,7 +156,7 @@ export function printReceipt(receiptText: string): void {
                 }
                 body { 
                   margin: 0 !important;
-                  padding: 4px !important;
+                  padding: 0 !important;
                   font-size: 9px;
                   font-weight: 700;
                   line-height: 1.1;
@@ -162,12 +164,18 @@ export function printReceipt(receiptText: string): void {
                   text-align: left !important;
                   vertical-align: top !important;
                   letter-spacing: 0.2px;
+                  position: absolute !important;
+                  top: 0 !important;
+                  left: 0 !important;
                 }
                 pre {
                   margin: 0 !important;
                   padding: 0 !important;
                   text-align: left !important;
                   font-weight: 700;
+                  position: absolute !important;
+                  top: 0 !important;
+                  left: 0 !important;
                 }
                 @page {
                   size: 3in 4in;
@@ -233,7 +241,7 @@ export function printReceipt(receiptText: string): void {
                 font-size: 10px;
                 font-weight: 600;
                 margin: 0;
-                padding: 4px;
+                padding: 0;
                 white-space: pre-wrap;
                 line-height: 1.2;
                 width: 3in;
@@ -242,11 +250,14 @@ export function printReceipt(receiptText: string): void {
                 color: #000000;
                 letter-spacing: 0.3px;
                 overflow: hidden;
+                position: absolute;
+                top: 0;
+                left: 0;
               }
               @media print {
                 body { 
                   margin: 0; 
-                  padding: 4px;
+                  padding: 0;
                   font-size: 9px;
                   font-weight: 700;
                   line-height: 1.1;
@@ -254,6 +265,9 @@ export function printReceipt(receiptText: string): void {
                   width: 3in;
                   height: 4in;
                   letter-spacing: 0.2px;
+                  position: absolute;
+                  top: 0;
+                  left: 0;
                 }
                 @page {
                   size: 3in 4in;

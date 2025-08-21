@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
+import LandingPage from "./pages/LandingPage";
 import TransactionFlow from "./pages/TransactionFlow";
 import BusinessProfile from "./pages/BusinessProfile";
 import History from "./pages/History";
@@ -26,11 +27,14 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/auth" element={<Auth />} />
-            <Route path="/" element={
+            <Route path="/landing" element={<LandingPage />} />
+            <Route path="/pricing-public" element={<Pricing />} />
+            <Route path="/app" element={
               <ProtectedRoute>
                 <Index />
               </ProtectedRoute>
             } />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/transaction/:type" element={
               <ProtectedRoute>
                 <TransactionFlow />
@@ -49,6 +53,11 @@ const App = () => (
             <Route path="/history" element={
               <ProtectedRoute>
                 <History />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Index />
               </ProtectedRoute>
             } />
             <Route path="/admin" element={

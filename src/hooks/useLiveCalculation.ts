@@ -2,11 +2,9 @@ import { useState, useEffect, useMemo } from 'react';
 import { TransactionType } from '@/types/transaction';
 import { calculateTransaction } from '@/utils/calculations';
 import { FormData } from '@/utils/formValidation';
-import { supabase } from '@/integrations/supabase/client';
 
 export function useLiveCalculation(formData: FormData, transactionType: TransactionType) {
   const [liveCalculation, setLiveCalculation] = useState<any>(null);
-  const [isRealTimeActive, setIsRealTimeActive] = useState(false);
 
   const calculation = useMemo(() => {
     const weight = parseFloat(formData.weight) || 0;
@@ -33,47 +31,10 @@ export function useLiveCalculation(formData: FormData, transactionType: Transact
     }
   }, [formData, transactionType]);
 
-  // Real-time updates for calculation changes
   useEffect(() => {
-    const channel = supabase
-      .channel('calculation-updates')
-      .on('presence', { event: 'sync' }, () => {
-        setIsRealTimeActive(true);
-      })
-      .on('presence', { event: 'join' }, () => {
-        setIsRealTimeActive(true);
-      })
-      .on('presence', { event: 'leave' }, () => {
-        setIsRealTimeActive(false);
-      })
-      .subscribe();
-
-    // Track calculation state for live updates
-    if (calculation) {
-      channel.track({
-        calculation,
-        timestamp: new Date().toISOString(),
-        transactionType
-      });
-    }
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [calculation, transactionType]);
-
-  useEffect(() => {
-    // Immediate calculation updates with visual feedback
-    const timer = setTimeout(() => {
-      setLiveCalculation({
-        ...calculation,
-        isLive: isRealTimeActive,
-        lastUpdate: new Date().toISOString()
-      });
-    }, 50); // Faster response for live feel
-    
-    return () => clearTimeout(timer);
-  }, [calculation, isRealTimeActive]);
+    // Immediate calculation updates as form changes
+    setLiveCalculation(calculation);
+  }, [calculation]);
 
   return liveCalculation;
 }

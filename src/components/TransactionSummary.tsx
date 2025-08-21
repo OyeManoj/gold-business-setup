@@ -83,20 +83,14 @@ export function TransactionSummary({
             Calculated Results
           </h4>
           <div className="space-y-3">
-            <div className="flex justify-between items-center p-3 bg-card rounded-lg border relative">
+            <div className="flex justify-between items-center p-3 bg-card rounded-lg border">
               <span className="font-medium">Fine Gold:</span>
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-bold text-primary animate-pulse duration-500">{formatWeight(fineGold)} g</span>
-                <div className="w-2 h-2 bg-success rounded-full animate-pulse" title="Live calculation"></div>
-              </div>
+              <span className="text-lg font-bold text-primary">{formatWeight(fineGold)} g</span>
             </div>
             {type !== 'EXCHANGE' && (
-              <div className="flex justify-between items-center p-3 bg-card rounded-lg border relative">
+              <div className="flex justify-between items-center p-3 bg-card rounded-lg border">
                 <span className="font-medium">Total Amount:</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-xl font-bold text-green-600 animate-pulse duration-500">{formatIndianCurrency(amount)}</span>
-                  <div className="w-2 h-2 bg-success rounded-full animate-pulse" title="Live calculation"></div>
-                </div>
+                <span className="text-xl font-bold text-green-600">{formatIndianCurrency(amount)}</span>
               </div>
             )}
           </div>

@@ -24,7 +24,7 @@ export function generateReceiptText(
 
   // Special formatting for emphasized lines
   const formatLargeLine = (label: string, value: string, unit: string = '') => {
-    const totalWidth = 42;
+    const totalWidth = 43;
     const valueUnit = value + unit;
     const spaces = totalWidth - label.length - valueUnit.length;
     return `${label}${' '.repeat(Math.max(1, spaces))}${valueUnit}\n`;
@@ -34,7 +34,7 @@ export function generateReceiptText(
   
   // Center text helper function
   const centerText = (text: string) => {
-    const totalWidth = 42; // 3-inch paper width
+    const totalWidth = 32; // 3-inch paper width
     const padding = Math.floor((totalWidth - text.length) / 2);
     return ' '.repeat(Math.max(0, padding)) + text;
   };
@@ -54,7 +54,7 @@ export function generateReceiptText(
     
     if (receiptSettings.showBusinessAddress && businessProfile.address) {
       // Split address into lines for 3-inch paper and center each line
-      const maxLineLength = 42;
+      const maxLineLength = 32;
       const words = businessProfile.address.split(' ');
       let currentLine = '';
       
@@ -75,7 +75,7 @@ export function generateReceiptText(
     }
     
     if (receiptSettings.showBusinessName || receiptSettings.showBusinessPhone || receiptSettings.showBusinessAddress) {
-      receipt += `========================\n`;
+      receipt += `================================\n`;
     }
   }
   

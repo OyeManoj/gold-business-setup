@@ -94,9 +94,13 @@ export function generateReceiptText(
 }
 
 export function printReceipt(receiptText: string): void {
-  // For web implementation, we'll open a print dialog
-  const printWindow = window.open('', '_blank');
+  // Open print window with security measures to prevent XSS
+  const printWindow = window.open('', '_blank', 'noopener');
   if (printWindow) {
+    // Prevent access to opener window for security
+    printWindow.opener = null;
+    
+    // Write secure HTML structure
     printWindow.document.write(`
       <html>
         <head>
@@ -134,10 +138,17 @@ export function printReceipt(receiptText: string): void {
             }
           </style>
         </head>
-        <body>${receiptText}</body>
+        <body><pre id="receipt"></pre></body>
       </html>
     `);
     printWindow.document.close();
+    
+    // Safely inject receipt text using textContent to prevent XSS
+    const receiptElement = printWindow.document.getElementById('receipt');
+    if (receiptElement) {
+      receiptElement.textContent = receiptText;
+    }
+    
     printWindow.print();
   }
 }

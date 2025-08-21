@@ -122,17 +122,106 @@ export function generateReceiptText(
 }
 
 export function printReceipt(receiptText: string): void {
-  // Try multiple approaches for printing
+  console.log('Starting print process...');
   
-  // Method 1: Try window.open with noopener
+  // Method 1: Modern approach - use the current window if popups are blocked
   try {
+    // Create a dedicated print container in the current document
+    const printContainer = document.createElement('div');
+    printContainer.id = 'receipt-print-container';
+    printContainer.style.cssText = `
+      position: fixed;
+      top: -9999px;
+      left: -9999px;
+      width: 3in;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: pre-wrap;
+      line-height: 1.2;
+      background: white;
+      color: black;
+      letter-spacing: 0.3px;
+      z-index: 9999;
+    `;
+    
+    const receiptPre = document.createElement('pre');
+    receiptPre.textContent = receiptText;
+    receiptPre.style.cssText = `
+      margin: 0;
+      padding: 0;
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: inherit;
+      white-space: pre-wrap;
+    `;
+    
+    printContainer.appendChild(receiptPre);
+    document.body.appendChild(printContainer);
+    
+    // Create print-specific styles
+    const printStyles = document.createElement('style');
+    printStyles.textContent = `
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+        #receipt-print-container,
+        #receipt-print-container * {
+          visibility: visible;
+        }
+        #receipt-print-container {
+          position: static !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 3in !important;
+          font-size: 13px !important;
+          font-weight: 700 !important;
+          line-height: 1.1 !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+        @page {
+          size: 3in 4in;
+          margin: 0;
+        }
+      }
+    `;
+    document.head.appendChild(printStyles);
+    
+    console.log('Print container created, attempting to print...');
+    
+    // Trigger print
+    window.print();
+    
+    // Cleanup after a delay
+    setTimeout(() => {
+      try {
+        if (document.body.contains(printContainer)) {
+          document.body.removeChild(printContainer);
+        }
+        if (document.head.contains(printStyles)) {
+          document.head.removeChild(printStyles);
+        }
+        console.log('Print cleanup completed');
+      } catch (cleanupError) {
+        console.error('Cleanup error:', cleanupError);
+      }
+    }, 1000);
+    
+    console.log('Print method 1 completed successfully');
+    return;
+    
+  } catch (error) {
+    console.error('Method 1 (current window print) failed:', error);
+  }
+  
+  // Method 2: Try popup window as fallback
+  try {
+    console.log('Attempting popup window method...');
     const printWindow = window.open('', '_blank', 'width=400,height=600,noopener');
     
     if (printWindow && printWindow.document) {
-      // Prevent access to opener window for security
-      printWindow.opener = null;
-      
-      // Write secure HTML structure
       printWindow.document.write(`
         <html>
           <head>
@@ -197,104 +286,139 @@ export function printReceipt(receiptText: string): void {
       `);
       printWindow.document.close();
       
-      // Safely inject receipt text using textContent to prevent XSS
       const receiptElement = printWindow.document.getElementById('receipt');
       
       if (receiptElement) {
         receiptElement.textContent = receiptText;
         
-        // Add a small delay to ensure content is loaded before printing
         setTimeout(() => {
           try {
             printWindow.print();
             setTimeout(() => printWindow.close(), 1000);
+            console.log('Popup print completed successfully');
           } catch (error) {
-            console.error('Print failed:', error);
+            console.error('Popup print failed:', error);
           }
         }, 100);
       }
       
       return;
+    } else {
+      console.log('Popup window blocked or failed to open');
     }
   } catch (error) {
-    console.error('Method 1 failed:', error);
+    console.error('Method 2 (popup window) failed:', error);
   }
   
-  // Method 2: Fallback - create a hidden iframe for printing
+  // Method 3: Last resort - show receipt in a modal for manual printing
   try {
-    const iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
+    console.log('Using fallback method - creating print modal...');
     
-    if (iframe.contentWindow) {
-      iframe.contentWindow.document.write(`
-        <html>
-          <head>
-            <title>Receipt</title>
-            <style>
-              body {
-                font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-                font-size: 10px;
-                font-weight: 600;
-                margin: 0;
-                padding: 0;
-                white-space: pre-wrap;
-                line-height: 1.2;
-                background: #ffffff;
-                color: #000000;
-                letter-spacing: 0.3px;
-              }
-              @media print {
-                body { 
-                  margin: 0 !important; 
-                  padding: 0 !important;
-                  font-size: 13px;
-                  font-weight: 700;
-                  line-height: 1.1;
-                  background: white;
-                  letter-spacing: 0.2px;
-                }
-                @page {
-                  size: 3in 4in;
-                  margin: 0 !important;
-              }
-            </style>
-          </head>
-          <body><pre id="iframe-receipt"></pre></body>
-        </html>
-      `);
-      iframe.contentWindow.document.close();
-      
-      // Security: Use textContent to prevent XSS
-      const receiptElement = iframe.contentWindow.document.getElementById('iframe-receipt');
-      if (receiptElement) {
-        receiptElement.textContent = receiptText;
-        
-        setTimeout(() => {
-          try {
-            iframe.contentWindow?.print();
-            setTimeout(() => document.body.removeChild(iframe), 1000);
-          } catch (error) {
-            console.error('Iframe print failed:', error);
-            document.body.removeChild(iframe);
-          }
-        }, 100);
-      }
-      
-      return;
+    // Remove any existing modal
+    const existingModal = document.getElementById('receipt-modal');
+    if (existingModal) {
+      existingModal.remove();
     }
+    
+    const modal = document.createElement('div');
+    modal.id = 'receipt-modal';
+    modal.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    `;
+    
+    const modalContent = document.createElement('div');
+    modalContent.style.cssText = `
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    `;
+    
+    const closeButton = document.createElement('button');
+    closeButton.textContent = '✕';
+    closeButton.style.cssText = `
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #666;
+    `;
+    
+    const receiptDisplay = document.createElement('pre');
+    receiptDisplay.textContent = receiptText;
+    receiptDisplay.style.cssText = `
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: pre-wrap;
+      line-height: 1.2;
+      margin: 0 0 20px 0;
+      padding: 0;
+    `;
+    
+    const printButton = document.createElement('button');
+    printButton.textContent = 'Print This Receipt';
+    printButton.style.cssText = `
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    `;
+    
+    const instructionText = document.createElement('p');
+    instructionText.innerHTML = `
+      <strong>Printing Instructions:</strong><br>
+      1. Click "Print This Receipt" button above<br>
+      2. Or use Ctrl+P (Cmd+P on Mac) to print<br>
+      3. Make sure to select "More Settings" and choose appropriate paper size
+    `;
+    instructionText.style.cssText = `
+      font-size: 12px;
+      color: #666;
+      margin-top: 15px;
+      line-height: 1.4;
+    `;
+    
+    // Event listeners
+    closeButton.onclick = () => modal.remove();
+    modal.onclick = (e) => {
+      if (e.target === modal) modal.remove();
+    };
+    printButton.onclick = () => {
+      window.print();
+    };
+    
+    modalContent.appendChild(closeButton);
+    modalContent.appendChild(receiptDisplay);
+    modalContent.appendChild(printButton);
+    modalContent.appendChild(instructionText);
+    modal.appendChild(modalContent);
+    document.body.appendChild(modal);
+    
+    console.log('Print modal created successfully');
+    
   } catch (error) {
-    console.error('Method 2 failed:', error);
+    console.error('All print methods failed:', error);
+    alert(`Print functionality unavailable. Please copy the receipt details manually.`);
   }
-  
-  // Method 3: Last resort - show alert with instructions
-  console.error('All print methods failed');
-  // Security: Don't include sensitive receipt text in alert
-  alert(`Print failed: Popup might be blocked. 
-
-Please:
-1. Enable popups for this site in your browser
-2. Or use your browser's print function (Ctrl+P) on the main page to print the transaction details manually`);
 }
 
 // For future Bluetooth thermal printer integration

@@ -42,12 +42,19 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "business_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "user_auth"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       subscribers: {
         Row: {
           created_at: string
-          email: string
           id: string
           stripe_customer_id: string | null
           subscribed: boolean
@@ -58,7 +65,6 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          email: string
           id?: string
           stripe_customer_id?: string | null
           subscribed?: boolean
@@ -69,7 +75,6 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          email?: string
           id?: string
           stripe_customer_id?: string | null
           subscribed?: boolean
@@ -78,7 +83,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "subscribers_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "user_auth"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       subscription_plans: {
         Row: {
@@ -165,6 +178,41 @@ export type Database = {
           user_id?: string
           weight?: number
         }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_auth"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_auth: {
+        Row: {
+          created_at: string
+          id: string
+          last_login: string | null
+          pin_code: string
+          updated_at: string
+          user_id_pin: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_login?: string | null
+          pin_code: string
+          updated_at?: string
+          user_id_pin: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_login?: string | null
+          pin_code?: string
+          updated_at?: string
+          user_id_pin?: string
+        }
         Relationships: []
       }
       user_roles: {
@@ -186,19 +234,42 @@ export type Database = {
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_auth"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      authenticate_user: {
+        Args: { pin_code: string; user_id_pin: string }
+        Returns: {
+          success: boolean
+          user_id: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      register_user: {
+        Args: { pin_code: string; user_id_pin: string }
+        Returns: {
+          message: string
+          success: boolean
+          user_id: string
+        }[]
       }
     }
     Enums: {

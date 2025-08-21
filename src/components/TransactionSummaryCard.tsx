@@ -27,6 +27,10 @@ export function TransactionSummaryCard({ summary }: TransactionSummaryCardProps)
             <span className="text-muted-foreground">Total Amount: </span>
             <span className="font-medium">₹{summary.totalAmount}</span>
           </div>
+          <div>
+            <span className="text-muted-foreground">Avg Sale Price: </span>
+            <span className="font-medium">₹{summary.avgSalePricePerGram}/g</span>
+          </div>
         </div>
       </div>
 

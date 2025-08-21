@@ -25,6 +25,7 @@ export interface ExportSummary {
     week: number;
     month: number;
   };
+  avgSalePricePerGram: number;
 }
 
 function calculateAveragePrices(transactions: Transaction[], periodDays: number) {
@@ -84,6 +85,12 @@ export function calculateSummary(transactions: Transaction[]): ExportSummary {
   const weekPnL = calculatePnL(transactions, 7);
   const monthPnL = calculatePnL(transactions, 30);
 
+  // Calculate average sale price per gram (total sale amount ÷ total gold sold)
+  const saleTransactions = transactions.filter(t => t.type === 'SALE');
+  const totalSaleAmount = saleTransactions.reduce((sum, t) => sum + t.amount, 0);
+  const totalGoldSold = saleTransactions.reduce((sum, t) => sum + t.fineGold, 0);
+  const avgSalePricePerGram = totalGoldSold > 0 ? totalSaleAmount / totalGoldSold : 0;
+
   return {
     totalTransactions: transactions.length,
     totalWeight: Number(totalWeight.toFixed(3)),
@@ -106,7 +113,8 @@ export function calculateSummary(transactions: Transaction[]): ExportSummary {
       day: Number(dayPnL.toFixed(2)),
       week: Number(weekPnL.toFixed(2)),
       month: Number(monthPnL.toFixed(2))
-    }
+    },
+    avgSalePricePerGram: Number(avgSalePricePerGram.toFixed(2))
   };
 }
 
@@ -154,6 +162,7 @@ export function exportTransactionsToExcel(
     { 'Sr. No.': '', 'Transaction ID': 'Total Gross Weight:', 'Date': Number(summary.totalWeight.toFixed(3)), 'Time': 'grams', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
     { 'Sr. No.': '', 'Transaction ID': 'Total Fine Gold:', 'Date': Number(summary.totalFineGold.toFixed(3)), 'Time': 'grams', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
     { 'Sr. No.': '', 'Transaction ID': 'Total Amount:', 'Date': Number(summary.totalAmount.toFixed(2)), 'Time': '₹', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
+    { 'Sr. No.': '', 'Transaction ID': 'Avg Sale Price:', 'Date': Number(summary.avgSalePricePerGram.toFixed(2)), 'Time': '₹/g', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
     { 'Sr. No.': '', 'Transaction ID': '', 'Date': '', 'Time': '', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
     { 'Sr. No.': '', 'Transaction ID': '═══ TYPE BREAKDOWN ═══', 'Date': '', 'Time': '', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
     { 'Sr. No.': '', 'Transaction ID': '', 'Date': '', 'Time': '', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' }

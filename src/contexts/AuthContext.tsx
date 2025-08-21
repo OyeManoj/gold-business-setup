@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
-interface AuthUser {
+interface UserAuth {
   id: string;
-  userIdPin: string;
+  user_id_pin: string;
 }
 
 interface AuthContextType {
-  user: AuthUser | null;
+  user: UserAuth | null;
   loading: boolean;
   signIn: (userIdPin: string, pinCode: string) => Promise<{ error: any }>;
   signUp: (userIdPin: string, pinCode: string) => Promise<{ error: any }>;
@@ -31,17 +31,17 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const [user, setUser] = useState<UserAuth | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Check for existing session in localStorage
-    const savedUser = localStorage.getItem('auth_user');
-    if (savedUser) {
+    const storedUser = localStorage.getItem('current_user');
+    if (storedUser) {
       try {
-        setUser(JSON.parse(savedUser));
+        setUser(JSON.parse(storedUser));
       } catch (error) {
-        localStorage.removeItem('auth_user');
+        localStorage.removeItem('current_user');
       }
     }
     setLoading(false);
@@ -55,22 +55,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
 
       if (error) {
-        return { error: { message: 'Authentication failed' } };
+        return { error };
       }
 
       if (data && data.length > 0 && data[0].success) {
-        const authUser: AuthUser = {
-          id: data[0].user_id,
-          userIdPin: userIdPin
-        };
-        setUser(authUser);
-        localStorage.setItem('auth_user', JSON.stringify(authUser));
+        const userData = { id: data[0].user_id, user_id_pin: userIdPin };
+        setUser(userData);
+        localStorage.setItem('current_user', JSON.stringify(userData));
         return { error: null };
       } else {
         return { error: { message: 'Invalid User ID or PIN' } };
       }
     } catch (error) {
-      return { error: { message: 'Authentication failed' } };
+      return { error };
     }
   };
 
@@ -82,30 +79,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
 
       if (error) {
-        return { error: { message: 'Registration failed' } };
+        return { error };
       }
 
       if (data && data.length > 0 && data[0].success) {
-        const authUser: AuthUser = {
-          id: data[0].user_id,
-          userIdPin: userIdPin
-        };
-        setUser(authUser);
-        localStorage.setItem('auth_user', JSON.stringify(authUser));
+        const userData = { id: data[0].user_id, user_id_pin: userIdPin };
+        setUser(userData);
+        localStorage.setItem('current_user', JSON.stringify(userData));
         return { error: null };
       } else {
         return { error: { message: data[0]?.message || 'Registration failed' } };
       }
     } catch (error) {
-      return { error: { message: 'Registration failed' } };
+      return { error };
     }
   };
 
   const signOut = async () => {
     // Clear all sensitive data from localStorage
-    const keysToRemove = ['auth_user', 'business_profile', 'receipt_settings', 'gold_transactions'];
+    const keysToRemove = ['business_profile', 'receipt_settings', 'gold_transactions', 'current_user'];
     keysToRemove.forEach(key => localStorage.removeItem(key));
-    
     setUser(null);
   };
 

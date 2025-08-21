@@ -6,9 +6,10 @@ const MAX_TRANSACTIONS = 10;
 
 export async function saveTransaction(transaction: Transaction): Promise<void> {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const currentUser = localStorage.getItem('current_user');
     
-    if (user) {
+    if (currentUser) {
+      const user = JSON.parse(currentUser);
       // Save to Supabase
       const { error } = await supabase
         .from('transactions')
@@ -45,9 +46,10 @@ export async function saveTransaction(transaction: Transaction): Promise<void> {
 
 export async function getTransactions(): Promise<Transaction[]> {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const currentUser = localStorage.getItem('current_user');
     
-    if (user) {
+    if (currentUser) {
+      const user = JSON.parse(currentUser);
       // Get from Supabase
       const { data, error } = await supabase
         .from('transactions')
@@ -96,9 +98,10 @@ export async function getTransactions(): Promise<Transaction[]> {
 
 export async function updateTransaction(updatedTransaction: Transaction): Promise<void> {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const currentUser = localStorage.getItem('current_user');
     
-    if (user) {
+    if (currentUser) {
+      const user = JSON.parse(currentUser);
       // Update in Supabase
       const { error } = await supabase
         .from('transactions')
@@ -141,9 +144,10 @@ export async function updateTransaction(updatedTransaction: Transaction): Promis
 
 export async function clearTransactions(): Promise<void> {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const currentUser = localStorage.getItem('current_user');
     
-    if (user) {
+    if (currentUser) {
+      const user = JSON.parse(currentUser);
       // Clear from Supabase
       const { error } = await supabase
         .from('transactions')

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -17,17 +17,31 @@ const Auth = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (userIdPin.length !== 4 || pinCode.length !== 4) {
+  const validateInputs = () => {
+    if (userIdPin.length !== 4 || !/^\d+$/.test(userIdPin)) {
       toast({
-        title: "Invalid Input",
-        description: "User ID and PIN must be exactly 4 digits each.",
+        title: "Invalid User ID",
+        description: "User ID must be exactly 4 digits",
         variant: "destructive",
       });
-      return;
+      return false;
     }
+    
+    if (pinCode.length !== 4 || !/^\d+$/.test(pinCode)) {
+      toast({
+        title: "Invalid PIN",
+        description: "PIN must be exactly 4 digits",
+        variant: "destructive",
+      });
+      return false;
+    }
+    
+    return true;
+  };
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateInputs()) return;
     
     setIsLoading(true);
     
@@ -52,15 +66,7 @@ const Auth = () => {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (userIdPin.length !== 4 || pinCode.length !== 4) {
-      toast({
-        title: "Invalid Input",
-        description: "User ID and PIN must be exactly 4 digits each.",
-        variant: "destructive",
-      });
-      return;
-    }
+    if (!validateInputs()) return;
     
     setIsLoading(true);
     
@@ -75,12 +81,22 @@ const Auth = () => {
     } else {
       toast({
         title: "Account Created!",
-        description: "Your account has been created successfully.",
+        description: "You can now use your User ID and PIN to sign in.",
       });
       navigate('/');
     }
     
     setIsLoading(false);
+  };
+
+  const handleUserIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, '').slice(0, 4);
+    setUserIdPin(value);
+  };
+
+  const handlePinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, '').slice(0, 4);
+    setPinCode(value);
   };
 
   return (
@@ -89,7 +105,7 @@ const Auth = () => {
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Gold Ease Receipt</CardTitle>
           <CardDescription>
-            Enter your 4-digit User ID and PIN to access your account
+            Professional gold business management platform
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -100,38 +116,32 @@ const Auth = () => {
             </TabsList>
             
             <TabsContent value="signin">
-              <form onSubmit={handleSignIn} className="space-y-6">
+              <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="signin-userid">User ID (4 digits)</Label>
-                  <InputOTP 
-                    maxLength={4} 
-                    value={userIdPin} 
-                    onChange={setUserIdPin}
-                    className="w-full justify-center"
-                  >
-                    <InputOTPGroup>
-                      <InputOTPSlot index={0} />
-                      <InputOTPSlot index={1} />
-                      <InputOTPSlot index={2} />
-                      <InputOTPSlot index={3} />
-                    </InputOTPGroup>
-                  </InputOTP>
+                  <Input
+                    id="signin-userid"
+                    type="text"
+                    placeholder="Enter your 4-digit User ID"
+                    value={userIdPin}
+                    onChange={handleUserIdChange}
+                    maxLength={4}
+                    required
+                    className="text-center text-lg tracking-widest"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="signin-pin">PIN (4 digits)</Label>
-                  <InputOTP 
-                    maxLength={4} 
-                    value={pinCode} 
-                    onChange={setPinCode}
-                    className="w-full justify-center"
-                  >
-                    <InputOTPGroup>
-                      <InputOTPSlot index={0} />
-                      <InputOTPSlot index={1} />
-                      <InputOTPSlot index={2} />
-                      <InputOTPSlot index={3} />
-                    </InputOTPGroup>
-                  </InputOTP>
+                  <Input
+                    id="signin-pin"
+                    type="password"
+                    placeholder="Enter your 4-digit PIN"
+                    value={pinCode}
+                    onChange={handlePinChange}
+                    maxLength={4}
+                    required
+                    className="text-center text-lg tracking-widest"
+                  />
                 </div>
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -141,38 +151,32 @@ const Auth = () => {
             </TabsContent>
             
             <TabsContent value="signup">
-              <form onSubmit={handleSignUp} className="space-y-6">
+              <form onSubmit={handleSignUp} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="signup-userid">Choose User ID (4 digits)</Label>
-                  <InputOTP 
-                    maxLength={4} 
-                    value={userIdPin} 
-                    onChange={setUserIdPin}
-                    className="w-full justify-center"
-                  >
-                    <InputOTPGroup>
-                      <InputOTPSlot index={0} />
-                      <InputOTPSlot index={1} />
-                      <InputOTPSlot index={2} />
-                      <InputOTPSlot index={3} />
-                    </InputOTPGroup>
-                  </InputOTP>
+                  <Input
+                    id="signup-userid"
+                    type="text"
+                    placeholder="Choose your 4-digit User ID"
+                    value={userIdPin}
+                    onChange={handleUserIdChange}
+                    maxLength={4}
+                    required
+                    className="text-center text-lg tracking-widest"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="signup-pin">Choose PIN (4 digits)</Label>
-                  <InputOTP 
-                    maxLength={4} 
-                    value={pinCode} 
-                    onChange={setPinCode}
-                    className="w-full justify-center"
-                  >
-                    <InputOTPGroup>
-                      <InputOTPSlot index={0} />
-                      <InputOTPSlot index={1} />
-                      <InputOTPSlot index={2} />
-                      <InputOTPSlot index={3} />
-                    </InputOTPGroup>
-                  </InputOTP>
+                  <Input
+                    id="signup-pin"
+                    type="password"
+                    placeholder="Choose your 4-digit PIN"
+                    value={pinCode}
+                    onChange={handlePinChange}
+                    maxLength={4}
+                    required
+                    className="text-center text-lg tracking-widest"
+                  />
                 </div>
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

@@ -5,9 +5,10 @@ const BUSINESS_STORAGE_KEY = 'business_profile';
 
 export async function saveBusinessProfile(profile: BusinessProfile): Promise<void> {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const currentUser = localStorage.getItem('current_user');
     
-    if (user) {
+    if (currentUser) {
+      const user = JSON.parse(currentUser);
       // Save to Supabase (upsert - insert or update)
       const { error } = await supabase
         .from('business_profiles')
@@ -32,9 +33,10 @@ export async function saveBusinessProfile(profile: BusinessProfile): Promise<voi
 
 export async function getBusinessProfile(): Promise<BusinessProfile> {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const currentUser = localStorage.getItem('current_user');
     
-    if (user) {
+    if (currentUser) {
+      const user = JSON.parse(currentUser);
       // Get from Supabase
       const { data, error } = await supabase
         .from('business_profiles')

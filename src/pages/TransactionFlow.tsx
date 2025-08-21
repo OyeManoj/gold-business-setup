@@ -149,10 +149,10 @@ export default function TransactionFlow() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-off-white to-background">
-      <div className="container mx-auto px-4 py-6">
+    <div className="h-screen flex flex-col bg-gradient-to-br from-background via-off-white to-background">
+      <div className="container mx-auto px-4 py-6 flex flex-col h-full">
         {/* Compact Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-8 flex-shrink-0">
           <div className="flex items-center">
             <Button
               variant="ghost"
@@ -171,8 +171,8 @@ export default function TransactionFlow() {
           />
         </div>
 
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-6">
+        <div className="max-w-6xl mx-auto flex-1 flex flex-col">
+          <div className="grid lg:grid-cols-2 gap-6 h-full">
             {/* Compact Input Form */}
             <Card className="h-full border border-border/60 shadow-lg bg-white/95 backdrop-blur-sm rounded-xl">
               <CardHeader className="pb-4 bg-gradient-to-r from-white/80 to-off-white/80 rounded-t-xl border-b border-border/30 px-6 py-4">

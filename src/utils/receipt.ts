@@ -89,215 +89,71 @@ export function generateReceiptText(
   return receipt;
 }
 
-export function printReceipt(receiptText: string): void {
-  console.log('printReceipt called with text:', receiptText);
+export async function printReceipt(receiptText: string): Promise<void> {
+  console.log('USB Thermal Printer - Connecting...');
   
-  // Try multiple approaches for printing
-  
-  // Method 1: Try window.open with noopener
   try {
-    const printWindow = window.open('', '_blank', 'width=400,height=600,noopener');
-    console.log('Print window opened:', printWindow);
+    // Check if Web Serial API is supported
+    if (!('serial' in navigator)) {
+      throw new Error('Web Serial API not supported. Please use Chrome/Edge browser.');
+    }
+
+    // Request a port
+    const port = await (navigator as any).serial.requestPort();
     
-    if (printWindow) {
-      // Prevent access to opener window for security
-      printWindow.opener = null;
-      
-      // Write secure HTML structure
-      printWindow.document.write(`
-        <html>
-          <head>
-            <title>Receipt</title>
-            <style>
-              * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-              }
-              body {
-                font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-                font-size: 9px;
-                font-weight: 300;
-                margin: 0;
-                padding: 0;
-                white-space: pre-wrap;
-                line-height: 1.1;
-                background: #ffffff;
-                color: #000000;
-                letter-spacing: 0.2px;
-                text-align: left;
-                vertical-align: top;
-              }
-              pre {
-                margin: 0;
-                padding: 0;
-                text-align: left;
-                white-space: pre-wrap;
-              }
-              @media print {
-                * {
-                  margin: 0 !important;
-                  padding: 0 !important;
-                }
-                body { 
-                  margin: 0 !important;
-                  padding: 0 !important;
-                  font-size: 8px;
-                  line-height: 1.0;
-                  background: white !important;
-                  text-align: left !important;
-                  vertical-align: top !important;
-                }
-                pre {
-                  margin: 0 !important;
-                  padding: 0 !important;
-                  text-align: left !important;
-                }
-                @page {
-                  size: 3in 4in;
-                  margin: 0 !important;
-                }
-              }
-            </style>
-          </head>
-          <body><pre id="receipt"></pre></body>
-        </html>
-      `);
-      printWindow.document.close();
-      
-      // Safely inject receipt text using textContent to prevent XSS
-      const receiptElement = printWindow.document.getElementById('receipt');
-      console.log('Receipt element found:', receiptElement);
-      
-      if (receiptElement) {
-        receiptElement.textContent = receiptText;
-        console.log('Receipt text set successfully');
+    // Open the port
+    await port.open({ 
+      baudRate: 9600,
+      dataBits: 8,
+      parity: 'none',
+      stopBits: 1,
+      flowControl: 'none'
+    });
+
+    console.log('Connected to USB thermal printer');
+
+    // Create ESC/POS commands
+    const writer = port.writable.getWriter();
+    
+    // ESC/POS Commands
+    const ESC = '\x1B';
+    const LF = '\x0A';
+    const CR = '\x0D';
+    
+    // Initialize printer
+    await writer.write(new TextEncoder().encode(ESC + '@')); // Initialize
+    await writer.write(new TextEncoder().encode(ESC + 'a' + '\x01')); // Center align
+    
+    // Print receipt text
+    await writer.write(new TextEncoder().encode(receiptText));
+    
+    // Feed paper and cut
+    await writer.write(new TextEncoder().encode(LF + LF + LF));
+    await writer.write(new TextEncoder().encode(ESC + 'i')); // Partial cut
+    
+    // Release the writer
+    writer.releaseLock();
+    
+    // Close the port
+    await port.close();
+    
+    console.log('Receipt printed successfully');
+    
+  } catch (error) {
+    console.error('USB Thermal Printer Error:', error);
+    
+    if (error instanceof Error) {
+      if (error.message.includes('No port selected')) {
+        alert('Please select your USB thermal printer from the device list.');
+      } else if (error.message.includes('not supported')) {
+        alert('USB thermal printing requires Chrome or Edge browser with Web Serial API support.');
       } else {
-        console.error('Receipt element not found');
+        alert(`Thermal printer error: ${error.message}\n\nPlease check:\n1. Printer is connected via USB\n2. Printer is powered on\n3. Browser permissions are granted`);
       }
-      
-      // Add a small delay to ensure content is loaded before printing
-      setTimeout(() => {
-        console.log('Attempting to print...');
-        try {
-          printWindow.print();
-          console.log('Print dialog should have opened');
-          
-          // Close the window after a delay
-          setTimeout(() => {
-            printWindow.close();
-          }, 1000);
-        } catch (error) {
-          console.error('Error calling print():', error);
-        }
-      }, 100);
-      
-      return; // Success, exit function
+    } else {
+      alert('Unknown thermal printer error. Please check your printer connection.');
     }
-  } catch (error) {
-    console.error('Method 1 failed:', error);
   }
-  
-  // Method 2: Fallback - create a hidden iframe for printing
-  try {
-    console.log('Trying iframe fallback method...');
-    
-    const iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
-    
-    if (iframe.contentWindow) {
-      iframe.contentWindow.document.write(`
-        <html>
-          <head>
-            <title>Receipt</title>
-            <style>
-              * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-              }
-              body {
-                font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-                font-size: 9px;
-                font-weight: 300;
-                margin: 0;
-                padding: 0;
-                white-space: pre-wrap;
-                line-height: 1.1;
-                background: #ffffff;
-                color: #000000;
-                letter-spacing: 0.2px;
-                text-align: left;
-                vertical-align: top;
-              }
-              pre {
-                margin: 0;
-                padding: 0;
-                text-align: left;
-                white-space: pre-wrap;
-              }
-              @media print {
-                * {
-                  margin: 0 !important;
-                  padding: 0 !important;
-                }
-                body { 
-                  margin: 0 !important;
-                  padding: 0 !important;
-                  font-size: 8px;
-                  line-height: 1.0;
-                  background: white !important;
-                  text-align: left !important;
-                  vertical-align: top !important;
-                }
-                pre {
-                  margin: 0 !important;
-                  padding: 0 !important;
-                  text-align: left !important;
-                }
-                @page {
-                  size: 3in 4in;
-                  margin: 0 !important;
-                }
-              }
-            </style>
-          </head>
-          <body><pre>${receiptText}</pre></body>
-        </html>
-      `);
-      iframe.contentWindow.document.close();
-      
-      setTimeout(() => {
-        try {
-          iframe.contentWindow?.print();
-          console.log('Iframe print called');
-          
-          // Clean up after printing
-          setTimeout(() => {
-            document.body.removeChild(iframe);
-          }, 1000);
-        } catch (error) {
-          console.error('Iframe print failed:', error);
-          document.body.removeChild(iframe);
-        }
-      }, 100);
-      
-      return; // Success, exit function
-    }
-  } catch (error) {
-    console.error('Method 2 failed:', error);
-  }
-  
-  // Method 3: Last resort - show alert with instructions
-  console.error('All print methods failed');
-  alert(`Print failed: Popup might be blocked. 
-
-Please:
-1. Enable popups for this site in your browser
-2. Or copy the receipt text below and print manually:
-
-${receiptText}`);
 }
 
 // For future Bluetooth thermal printer integration

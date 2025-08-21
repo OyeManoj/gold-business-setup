@@ -140,6 +140,46 @@ const Pricing = () => {
           </div>
         </div>
 
+        {/* Setup Status Notice */}
+        <div className="mb-8">
+          <Card className="bg-blue-50 border-blue-200">
+            <CardContent className="p-6">
+              <div className="flex items-start gap-3">
+                <div className="bg-blue-100 p-2 rounded-full">
+                  <RefreshCw className="h-5 w-5 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-blue-800 mb-2">
+                    Setup Required for Live Payments
+                  </h3>
+                  <p className="text-blue-700 text-sm mb-3">
+                    To enable live subscriptions, configure your Stripe secret key in the edge functions. 
+                    The pricing page is ready - just add your Stripe credentials to start accepting payments!
+                  </p>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => window.open('https://dashboard.stripe.com/apikeys', '_blank')}
+                      className="text-blue-700 border-blue-300 hover:bg-blue-100"
+                    >
+                      Get Stripe API Keys
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => window.open('https://supabase.com/dashboard/project/zjwpcnsmkbestuhalqps/settings/functions', '_blank')}
+                      className="text-blue-700 border-blue-300 hover:bg-blue-100"
+                    >
+                      Configure Edge Functions
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Current Subscription Status */}
         {subscription.subscribed && (
           <Card className="mb-8 bg-green-50 border-green-200">

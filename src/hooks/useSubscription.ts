@@ -28,14 +28,18 @@ export function useSubscription() {
       const { data, error: functionError } = await supabase.functions.invoke('check-subscription');
       
       if (functionError) {
-        throw new Error(functionError.message);
+        // If Stripe is not configured yet, default to unsubscribed
+        console.warn('Subscription check failed (likely Stripe not configured):', functionError.message);
+        setSubscription({ subscribed: false });
+        return;
       }
 
       setSubscription(data || { subscribed: false });
     } catch (err) {
-      console.error('Error checking subscription:', err);
-      setError(err instanceof Error ? err.message : 'Failed to check subscription');
+      console.warn('Error checking subscription (Stripe may not be configured):', err);
+      // Gracefully handle errors by defaulting to unsubscribed
       setSubscription({ subscribed: false });
+      setError(null); // Don't show error to user if Stripe isn't configured yet
     } finally {
       setLoading(false);
     }

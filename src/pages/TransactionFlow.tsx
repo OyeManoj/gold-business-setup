@@ -302,18 +302,18 @@ export default function TransactionFlow() {
               </Card>
             )}
 
-            {/* Compact Summary Panel */}
-            {showSummary && calculation && (
+            {/* Live Summary Panel */}
+            {liveCalculation && (
               <div className="space-y-4">
                 <TransactionSummary
                   type={transactionType}
-                  weight={parseFloat(formData.weight)}
-                  purity={transactionType === 'SALE' ? 100 : parseFloat(formData.purity)}
-                  rate={transactionType === 'EXCHANGE' ? 1 : parseFloat(formData.rate)}
-                  fineGold={calculation.fineGold}
-                  amount={calculation.amount}
-                  reduction={transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined}
-                  remainingFineGold={calculation.remainingFineGold}
+                  weight={parseFloat(formData.weight) || 0}
+                  purity={transactionType === 'SALE' ? 100 : (parseFloat(formData.purity) || 0)}
+                  rate={transactionType === 'EXCHANGE' ? 1 : (parseFloat(formData.rate) || 0)}
+                  fineGold={liveCalculation.fineGold}
+                  amount={liveCalculation.amount}
+                  reduction={transactionType === 'EXCHANGE' ? (parseFloat(formData.reduction) || 0) : undefined}
+                  remainingFineGold={liveCalculation.remainingFineGold}
                   language={language}
                 />
 

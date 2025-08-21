@@ -56,7 +56,7 @@ const Index = () => {
             <div className="text-center mb-3">
               <p className="text-sm text-muted-foreground font-medium">
                 {language === 'ar' ? 'مسجل الدخول كـ:' : 'Signed in as:'} 
-                <span className="text-foreground font-semibold ml-1">{user?.email}</span>
+                <span className="text-foreground font-semibold ml-1">User {user?.userIdPin}</span>
               </p>
             </div>
             

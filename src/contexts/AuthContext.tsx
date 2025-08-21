@@ -1,19 +1,21 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
+interface AuthUser {
+  id: string;
+  userIdPin: string;
+}
+
 interface AuthContextType {
-  user: User | null;
-  session: Session | null;
+  user: AuthUser | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signUp: (email: string, password: string) => Promise<{ error: any }>;
+  signIn: (userIdPin: string, pinCode: string) => Promise<{ error: any }>;
+  signUp: (userIdPin: string, pinCode: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
-  session: null,
   loading: true,
   signIn: async () => ({ error: null }),
   signUp: async () => ({ error: null }),
@@ -29,62 +31,86 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
+    // Check for existing session in localStorage
+    const savedUser = localStorage.getItem('auth_user');
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (error) {
+        localStorage.removeItem('auth_user');
       }
-    );
-
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    }
+    setLoading(false);
   }, []);
 
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    return { error };
+  const signIn = async (userIdPin: string, pinCode: string) => {
+    try {
+      const { data, error } = await supabase.rpc('authenticate_user', {
+        user_id_pin: userIdPin,
+        pin_code: pinCode
+      });
+
+      if (error) {
+        return { error: { message: 'Authentication failed' } };
+      }
+
+      if (data && data.length > 0 && data[0].success) {
+        const authUser: AuthUser = {
+          id: data[0].user_id,
+          userIdPin: userIdPin
+        };
+        setUser(authUser);
+        localStorage.setItem('auth_user', JSON.stringify(authUser));
+        return { error: null };
+      } else {
+        return { error: { message: 'Invalid User ID or PIN' } };
+      }
+    } catch (error) {
+      return { error: { message: 'Authentication failed' } };
+    }
   };
 
-  const signUp = async (email: string, password: string) => {
-    const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl
+  const signUp = async (userIdPin: string, pinCode: string) => {
+    try {
+      const { data, error } = await supabase.rpc('register_user', {
+        user_id_pin: userIdPin,
+        pin_code: pinCode
+      });
+
+      if (error) {
+        return { error: { message: 'Registration failed' } };
       }
-    });
-    return { error };
+
+      if (data && data.length > 0 && data[0].success) {
+        const authUser: AuthUser = {
+          id: data[0].user_id,
+          userIdPin: userIdPin
+        };
+        setUser(authUser);
+        localStorage.setItem('auth_user', JSON.stringify(authUser));
+        return { error: null };
+      } else {
+        return { error: { message: data[0]?.message || 'Registration failed' } };
+      }
+    } catch (error) {
+      return { error: { message: 'Registration failed' } };
+    }
   };
 
   const signOut = async () => {
-    // Security: Clear all sensitive data from localStorage before signing out
-    const keysToRemove = ['business_profile', 'receipt_settings', 'gold_transactions'];
+    // Clear all sensitive data from localStorage
+    const keysToRemove = ['auth_user', 'business_profile', 'receipt_settings', 'gold_transactions'];
     keysToRemove.forEach(key => localStorage.removeItem(key));
     
-    await supabase.auth.signOut();
+    setUser(null);
   };
 
   const value = {
     user,
-    session,
     loading,
     signIn,
     signUp,

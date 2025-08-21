@@ -1,28 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { useTranslation } from '@/utils/translations';
 import { ArrowUpDown, ShoppingCart, TrendingUp, History, Settings } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
 
 const Index = () => {
   const navigate = useNavigate();
   const [language, setLanguage] = useState<Language>('en');
   const t = useTranslation(language);
 
-  // Clear any auth state to prevent login redirects
-  useEffect(() => {
-    const clearAuth = async () => {
-      try {
-        await supabase.auth.signOut();
-      } catch (error) {
-        // Ignore auth errors
-      }
-    };
-    clearAuth();
-  }, []);
 
   const transactions = [
     {

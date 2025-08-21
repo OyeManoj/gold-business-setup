@@ -8,34 +8,34 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Modern color palette */
-    --background: 0 0% 96%;
-    --foreground: 0 0% 0%;
+    /* Modern color palette - Off-white background with black text */
+    --background: 0 0% 92%;
+    --foreground: 0 0% 10%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
+    --card: 0 0% 95%;
+    --card-foreground: 0 0% 10%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
+    --popover: 0 0% 95%;
+    --popover-foreground: 0 0% 10%;
 
     --primary: 123 47% 32%;
-    --primary-foreground: 0 0% 0%;
+    --primary-foreground: 0 0% 10%;
     --primary-glow: 123 47% 42%;
 
-    --secondary: 0 0% 46%;
-    --secondary-foreground: 0 0% 0%;
+    --secondary: 0 0% 85%;
+    --secondary-foreground: 0 0% 10%;
 
-    --muted: 0 0% 94%;
-    --muted-foreground: 0 0% 0%;
+    --muted: 0 0% 88%;
+    --muted-foreground: 0 0% 10%;
 
     --accent: 210 67% 46%;
-    --accent-foreground: 0 0% 0%;
+    --accent-foreground: 0 0% 10%;
 
     --destructive: 4 64% 49%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 88%;
-    --input: 0 0% 100%;
+    --border: 0 0% 80%;
+    --input: 0 0% 95%;
     --ring: 210 67% 46%;
 
     --success: 123 47% 32%;
@@ -51,8 +51,8 @@ All colors MUST be HSL.
     --gray: 0 0% 40%;
     --gray-light: 0 0% 50%;
     --light-gray: 0 0% 25%;
-    --off-white: 0 0% 85%;
-    --pure-white: 0 0% 95%;
+    --off-white: 0 0% 92%;
+    --pure-white: 0 0% 98%;
     --charcoal: 0 0% 8%;
     --slate: 0 0% 30%;
 

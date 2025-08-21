@@ -108,15 +108,11 @@ export function generateReceiptText(
 }
 
 export function printReceipt(receiptText: string): void {
-  // Security: Log only that function was called, not sensitive receipt data
-  console.log('printReceipt called');
-  
   // Try multiple approaches for printing
   
   // Method 1: Try window.open with noopener
   try {
     const printWindow = window.open('', '_blank', 'width=400,height=600,noopener');
-    console.log('Print window opened:', printWindow);
     
     if (printWindow) {
       // Prevent access to opener window for security
@@ -202,32 +198,22 @@ export function printReceipt(receiptText: string): void {
       
       // Safely inject receipt text using textContent to prevent XSS
       const receiptElement = printWindow.document.getElementById('receipt');
-      console.log('Receipt element found:', receiptElement);
       
       if (receiptElement) {
         receiptElement.textContent = receiptText;
-        console.log('Receipt text set successfully');
-      } else {
-        console.error('Receipt element not found');
+        
+        // Add a small delay to ensure content is loaded before printing
+        setTimeout(() => {
+          try {
+            printWindow.print();
+            setTimeout(() => printWindow.close(), 1000);
+          } catch (error) {
+            console.error('Print failed:', error);
+          }
+        }, 100);
       }
       
-      // Add a small delay to ensure content is loaded before printing
-      setTimeout(() => {
-        console.log('Attempting to print...');
-        try {
-          printWindow.print();
-          console.log('Print dialog should have opened');
-          
-          // Close the window after a delay
-          setTimeout(() => {
-            printWindow.close();
-          }, 1000);
-        } catch (error) {
-          console.error('Error calling print():', error);
-        }
-      }, 100);
-      
-      return; // Success, exit function
+      return;
     }
   } catch (error) {
     console.error('Method 1 failed:', error);
@@ -235,8 +221,6 @@ export function printReceipt(receiptText: string): void {
   
   // Method 2: Fallback - create a hidden iframe for printing
   try {
-    console.log('Trying iframe fallback method...');
-    
     const iframe = document.createElement('iframe');
     iframe.style.display = 'none';
     document.body.appendChild(iframe);
@@ -255,15 +239,9 @@ export function printReceipt(receiptText: string): void {
                 padding: 0;
                 white-space: pre-wrap;
                 line-height: 1.2;
-                width: 3in;
-                height: 4in;
                 background: #ffffff;
                 color: #000000;
                 letter-spacing: 0.3px;
-                overflow: hidden;
-                position: absolute;
-                top: 0;
-                left: 0;
               }
               @media print {
                 body { 
@@ -273,12 +251,7 @@ export function printReceipt(receiptText: string): void {
                   font-weight: 700;
                   line-height: 1.1;
                   background: white;
-                  width: 3in;
-                  height: 4in;
                   letter-spacing: 0.2px;
-                  position: absolute;
-                  top: 0;
-                  left: 0;
                 }
                 @page {
                   size: 3in 4in;
@@ -292,29 +265,23 @@ export function printReceipt(receiptText: string): void {
       `);
       iframe.contentWindow.document.close();
       
-      // Security: Use textContent instead of innerHTML to prevent XSS
+      // Security: Use textContent to prevent XSS
       const receiptElement = iframe.contentWindow.document.getElementById('iframe-receipt');
       if (receiptElement) {
         receiptElement.textContent = receiptText;
-      }
-      iframe.contentWindow.document.close();
-      
-      setTimeout(() => {
-        try {
-          iframe.contentWindow?.print();
-          console.log('Iframe print called');
-          
-          // Clean up after printing
-          setTimeout(() => {
+        
+        setTimeout(() => {
+          try {
+            iframe.contentWindow?.print();
+            setTimeout(() => document.body.removeChild(iframe), 1000);
+          } catch (error) {
+            console.error('Iframe print failed:', error);
             document.body.removeChild(iframe);
-          }, 1000);
-        } catch (error) {
-          console.error('Iframe print failed:', error);
-          document.body.removeChild(iframe);
-        }
-      }, 100);
+          }
+        }, 100);
+      }
       
-      return; // Success, exit function
+      return;
     }
   } catch (error) {
     console.error('Method 2 failed:', error);

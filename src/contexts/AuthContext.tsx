@@ -6,8 +6,8 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signUp: (email: string, password: string) => Promise<{ error: any }>;
+  sendOTP: (phone: string) => Promise<{ error: any }>;
+  verifyOTP: (phone: string, token: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
 }
 
@@ -15,8 +15,8 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   session: null,
   loading: true,
-  signIn: async () => ({ error: null }),
-  signUp: async () => ({ error: null }),
+  sendOTP: async () => ({ error: null }),
+  verifyOTP: async () => ({ error: null }),
   signOut: async () => {},
 });
 
@@ -53,23 +53,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => subscription.unsubscribe();
   }, []);
 
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+  const sendOTP = async (phone: string) => {
+    const { error } = await supabase.auth.signInWithOtp({
+      phone: phone,
+      options: {
+        channel: 'sms',
+      }
     });
     return { error };
   };
 
-  const signUp = async (email: string, password: string) => {
-    const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl
-      }
+  const verifyOTP = async (phone: string, token: string) => {
+    const { error } = await supabase.auth.verifyOtp({
+      phone: phone,
+      token: token,
+      type: 'sms'
     });
     return { error };
   };
@@ -82,8 +80,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     user,
     session,
     loading,
-    signIn,
-    signUp,
+    sendOTP,
+    verifyOTP,
     signOut,
   };
 

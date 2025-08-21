@@ -52,7 +52,7 @@ const Index = () => {
         <div className="flex flex-col items-center gap-4 mb-12">
           <div className="text-center">
             <p className="text-sm text-muted-foreground">
-              {language === 'ar' ? 'مسجل الدخول كـ:' : 'Signed in as:'} {user?.email}
+              {language === 'ar' ? 'مسجل الدخول كـ:' : 'Signed in as:'} {user?.phone || user?.email || 'User'}
             </p>
           </div>
           <div className="flex items-center justify-center gap-6">

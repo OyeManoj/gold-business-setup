@@ -91,8 +91,16 @@ export function generateReceiptText(
   }
   
   receipt += `\n================================\n`;
-  receipt += `THANK YOU FOR BUSINESS\n`;
-  receipt += `VISIT AGAIN SOON\n`;
+  
+  // Center the thank you messages
+  const centerText = (text: string) => {
+    const totalWidth = 32;
+    const padding = Math.floor((totalWidth - text.length) / 2);
+    return ' '.repeat(Math.max(0, padding)) + text;
+  };
+  
+  receipt += `${centerText('THANK YOU FOR BUSINESS')}\n`;
+  receipt += `${centerText('VISIT AGAIN SOON')}\n`;
   
   return receipt;
 }

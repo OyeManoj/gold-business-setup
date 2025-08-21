@@ -184,7 +184,7 @@ export function exportTransactionsToExcel(
   );
 
   // Purchase average prices
-  if (summary.averagePrices.purchase.day > 0) {
+  if (summary.averagePrices.purchase.day > 0 || summary.averagePrices.purchase.week > 0 || summary.averagePrices.purchase.month > 0) {
     summaryData.push(
       { 'Sr. No.': '', 'Transaction ID': 'Purchase Avg (Day):', 'Date': summary.averagePrices.purchase.day, 'Time': '₹/g', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
       { 'Sr. No.': '', 'Transaction ID': 'Purchase Avg (Week):', 'Date': summary.averagePrices.purchase.week, 'Time': '₹/g', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
@@ -193,7 +193,7 @@ export function exportTransactionsToExcel(
   }
 
   // Sale average prices
-  if (summary.averagePrices.sale.day > 0) {
+  if (summary.averagePrices.sale.day > 0 || summary.averagePrices.sale.week > 0 || summary.averagePrices.sale.month > 0) {
     summaryData.push(
       { 'Sr. No.': '', 'Transaction ID': 'Sale Avg (Day):', 'Date': summary.averagePrices.sale.day, 'Time': '₹/g', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },
       { 'Sr. No.': '', 'Transaction ID': 'Sale Avg (Week):', 'Date': summary.averagePrices.sale.week, 'Time': '₹/g', 'Type': '', 'Gross Weight (g)': '', 'Purity (%)': '', 'Reduction (%)': '', 'Rate (₹/g)': '', 'Fine Gold (g)': '', 'Total Amount (₹)': '' },

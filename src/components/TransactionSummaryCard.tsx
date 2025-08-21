@@ -100,6 +100,31 @@ export function TransactionSummaryCard({ summary }: TransactionSummaryCardProps)
           </div>
         </div>
       </div>
+
+      {/* Exchange Profit */}
+      <div className="p-4 bg-purple-50 dark:bg-purple-950/30 rounded-lg">
+        <h3 className="font-medium mb-3">Exchange Profit</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Day:</span>
+            <span className="font-medium text-green-600 dark:text-green-400">
+              {formatIndianCurrency(summary.exchangeProfit.day)}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Week:</span>
+            <span className="font-medium text-green-600 dark:text-green-400">
+              {formatIndianCurrency(summary.exchangeProfit.week)}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Month:</span>
+            <span className="font-medium text-green-600 dark:text-green-400">
+              {formatIndianCurrency(summary.exchangeProfit.month)}
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

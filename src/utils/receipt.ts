@@ -128,13 +128,13 @@ export function printReceipt(receiptText: string): void {
                 font-weight: 600;
                 margin: 0;
                 padding: 0;
-                white-space: pre-wrap;
+                white-space: pre;
                 line-height: 1.2;
                 background: #ffffff;
                 color: #000000;
                 letter-spacing: 0.3px;
                 text-align: left;
-                vertical-align: top;
+                word-spacing: normal;
                 position: absolute;
                 top: 0;
                 left: 0;

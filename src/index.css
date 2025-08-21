@@ -8,41 +8,41 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Deep black color palette */
-    --background: 0 0% 5%;
-    --foreground: 0 0% 95%;
+    /* Modern color palette */
+    --background: 0 0% 96%;
+    --foreground: 0 0% 15%;
 
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 95%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 15%;
 
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 15%;
 
-    --primary: 0 0% 15%;
+    --primary: 123 47% 32%;
     --primary-foreground: 0 0% 98%;
-    --primary-glow: 0 0% 25%;
+    --primary-glow: 123 47% 42%;
 
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 90%;
+    --secondary: 0 0% 46%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 0 0% 10%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 46%;
 
-    --accent: 0 0% 18%;
-    --accent-foreground: 0 0% 95%;
+    --accent: 210 67% 46%;
+    --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 0% 25%;
+    --destructive: 4 64% 49%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 12%;
-    --ring: 0 0% 30%;
+    --border: 0 0% 88%;
+    --input: 0 0% 100%;
+    --ring: 210 67% 46%;
 
-    --success: 0 0% 20%;
+    --success: 123 47% 32%;
     --success-foreground: 0 0% 98%;
 
-    --warning: 0 0% 35%;
-    --warning-foreground: 0 0% 98%;
+    --warning: 45 100% 50%;
+    --warning-foreground: 0 0% 15%;
 
     /* Deep black business colors */
     --dark: 0 0% 5%;

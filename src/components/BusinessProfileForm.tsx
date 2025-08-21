@@ -21,13 +21,16 @@ export function BusinessProfileForm({ language }: BusinessProfileFormProps) {
   });
 
   useEffect(() => {
-    const savedProfile = getBusinessProfile();
-    setProfile(savedProfile);
+    const loadProfile = async () => {
+      const savedProfile = await getBusinessProfile();
+      setProfile(savedProfile);
+    };
+    loadProfile();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    saveBusinessProfile(profile);
+    await saveBusinessProfile(profile);
     toast({
       title: language === 'ar' ? 'تم الحفظ' : 'Saved Successfully',
       description: language === 'ar' ? 'تم حفظ بيانات العمل بنجاح' : 'Business profile has been saved successfully.',

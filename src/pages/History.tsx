@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LanguageToggle, Language } from '@/components/LanguageToggle';
@@ -17,7 +17,15 @@ export default function History() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [language, setLanguage] = useState<Language>('en');
-  const [transactions, setTransactions] = useState(getTransactions());
+  const [transactions, setTransactions] = useState<any[]>([]);
+  
+  useEffect(() => {
+    const loadTransactions = async () => {
+      const loadedTransactions = await getTransactions();
+      setTransactions(loadedTransactions);
+    };
+    loadTransactions();
+  }, []);
   
   const {
     filters,
@@ -30,8 +38,8 @@ export default function History() {
   
   const t = useTranslation(language);
 
-  const handleClearHistory = () => {
-    clearTransactions();
+  const handleClearHistory = async () => {
+    await clearTransactions();
     setTransactions([]);
     toast({
       title: "Success",

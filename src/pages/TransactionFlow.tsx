@@ -38,19 +38,22 @@ export default function TransactionFlow() {
 
   // Load transaction for editing
   useEffect(() => {
-    if (isEditMode && transactionId) {
-      const transactions = getTransactions();
-      const transaction = transactions.find(t => t.id === transactionId);
-      if (transaction) {
-        setEditingTransaction(transaction);
-        setFormData({
-          weight: transaction.weight.toString(),
-          purity: transaction.purity?.toString() || '',
-          reduction: transaction.reduction?.toString() || '',
-          rate: transaction.rate.toString(),
-        });
+    const loadTransaction = async () => {
+      if (isEditMode && transactionId) {
+        const transactions = await getTransactions();
+        const transaction = transactions.find(t => t.id === transactionId);
+        if (transaction) {
+          setEditingTransaction(transaction);
+          setFormData({
+            weight: transaction.weight.toString(),
+            purity: transaction.purity?.toString() || '',
+            reduction: transaction.reduction?.toString() || '',
+            rate: transaction.rate.toString(),
+          });
+        }
       }
-    }
+    };
+    loadTransaction();
   }, [isEditMode, transactionId]);
 
   const liveCalculation = useLiveCalculation(formData, transactionType);
@@ -76,7 +79,7 @@ export default function TransactionFlow() {
     }
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     const transaction: Transaction = {
       id: isEditMode ? editingTransaction!.id : Date.now().toString(),
       type: transactionType,
@@ -96,14 +99,14 @@ export default function TransactionFlow() {
     };
 
     if (isEditMode) {
-      updateTransaction(transaction);
+      await updateTransaction(transaction);
       toast({
         title: "Success",
         description: "Transaction updated successfully",
         variant: "default"
       });
     } else {
-      saveTransaction(transaction);
+      await saveTransaction(transaction);
       const receiptText = generateReceiptText(transaction, language);
       printReceipt(receiptText);
       toast({

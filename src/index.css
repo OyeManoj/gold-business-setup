@@ -8,61 +8,61 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Black and white color palette */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 10%;
+    /* Deep black color palette */
+    --background: 0 0% 5%;
+    --foreground: 0 0% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 0 0% 10%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 0 0% 30%;
+    --primary: 0 0% 15%;
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 0 0% 25%;
 
-    --secondary: 0 0% 85%;
-    --secondary-foreground: 0 0% 10%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 90%;
 
-    --muted: 0 0% 95%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 65%;
 
-    --accent: 0 0% 92%;
-    --accent-foreground: 0 0% 10%;
+    --accent: 0 0% 18%;
+    --accent-foreground: 0 0% 95%;
 
-    --destructive: 0 0% 20%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 0% 25%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 88%;
-    --input: 0 0% 97%;
-    --ring: 0 0% 10%;
+    --border: 0 0% 20%;
+    --input: 0 0% 12%;
+    --ring: 0 0% 30%;
 
-    --success: 0 0% 25%;
-    --success-foreground: 0 0% 100%;
+    --success: 0 0% 20%;
+    --success-foreground: 0 0% 98%;
 
-    --warning: 0 0% 30%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 0 0% 35%;
+    --warning-foreground: 0 0% 98%;
 
-    /* Black and white business colors */
-    --dark: 0 0% 10%;
-    --dark-light: 0 0% 25%;
-    --dark-medium: 0 0% 40%;
-    --gray: 0 0% 60%;
-    --gray-light: 0 0% 75%;
-    --light-gray: 0 0% 85%;
-    --off-white: 0 0% 95%;
-    --pure-white: 0 0% 100%;
-    --charcoal: 0 0% 15%;
-    --slate: 0 0% 50%;
+    /* Deep black business colors */
+    --dark: 0 0% 5%;
+    --dark-light: 0 0% 12%;
+    --dark-medium: 0 0% 20%;
+    --gray: 0 0% 40%;
+    --gray-light: 0 0% 50%;
+    --light-gray: 0 0% 25%;
+    --off-white: 0 0% 85%;
+    --pure-white: 0 0% 95%;
+    --charcoal: 0 0% 8%;
+    --slate: 0 0% 30%;
 
-    /* Monochrome accent variations */
-    --accent-1: 0 0% 20%;
-    --accent-1-light: 0 0% 80%;
-    --accent-2: 0 0% 35%;
-    --accent-2-light: 0 0% 70%;
-    --accent-3: 0 0% 25%;
-    --accent-3-light: 0 0% 75%;
+    /* Dark accent variations */
+    --accent-1: 0 0% 15%;
+    --accent-1-light: 0 0% 70%;
+    --accent-2: 0 0% 22%;
+    --accent-2-light: 0 0% 60%;
+    --accent-3: 0 0% 18%;
+    --accent-3-light: 0 0% 65%;
 
     /* Modern spacing and layout */
     --radius: 12px;
@@ -90,54 +90,54 @@ All colors MUST be HSL.
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: all 0.15s ease-out;
 
-    /* Sidebar */
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 0 0% 9%;
-    --sidebar-primary: 0 0% 9%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 0 0% 96%;
-    --sidebar-accent-foreground: 0 0% 9%;
-    --sidebar-border: 0 0% 90%;
-    --sidebar-ring: 0 0% 9%;
+    /* Dark sidebar */
+    --sidebar-background: 0 0% 5%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 0 0% 15%;
+    --sidebar-primary-foreground: 0 0% 95%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 90%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 0 0% 25%;
   }
 
   .dark {
-    --background: 0 0% 3.9%;
+    --background: 0 0% 2%;
     --foreground: 0 0% 98%;
 
-    --card: 0 0% 3.9%;
+    --card: 0 0% 3%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 3.9%;
+    --popover: 0 0% 3%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
+    --primary: 0 0% 8%;
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 0 0% 6%;
+    --secondary-foreground: 0 0% 95%;
 
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
+    --muted: 0 0% 5%;
+    --muted-foreground: 0 0% 70%;
 
-    --accent: 0 0% 14.9%;
+    --accent: 0 0% 8%;
     --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 0% 15%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --border: 0 0% 10%;
+    --input: 0 0% 6%;
+    --ring: 0 0% 20%;
     
-    --sidebar-background: 0 0% 9%;
+    --sidebar-background: 0 0% 2%;
     --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 0 0% 98%;
-    --sidebar-primary-foreground: 0 0% 9%;
-    --sidebar-accent: 0 0% 14.9%;
+    --sidebar-primary: 0 0% 8%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 0 0% 5%;
     --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 0 0% 14.9%;
-    --sidebar-ring: 0 0% 83.1%;
+    --sidebar-border: 0 0% 8%;
+    --sidebar-ring: 0 0% 20%;
   }
 }
 
@@ -147,7 +147,7 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-white text-foreground font-normal;
+    @apply bg-background text-foreground font-normal;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

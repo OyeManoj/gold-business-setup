@@ -150,19 +150,21 @@ export default function TransactionFlow() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="container mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-10">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate('/')}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft size={16} />
-            <span className="font-medium">{t.back}</span>
-          </Button>
+    <div className="min-h-screen bg-gradient-to-br from-background via-off-white to-background">
+      <div className="container mx-auto px-6 py-12">
+        {/* Header with perfect symmetry */}
+        <div className="flex items-center justify-between mb-16">
+          <div className="flex items-center">
+            <Button
+              variant="ghost"
+              size="default"
+              onClick={() => navigate('/')}
+              className="flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-white/80 hover:shadow-md transition-all duration-200"
+            >
+              <ArrowLeft size={20} />
+              <span className="font-medium text-lg">{t.back}</span>
+            </Button>
+          </div>
           
           <LanguageToggle
             currentLanguage={language}
@@ -170,21 +172,21 @@ export default function TransactionFlow() {
           />
         </div>
 
-        <div className="max-w-5xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* Input Form */}
-            <Card className="h-fit border-0 shadow-sm bg-white">
-              <CardHeader className="pb-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <Badge className={`${getTransactionColor(transactionType)} text-white px-3 py-1.5 text-sm font-medium rounded-lg shadow-sm`}>
+        <div className="max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-10">
+            {/* Enhanced Input Form */}
+            <Card className="h-fit border-2 border-border/60 shadow-xl bg-white/95 backdrop-blur-sm rounded-2xl">
+              <CardHeader className="pb-8 bg-gradient-to-r from-white/80 to-off-white/80 rounded-t-2xl border-b-2 border-border/30">
+                <div className="flex items-center gap-4 mb-6">
+                  <Badge className={`${getTransactionColor(transactionType)} text-white px-4 py-2 text-sm font-bold rounded-xl shadow-md border-2 border-white/20`}>
                     {t[transactionType.toLowerCase() as keyof typeof t]}
                   </Badge>
                 </div>
-                <CardTitle className="text-xl font-medium text-foreground">
+                <CardTitle className="text-2xl font-bold text-dark tracking-tight">
                   {isEditMode ? 'Edit Transaction' : 'Transaction Details'}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-8 p-8">
                 {/* Average Prices Display */}
                 <DayAveragePrices transactionType={transactionType} />
                 
@@ -251,18 +253,18 @@ export default function TransactionFlow() {
                   />
                 )}
 
-                {/* Calculate Button */}
+                {/* Enhanced Calculate Button */}
                 <Button
                   variant="default"
                   size="lg"
                   onClick={handleCalculate}
-                  className="w-full"
+                  className="w-full py-4 text-lg font-bold rounded-xl bg-gradient-to-r from-dark to-charcoal hover:from-charcoal hover:to-dark shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
                   disabled={
                     !formData.weight || 
                     (transactionType !== 'EXCHANGE' && !formData.rate)
                   }
                 >
-                  <Calculator size={18} className="mr-2" />
+                  <Calculator size={20} className="mr-3" />
                   {isEditMode ? 'Update Transaction' : 'Calculate Transaction'}
                 </Button>
               </CardContent>

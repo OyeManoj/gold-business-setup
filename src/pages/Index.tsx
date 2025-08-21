@@ -4,10 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { useTranslation } from '@/utils/translations';
-import { ArrowUpDown, ShoppingCart, TrendingUp, History, Settings } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { ArrowUpDown, ShoppingCart, TrendingUp, History, Settings, LogOut, User } from 'lucide-react';
 
 const Index = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [language, setLanguage] = useState<Language>('en');
   const t = useTranslation(language);
 
@@ -49,31 +51,52 @@ const Index = () => {
         {/* Compact Navigation */}
         <div className="max-w-4xl mx-auto mb-8">
           <div className="bg-card/70 backdrop-blur-sm rounded-xl p-4 shadow-md border border-border">            
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <LanguageToggle
-                currentLanguage={language}
-                onLanguageChange={setLanguage}
-              />
-              
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate('/business-profile')}
-                  className="flex items-center gap-2"
-                >
-                  <Settings size={16} />
-                  <span className="font-medium text-sm">{language === 'ar' ? 'ملف العمل' : 'Business Profile'}</span>
-                </Button>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <LanguageToggle
+                  currentLanguage={language}
+                  onLanguageChange={setLanguage}
+                />
+                
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate('/business-profile')}
+                    className="flex items-center gap-2"
+                  >
+                    <Settings size={16} />
+                    <span className="font-medium text-sm">{language === 'ar' ? 'ملف العمل' : 'Business Profile'}</span>
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate('/history')}
+                    className="flex items-center gap-2"
+                  >
+                    <History size={16} />
+                    <span className="font-medium text-sm">{t.history}</span>
+                  </Button>
+                </div>
+              </div>
+
+              {/* User Menu */}
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 px-3 py-2 bg-muted/20 rounded-lg">
+                  <User size={16} className="text-muted-foreground" />
+                  <span className="text-sm font-medium">{user?.name}</span>
+                  <span className="text-xs text-muted-foreground">({user?.userId})</span>
+                </div>
                 
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => navigate('/history')}
-                  className="flex items-center gap-2"
+                  onClick={logout}
+                  className="flex items-center gap-2 text-destructive hover:text-destructive"
                 >
-                  <History size={16} />
-                  <span className="font-medium text-sm">{t.history}</span>
+                  <LogOut size={16} />
+                  <span className="font-medium text-sm">{language === 'ar' ? 'تسجيل الخروج' : 'Logout'}</span>
                 </Button>
               </div>
             </div>
@@ -109,15 +132,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="text-center mt-16 pb-8">
-          <p className="text-muted-foreground text-sm">
-            {language === 'ar' 
-              ? 'نظام إدارة محترف لمعاملات الذهب'
-              : 'Professional Gold Transaction Management System'
-            }
-          </p>
-        </div>
       </div>
     </div>
   );

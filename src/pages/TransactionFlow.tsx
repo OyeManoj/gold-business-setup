@@ -174,7 +174,7 @@ export default function TransactionFlow() {
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Compact Input Form */}
-            <Card className="h-fit border border-border/60 shadow-lg bg-white/95 backdrop-blur-sm rounded-xl">
+            <Card className="h-full border border-border/60 shadow-lg bg-white/95 backdrop-blur-sm rounded-xl">
               <CardHeader className="pb-4 bg-gradient-to-r from-white/80 to-off-white/80 rounded-t-xl border-b border-border/30 px-6 py-4">
                 <div className="flex items-center gap-3 mb-3">
                   <Badge className={`${getTransactionColor(transactionType)} text-white px-3 py-1.5 text-sm font-bold rounded-lg shadow-sm border border-white/20`}>

@@ -38,7 +38,7 @@ export function TransactionSummary({
   };
 
   return (
-    <Card className="bg-gradient-to-br from-gold-light/30 to-background border-2 border-gold/20">
+    <Card className="h-full bg-gradient-to-br from-gold-light/30 to-background border-2 border-gold/20">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-xl">Transaction Summary</CardTitle>

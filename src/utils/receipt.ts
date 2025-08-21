@@ -79,7 +79,21 @@ export function generateReceiptText(
     }
   }
   
-  receipt += `${centerText('GOLD EXCHANGE')}\n`;
+  // Display transaction type based on the actual transaction type
+  const getTransactionTitle = (type: string) => {
+    switch (type) {
+      case 'EXCHANGE':
+        return 'GOLD EXCHANGE';
+      case 'PURCHASE':
+        return 'GOLD PURCHASE';
+      case 'SALE':
+        return 'GOLD SALE';
+      default:
+        return 'GOLD TRANSACTION';
+    }
+  };
+  
+  receipt += `${centerText(getTransactionTitle(transaction.type))}\n`;
   receipt += `================================\n`;
   const dateTimeText = `${date} • ${time}`;
   receipt += `${centerText(dateTimeText)}\n`;

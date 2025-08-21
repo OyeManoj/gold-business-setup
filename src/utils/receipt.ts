@@ -142,9 +142,6 @@ export function printReceipt(receiptText: string): void {
                 letter-spacing: 0.3px;
                 text-align: left;
                 word-spacing: normal;
-                position: absolute;
-                top: 0;
-                left: 0;
               }
               pre {
                 margin: 0;
@@ -152,9 +149,6 @@ export function printReceipt(receiptText: string): void {
                 text-align: left;
                 white-space: pre-wrap;
                 font-weight: 600;
-                position: absolute;
-                top: 0;
-                left: 0;
               }
               @media print {
                 * {
@@ -171,23 +165,16 @@ export function printReceipt(receiptText: string): void {
                   text-align: left !important;
                   vertical-align: top !important;
                   letter-spacing: 0.2px;
-                  position: absolute !important;
-                  top: 0 !important;
-                  left: 0 !important;
                 }
                 pre {
                   margin: 0 !important;
                   padding: 0 !important;
                   text-align: left !important;
                   font-weight: 700;
-                  position: absolute !important;
-                  top: 0 !important;
-                  left: 0 !important;
                 }
                 @page {
                   size: 3in 4in;
                   margin: 0 !important;
-                }
               }
             </style>
           </head>
@@ -245,8 +232,8 @@ export function printReceipt(receiptText: string): void {
               }
               @media print {
                 body { 
-                  margin: 0; 
-                  padding: 0;
+                  margin: 0 !important; 
+                  padding: 0 !important;
                   font-size: 9px;
                   font-weight: 700;
                   line-height: 1.1;
@@ -255,8 +242,7 @@ export function printReceipt(receiptText: string): void {
                 }
                 @page {
                   size: 3in 4in;
-                  margin: 0;
-                }
+                  margin: 0 !important;
               }
             </style>
           </head>

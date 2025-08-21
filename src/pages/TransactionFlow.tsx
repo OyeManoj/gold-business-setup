@@ -83,7 +83,7 @@ export default function TransactionFlow() {
 
   const handleConfirm = async () => {
     const transaction: Transaction = {
-      id: isEditMode ? editingTransaction!.id : Date.now().toString(),
+      id: isEditMode ? editingTransaction!.id : crypto.randomUUID(),
       type: transactionType,
       weight: parseFloat(formData.weight),
       purity: transactionType === 'SALE' ? 100 : parseFloat(formData.purity),

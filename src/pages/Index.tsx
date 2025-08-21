@@ -4,14 +4,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { useTranslation } from '@/utils/translations';
-import { useAuth } from '@/hooks/useAuth';
-import { ArrowUpDown, ShoppingCart, TrendingUp, History, Settings, LogOut, Shield, CreditCard } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { ArrowUpDown, ShoppingCart, TrendingUp, History, Settings, LogOut } from 'lucide-react';
 
 const Index = () => {
   const navigate = useNavigate();
   const [language, setLanguage] = useState<Language>('en');
   const t = useTranslation(language);
-  const { signOut, user, isAdmin } = useAuth();
+  const { signOut, user } = useAuth();
 
   const transactions = [
     {
@@ -78,26 +78,6 @@ const Index = () => {
               <History size={16} />
               {t.history}
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => navigate('/pricing')}
-              className="flex items-center gap-2"
-            >
-              <CreditCard size={16} />
-              Pricing
-            </Button>
-            {isAdmin && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => navigate('/admin')}
-                className="flex items-center gap-2 bg-primary/10 border-primary hover:bg-primary/20"
-              >
-                <Shield size={16} />
-                Admin Dashboard
-              </Button>
-            )}
             <Button
               variant="outline"
               size="sm"

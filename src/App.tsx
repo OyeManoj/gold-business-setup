@@ -6,14 +6,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
-import LandingPage from "./pages/LandingPage";
 import TransactionFlow from "./pages/TransactionFlow";
 import BusinessProfile from "./pages/BusinessProfile";
 import History from "./pages/History";
 import Auth from "./pages/Auth";
-import AdminDashboard from "./pages/AdminDashboard";
-import Pricing from "./pages/Pricing";
-import SubscriptionSuccess from "./pages/SubscriptionSuccess";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,14 +23,11 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/auth" element={<Auth />} />
-            <Route path="/landing" element={<LandingPage />} />
-            <Route path="/pricing-public" element={<Pricing />} />
-            <Route path="/app" element={
+            <Route path="/" element={
               <ProtectedRoute>
                 <Index />
               </ProtectedRoute>
             } />
-            <Route path="/" element={<LandingPage />} />
             <Route path="/transaction/:type" element={
               <ProtectedRoute>
                 <TransactionFlow />
@@ -53,26 +46,6 @@ const App = () => (
             <Route path="/history" element={
               <ProtectedRoute>
                 <History />
-              </ProtectedRoute>
-            } />
-            <Route path="/dashboard" element={
-              <ProtectedRoute>
-                <Index />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin" element={
-              <ProtectedRoute>
-                <AdminDashboard />
-              </ProtectedRoute>
-            } />
-            <Route path="/pricing" element={
-              <ProtectedRoute>
-                <Pricing />
-              </ProtectedRoute>
-            } />
-            <Route path="/subscription-success" element={
-              <ProtectedRoute>
-                <SubscriptionSuccess />
               </ProtectedRoute>
             } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

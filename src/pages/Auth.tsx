@@ -5,47 +5,34 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Mail, Shield, Eye, EyeOff } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 const Auth = () => {
-  const [userId, setUserId] = useState('');
-  const [pin, setPin] = useState('');
-  const [mode, setMode] = useState<'signin' | 'signup'>('signin');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [showPin, setShowPin] = useState(false);
-  const { signUp, signIn } = useAuth();
+  const { signIn, signUp } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const handleAuth = async (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (userId.length !== 4 || pin.length !== 4) {
-      toast({
-        title: "Invalid Input",
-        description: "Both User ID and PIN must be exactly 4 digits.",
-        variant: "destructive",
-      });
-      return;
-    }
-    
     setIsLoading(true);
     
-    const { error } = mode === 'signup' 
-      ? await signUp(userId, pin)
-      : await signIn(userId, pin);
+    const { error } = await signIn(email, password);
     
     if (error) {
       toast({
-        title: mode === 'signup' ? "Signup Failed" : "Sign In Failed",
+        title: "Sign In Failed",
         description: error.message,
         variant: "destructive",
       });
     } else {
       toast({
-        title: mode === 'signup' ? "Account Created!" : "Welcome back!",
-        description: mode === 'signup' ? "Your account has been created successfully." : "You have successfully signed in.",
+        title: "Welcome back!",
+        description: "You have successfully signed in.",
       });
       navigate('/');
     }
@@ -53,6 +40,27 @@ const Auth = () => {
     setIsLoading(false);
   };
 
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    const { error } = await signUp(email, password);
+    
+    if (error) {
+      toast({
+        title: "Sign Up Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Account Created!",
+        description: "Please check your email to verify your account.",
+      });
+    }
+    
+    setIsLoading(false);
+  };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -60,74 +68,79 @@ const Auth = () => {
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Gold Ease Receipt</CardTitle>
           <CardDescription>
-            {mode === 'signin' ? 'Sign in to your account' : 'Create a new account'}
+            Professional gold business management platform
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleAuth} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="userId">User ID (4 digits)</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="userId"
-                  type="text"
-                  placeholder="1234"
-                  value={userId}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, '').slice(0, 4);
-                    setUserId(value);
-                  }}
-                  className="pl-10 text-center text-xl tracking-widest"
-                  maxLength={4}
-                  required
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="pin">PIN (4 digits)</Label>
-              <div className="relative">
-                <Input
-                  id="pin"
-                  type={showPin ? "text" : "password"}
-                  placeholder="••••"
-                  value={pin}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, '').slice(0, 4);
-                    setPin(value);
-                  }}
-                  className="pr-10 text-center text-xl tracking-widest"
-                  maxLength={4}
-                  required
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                  onClick={() => setShowPin(!showPin)}
-                >
-                  {showPin ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
+          <Tabs defaultValue="signin" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="signin">Sign In</TabsTrigger>
+              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="signin">
+              <form onSubmit={handleSignIn} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="signin-email">Email</Label>
+                  <Input
+                    id="signin-email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="signin-password">Password</Label>
+                  <Input
+                    id="signin-password"
+                    type="password"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Sign In
                 </Button>
-              </div>
-            </div>
-            <Button type="submit" className="w-full" disabled={isLoading || userId.length !== 4 || pin.length !== 4}>
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {mode === 'signin' ? 'Sign In' : 'Sign Up'}
-            </Button>
-            <Button 
-              type="button" 
-              variant="outline" 
-              className="w-full" 
-              onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
-            >
-              {mode === 'signin' ? 'Need an account? Sign up' : 'Already have an account? Sign in'}
-            </Button>
-          </form>
+              </form>
+            </TabsContent>
+            
+            <TabsContent value="signup">
+              <form onSubmit={handleSignUp} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="signup-email">Email</Label>
+                  <Input
+                    id="signup-email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="signup-password">Password</Label>
+                  <Input
+                    id="signup-password"
+                    type="password"
+                    placeholder="Create a password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={6}
+                  />
+                </div>
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Create Account
+                </Button>
+              </form>
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
     </div>

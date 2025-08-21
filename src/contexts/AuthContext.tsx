@@ -6,8 +6,8 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  signUp: (userId: string, pin: string) => Promise<{ error: any }>;
-  signIn: (userId: string, pin: string) => Promise<{ error: any }>;
+  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
 }
 
@@ -15,8 +15,8 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   session: null,
   loading: true,
-  signUp: async () => ({ error: null }),
   signIn: async () => ({ error: null }),
+  signUp: async () => ({ error: null }),
   signOut: async () => {},
 });
 
@@ -53,28 +53,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (userId: string, pin: string) => {
-    // Create email from userId for Supabase auth
-    const email = `${userId}@goldease.app`;
-    // Pad PIN to meet Supabase 6-character minimum password requirement
-    const password = pin.padEnd(6, '0');
-    
-    const { error } = await supabase.auth.signUp({
+  const signIn = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
     return { error };
   };
 
-  const signIn = async (userId: string, pin: string) => {
-    // Create email from userId for Supabase auth
-    const email = `${userId}@goldease.app`;
-    // Pad PIN to meet Supabase 6-character minimum password requirement
-    const password = pin.padEnd(6, '0');
+  const signUp = async (email: string, password: string) => {
+    const redirectUrl = `${window.location.origin}/`;
     
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: redirectUrl
+      }
     });
     return { error };
   };
@@ -87,8 +82,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     user,
     session,
     loading,
-    signUp,
     signIn,
+    signUp,
     signOut,
   };
 

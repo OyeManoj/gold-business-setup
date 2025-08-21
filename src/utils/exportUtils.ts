@@ -85,11 +85,11 @@ export function calculateSummary(transactions: Transaction[]): ExportSummary {
   const weekPnL = calculatePnL(transactions, 7);
   const monthPnL = calculatePnL(transactions, 30);
 
-  // Calculate average sale price per gram (total sale amount ÷ total gold sold)
+  // Calculate average sale price per gram (same logic as purchase - sum of rates ÷ number of transactions)
   const saleTransactions = transactions.filter(t => t.type === 'SALE');
-  const totalSaleAmount = saleTransactions.reduce((sum, t) => sum + t.amount, 0);
-  const totalGoldSold = saleTransactions.reduce((sum, t) => sum + t.fineGold, 0);
-  const avgSalePricePerGram = totalGoldSold > 0 ? totalSaleAmount / totalGoldSold : 0;
+  const avgSalePricePerGram = saleTransactions.length > 0 
+    ? saleTransactions.reduce((sum, t) => sum + t.rate, 0) / saleTransactions.length 
+    : 0;
 
   return {
     totalTransactions: transactions.length,

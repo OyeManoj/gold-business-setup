@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { useTranslation } from '@/utils/translations';
 import { useAuth } from '@/hooks/useAuth';
-import { ArrowUpDown, ShoppingCart, TrendingUp, History, Settings, LogOut, Shield } from 'lucide-react';
+import { ArrowUpDown, ShoppingCart, TrendingUp, History, Settings, LogOut, Shield, CreditCard } from 'lucide-react';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -77,6 +77,15 @@ const Index = () => {
             >
               <History size={16} />
               {t.history}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/pricing')}
+              className="flex items-center gap-2"
+            >
+              <CreditCard size={16} />
+              Pricing
             </Button>
             {isAdmin && (
               <Button

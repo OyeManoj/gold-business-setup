@@ -11,6 +11,8 @@ import BusinessProfile from "./pages/BusinessProfile";
 import History from "./pages/History";
 import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/AdminDashboard";
+import Pricing from "./pages/Pricing";
+import SubscriptionSuccess from "./pages/SubscriptionSuccess";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +54,16 @@ const App = () => (
             <Route path="/admin" element={
               <ProtectedRoute>
                 <AdminDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/pricing" element={
+              <ProtectedRoute>
+                <Pricing />
+              </ProtectedRoute>
+            } />
+            <Route path="/subscription-success" element={
+              <ProtectedRoute>
+                <SubscriptionSuccess />
               </ProtectedRoute>
             } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

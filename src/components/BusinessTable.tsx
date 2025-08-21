@@ -12,6 +12,9 @@ interface BusinessData {
   transaction_count: number;
   total_amount: number;
   last_transaction: string;
+  subscription_status?: boolean;
+  subscription_tier?: string;
+  subscription_end?: string;
 }
 
 interface BusinessTableProps {
@@ -69,6 +72,7 @@ export function BusinessTable({ businesses, onViewBusiness }: BusinessTableProps
               <TableRow>
                 <TableHead>Business Name</TableHead>
                 <TableHead>Created</TableHead>
+                <TableHead>Subscription</TableHead>
                 <TableHead>Transactions</TableHead>
                 <TableHead>Total Revenue</TableHead>
                 <TableHead>Last Activity</TableHead>
@@ -87,6 +91,24 @@ export function BusinessTable({ businesses, onViewBusiness }: BusinessTableProps
                     </TableCell>
                     <TableCell className="text-muted-foreground">
                       {formatDate(business.business_created)}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col">
+                        {business.subscription_status ? (
+                          <>
+                            <Badge variant="default" className="mb-1">
+                              {business.subscription_tier || 'Active'}
+                            </Badge>
+                            {business.subscription_end && (
+                              <span className="text-xs text-muted-foreground">
+                                Until {formatDate(business.subscription_end)}
+                              </span>
+                            )}
+                          </>
+                        ) : (
+                          <Badge variant="outline">Free</Badge>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell>
                       <span className="font-medium">{business.transaction_count}</span>

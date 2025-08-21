@@ -15,6 +15,9 @@ interface BusinessAnalytics {
   transaction_count: number;
   total_amount: number;
   last_transaction: string;
+  subscription_status?: boolean;
+  subscription_tier?: string;
+  subscription_end?: string;
 }
 
 export function useAdminData() {
@@ -26,11 +29,12 @@ export function useAdminData() {
   const fetchAdminStats = async () => {
     try {
       // Fetch basic stats
-      const [usersResult, businessesResult, transactionsResult, todayTransactionsResult] = await Promise.all([
+      const [usersResult, businessesResult, transactionsResult, todayTransactionsResult, subscribersResult] = await Promise.all([
         supabase.auth.admin.listUsers(),
         supabase.from('business_profiles').select('*'),
         supabase.from('transactions').select('*'),
-        supabase.from('transactions').select('*').gte('created_at', new Date().toISOString().split('T')[0])
+        supabase.from('transactions').select('*').gte('created_at', new Date().toISOString().split('T')[0]),
+        supabase.from('subscribers').select('*')
       ]);
 
       const adminStats: AdminStats = {
@@ -63,6 +67,12 @@ export function useAdminData() {
           .select('*')
           .eq('user_id', business.user_id);
 
+        const { data: subscription } = await supabase
+          .from('subscribers')
+          .select('*')
+          .eq('user_id', business.user_id)
+          .maybeSingle();
+
         if (transError) {
           console.error('Error fetching transactions for business:', transError);
           continue;
@@ -80,6 +90,9 @@ export function useAdminData() {
           transaction_count: transactions?.length || 0,
           total_amount: totalAmount,
           last_transaction: lastTransaction ? new Date(lastTransaction).toISOString() : '',
+          subscription_status: subscription?.subscribed || false,
+          subscription_tier: subscription?.subscription_tier || null,
+          subscription_end: subscription?.subscription_end || null,
         });
       }
 

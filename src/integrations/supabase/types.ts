@@ -44,6 +44,84 @@ export type Database = {
         }
         Relationships: []
       }
+      subscribers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          stripe_customer_id: string | null
+          subscribed: boolean
+          subscription_end: string | null
+          subscription_tier: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          stripe_customer_id?: string | null
+          subscribed?: boolean
+          subscription_end?: string | null
+          subscription_tier?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          stripe_customer_id?: string | null
+          subscribed?: boolean
+          subscription_end?: string | null
+          subscription_tier?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      subscription_plans: {
+        Row: {
+          active: boolean | null
+          created_at: string
+          description: string | null
+          features: Json | null
+          id: string
+          max_transactions: number | null
+          name: string
+          price_monthly: number
+          price_yearly: number | null
+          stripe_price_id_monthly: string | null
+          stripe_price_id_yearly: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string
+          description?: string | null
+          features?: Json | null
+          id?: string
+          max_transactions?: number | null
+          name: string
+          price_monthly: number
+          price_yearly?: number | null
+          stripe_price_id_monthly?: string | null
+          stripe_price_id_yearly?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string
+          description?: string | null
+          features?: Json | null
+          id?: string
+          max_transactions?: number | null
+          name?: string
+          price_monthly?: number
+          price_yearly?: number | null
+          stripe_price_id_monthly?: string | null
+          stripe_price_id_yearly?: string | null
+        }
+        Relationships: []
+      }
       transactions: {
         Row: {
           amount: number

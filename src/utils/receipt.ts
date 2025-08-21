@@ -14,9 +14,9 @@ export function generateReceiptText(
   const date = transaction.date.toLocaleDateString('en-IN');
   const time = transaction.date.toLocaleTimeString('en-IN', { hour12: true });
 
-  // Helper function for proper alignment for 3-inch paper (24 characters wide)
+  // Helper function for proper alignment for 32-character width
   const formatLine = (label: string, value: string, unit: string = '') => {
-    const totalWidth = 42; // Optimized for 3-inch paper width
+    const totalWidth = 32; // 32-character width
     const valueUnit = value + unit;
     const spaces = totalWidth - label.length - valueUnit.length;
     return `${label}${' '.repeat(Math.max(1, spaces))}${valueUnit}\n`;
@@ -24,7 +24,7 @@ export function generateReceiptText(
 
   // Special formatting for emphasized lines
   const formatLargeLine = (label: string, value: string, unit: string = '') => {
-    const totalWidth = 43;
+    const totalWidth = 32;
     const valueUnit = value + unit;
     const spaces = totalWidth - label.length - valueUnit.length;
     return `${label}${' '.repeat(Math.max(1, spaces))}${valueUnit}\n`;
@@ -80,10 +80,10 @@ export function generateReceiptText(
   }
   
   receipt += `${centerText('GOLD EXCHANGE')}\n`;
-  receipt += `========================\n`;
+  receipt += `================================\n`;
   const dateTimeText = `${date} • ${time}`;
   receipt += `${centerText(dateTimeText)}\n`;
-  receipt += `------------------------\n`;
+  receipt += `--------------------------------\n`;
   receipt += formatLine('WEIGHT', transaction.weight.toFixed(3), 'G');
   receipt += formatLine('PURITY', String(transaction.purity), '%');
   
@@ -91,7 +91,7 @@ export function generateReceiptText(
     receipt += formatLine('REDUCTION', String(transaction.reduction), '%');
   }
   
-  receipt += `------------------------\n`;
+  receipt += `--------------------------------\n`;
   receipt += formatLargeLine('FINE GOLD', transaction.fineGold.toFixed(3), 'G');
 
   // Only show payment for non-Exchange transactions
@@ -99,7 +99,7 @@ export function generateReceiptText(
     receipt += formatLargeLine('PAYMENT', `${t.rupees}${transaction.amount.toLocaleString()}`);
   }
   
-  receipt += `\n========================\n`;
+  receipt += `\n================================\n`;
   
   receipt += `${centerText('THANK YOU')}\n`;
   receipt += `${centerText('VISIT AGAIN')}\n`;

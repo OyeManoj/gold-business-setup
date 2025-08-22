@@ -47,7 +47,7 @@ const Index = () => {
         {/* Sharp Modern Header */}
         <div className="text-center mb-24">
           <h1 className="text-7xl md:text-8xl font-extrabold text-foreground mb-8 tracking-tighter">
-            {language === 'ar' ? 'سهولة الذهب' : 'GOLD EASE'}
+            {language === 'ar' ? 'ذهب أمبيكا' : 'AMBIKA GOLD'}
           </h1>
           <p className="text-xl text-muted-foreground font-normal max-w-2xl mx-auto">
             {language === 'ar' ? 'نظام إدارة المعاملات المتقدم' : 'Advanced Transaction Management System'}

@@ -49,10 +49,16 @@ export function useDeviceTracking() {
   // Get current user info
   const getCurrentUser = () => {
     const userStr = localStorage.getItem('goldease_user');
-    if (!userStr) return null;
+    if (!userStr) {
+      console.log('Device tracking: No user in localStorage');
+      return null;
+    }
     try {
-      return JSON.parse(userStr);
-    } catch {
+      const user = JSON.parse(userStr);
+      console.log('Device tracking: Retrieved user from localStorage:', user);
+      return user;
+    } catch (error) {
+      console.error('Device tracking: Failed to parse user from localStorage:', error);
       return null;
     }
   };
@@ -60,9 +66,13 @@ export function useDeviceTracking() {
   // Register current device session
   const registerDeviceSession = async () => {
     const user = getCurrentUser();
-    if (!user) return null;
+    if (!user) {
+      console.log('Device tracking: Cannot register session - no user');
+      return null;
+    }
 
     const deviceInfo = getDeviceInfo();
+    console.log('Device tracking: Registering session with info:', { userId: user.userId, deviceInfo });
     
     try {
       const { data, error } = await supabase
@@ -74,12 +84,16 @@ export function useDeviceTracking() {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Device tracking: Database error during session registration:', error);
+        throw error;
+      }
       
+      console.log('Device tracking: Session registered successfully:', data);
       setCurrentSessionId(data.id);
       return data.id;
     } catch (error) {
-      console.error('Failed to register device session:', error);
+      console.error('Device tracking: Failed to register device session:', error);
       return null;
     }
   };
@@ -102,8 +116,12 @@ export function useDeviceTracking() {
   // Load user sessions
   const loadUserSessions = async () => {
     const user = getCurrentUser();
-    if (!user) return;
+    if (!user) {
+      console.log('Device tracking: Cannot load sessions - no user');
+      return;
+    }
 
+    console.log('Device tracking: Loading sessions for user:', user.userId);
     try {
       const { data, error } = await supabase
         .from('user_sessions')
@@ -111,10 +129,15 @@ export function useDeviceTracking() {
         .eq('user_id', user.userId)
         .order('last_seen', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Device tracking: Database error loading sessions:', error);
+        throw error;
+      }
+      
+      console.log('Device tracking: Loaded sessions:', data);
       setDevices(data || []);
     } catch (error) {
-      console.error('Failed to load user sessions:', error);
+      console.error('Device tracking: Failed to load user sessions:', error);
     }
   };
 

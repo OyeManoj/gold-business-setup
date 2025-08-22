@@ -12,23 +12,23 @@ interface BusinessInputProps extends React.InputHTMLAttributes<HTMLInputElement>
 export const BusinessInput = forwardRef<HTMLInputElement, BusinessInputProps>(
   ({ label, unit, error, className, ...props }, ref) => {
     return (
-      <div className="space-y-1">
-        <Label htmlFor={props.id} className="text-xs font-medium text-muted-foreground">
+      <div className="space-y-2 md:space-y-3">
+        <Label htmlFor={props.id} className="text-sm md:text-base font-semibold text-foreground">
           {label}
         </Label>
         <div className="relative">
           <Input
             ref={ref}
             className={cn(
-              "h-10 text-sm font-medium border border-light-gray rounded-lg bg-off-white focus:bg-white focus:ring-2 focus:ring-dark/60 focus:border-dark/50 focus:ring-offset-0 transition-all duration-200 shadow-sm",
-              error && "ring-2 ring-destructive/60 bg-destructive/10 border-destructive/40",
+              "h-12 md:h-14 text-base md:text-lg font-medium border-2 border-border rounded-lg bg-background focus:bg-white focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 shadow-sm hover:shadow-md",
+              error && "ring-2 ring-destructive border-destructive bg-destructive/5",
               className
             )}
             {...props}
           />
           {unit && (
             <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-              <span className="text-xs font-medium text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded-md">
+              <span className="text-sm md:text-base font-semibold text-muted-foreground bg-muted px-2 py-1 rounded-md border border-border/50">
                 {unit}
               </span>
             </div>

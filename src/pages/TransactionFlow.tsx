@@ -149,8 +149,8 @@ export default function TransactionFlow() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-background via-off-white to-background">
-      <div className="container mx-auto px-4 py-6 flex flex-col h-full">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-off-white to-background">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8 flex flex-col min-h-screen">
         {/* Compact Header */}
         <div className="flex items-center justify-between mb-8 flex-shrink-0">
           <div className="flex items-center">
@@ -171,11 +171,11 @@ export default function TransactionFlow() {
           />
         </div>
 
-        <div className="max-w-6xl mx-auto flex-1 flex flex-col">
-          <div className="grid lg:grid-cols-2 gap-6 h-full">
+        <div className="max-w-7xl mx-auto flex-1 flex flex-col">
+          <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 flex-1">
             {/* Compact Input Form */}
-            <Card className="h-full border border-border/60 shadow-lg bg-white/95 backdrop-blur-sm rounded-xl">
-              <CardHeader className="pb-4 bg-gradient-to-r from-white/80 to-off-white/80 rounded-t-xl border-b border-border/30 px-6 py-4">
+            <Card className="h-fit md:h-full border-2 border-border shadow-xl bg-white/95 backdrop-blur-sm rounded-xl">
+              <CardHeader className="pb-4 md:pb-6 bg-gradient-to-r from-white/80 to-off-white/80 rounded-t-xl border-b-2 border-border/50 px-6 md:px-8 py-4 md:py-6">
                 <div className="flex items-center gap-3 mb-3">
                   <Badge className={`${getTransactionColor(transactionType)} text-white px-3 py-1.5 text-sm font-bold rounded-lg shadow-sm border border-white/20`}>
                     {t[transactionType.toLowerCase() as keyof typeof t]}
@@ -185,7 +185,7 @@ export default function TransactionFlow() {
                   {isEditMode ? 'Edit Transaction' : 'Transaction Details'}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 p-4">
+              <CardContent className="space-y-4 md:space-y-6 p-6 md:p-8">
                 {/* Average Prices Display */}
                 <DayAveragePrices transactionType={transactionType} />
                 

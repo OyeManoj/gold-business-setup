@@ -41,8 +41,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 md:px-6 lg:px-8">
+      <Card className="w-full max-w-md md:max-w-lg lg:max-w-xl border-2 border-border shadow-xl">
         <CardHeader className="text-center">
           <div className="mx-auto w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-4">
             <LogIn className="w-8 h-8 text-primary-foreground" />
@@ -51,8 +51,8 @@ const Login = () => {
           <p className="text-muted-foreground">Enter your 4-digit User ID and PIN</p>
         </CardHeader>
         
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <CardContent className="p-6 md:p-8">
+          <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
             {error && (
               <Alert variant="destructive">
                 <AlertDescription>{error}</AlertDescription>
@@ -71,7 +71,7 @@ const Login = () => {
                 onChange={handleInputChange('userId')}
                 placeholder="1234"
                 maxLength={4}
-                className="text-center text-lg font-mono tracking-widest"
+                className="text-center text-lg md:text-xl font-mono tracking-widest border-2 border-border focus:border-primary h-12 md:h-14"
                 required
               />
               <p className="text-xs text-muted-foreground">Enter 4-digit User ID</p>
@@ -89,7 +89,7 @@ const Login = () => {
                 onChange={handleInputChange('pin')}
                 placeholder="••••"
                 maxLength={4}
-                className="text-center text-lg font-mono tracking-widest"
+                className="text-center text-lg md:text-xl font-mono tracking-widest border-2 border-border focus:border-primary h-12 md:h-14"
                 required
               />
               <p className="text-xs text-muted-foreground">Enter 4-digit PIN</p>
@@ -97,7 +97,7 @@ const Login = () => {
 
             <Button 
               type="submit" 
-              className="w-full" 
+              className="w-full h-12 md:h-14 text-base md:text-lg font-semibold border-2 border-transparent hover:border-primary/20" 
               size="lg"
               disabled={isLoading || formData.userId.length !== 4 || formData.pin.length !== 4}
             >

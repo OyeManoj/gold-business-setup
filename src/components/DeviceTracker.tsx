@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useDeviceTracking } from '@/hooks/useDeviceTracking';
-import { Monitor, Smartphone, Wifi, WifiOff, Clock, Users } from 'lucide-react';
+import { Monitor, Smartphone, Wifi, WifiOff, Clock, Users, CheckCircle, AlertCircle } from 'lucide-react';
 
 export function DeviceTracker() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +13,9 @@ export function DeviceTracker() {
   const onlineCount = devices.filter(device => 
     getDeviceStatus(device).status === 'online'
   ).length;
+
+  const currentDevice = devices.find(device => device.id === currentSessionId);
+  const currentDeviceStatus = currentDevice ? getDeviceStatus(currentDevice) : null;
 
   const getDeviceIcon = (deviceType: string) => {
     return deviceType === 'Mobile' ? Smartphone : Monitor;
@@ -45,6 +48,15 @@ export function DeviceTracker() {
           >
             {onlineCount}/{devices.length}
           </Badge>
+          {currentDeviceStatus && (
+            <div className="absolute -top-1 -right-1">
+              {currentDeviceStatus.status === 'online' ? (
+                <CheckCircle size={12} className="text-green-500 bg-white rounded-full" />
+              ) : (
+                <AlertCircle size={12} className="text-yellow-500 bg-white rounded-full" />
+              )}
+            </div>
+          )}
         </Button>
       </DialogTrigger>
       
@@ -58,6 +70,49 @@ export function DeviceTracker() {
             </Badge>
           </DialogTitle>
         </DialogHeader>
+
+        {/* Current Device Status */}
+        {currentDevice && (
+          <Card className="mb-4 border-blue-200 bg-blue-50/50">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  {getDeviceIcon(currentDevice.device_type) === Smartphone ? (
+                    <Smartphone size={20} className="text-blue-600" />
+                  ) : (
+                    <Monitor size={20} className="text-blue-600" />
+                  )}
+                  {currentDeviceStatus?.status === 'online' && (
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h4 className="text-sm font-medium text-blue-900">This Device</h4>
+                    <Badge variant="secondary" className="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-700">
+                      Current
+                    </Badge>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-blue-700">
+                    <span>{currentDevice.device_name}</span>
+                    <span>•</span>
+                    {currentDeviceStatus?.status === 'online' ? (
+                      <>
+                        <Wifi size={12} className="text-green-500" />
+                        <span className="text-green-600 font-medium">Online & Synced</span>
+                      </>
+                    ) : (
+                      <>
+                        <WifiOff size={12} className="text-yellow-500" />
+                        <span className="text-yellow-600 font-medium">{currentDeviceStatus?.text}</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
         
         <div className="space-y-3 max-h-96 overflow-y-auto">
           {devices.length === 0 ? (
@@ -139,10 +194,22 @@ export function DeviceTracker() {
         
         <div className="flex justify-between items-center pt-3 border-t">
           <div className="text-xs text-muted-foreground">
-            <div>Updates in real-time</div>
+            <div className="flex items-center gap-2">
+              <span>Real-time updates</span>
+              {currentDeviceStatus?.status === 'online' && (
+                <CheckCircle size={12} className="text-green-500" />
+              )}
+            </div>
             {onlineCount > 0 && (
-              <div className="text-green-600 mt-1">
-                ✓ {onlineCount} device{onlineCount > 1 ? 's' : ''} synced
+              <div className="text-green-600 mt-1 flex items-center gap-1">
+                <CheckCircle size={12} />
+                <span>{onlineCount} device{onlineCount > 1 ? 's' : ''} synced</span>
+              </div>
+            )}
+            {currentDeviceStatus && (
+              <div className="mt-1 flex items-center gap-1">
+                <span className="text-blue-600">Your device:</span>
+                <span className={currentDeviceStatus.color}>{currentDeviceStatus.text}</span>
               </div>
             )}
           </div>

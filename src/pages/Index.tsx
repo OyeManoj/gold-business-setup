@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { useTranslation } from '@/utils/translations';
 import { useAuth } from '@/contexts/AuthContext';
-import { ArrowUpDown, ShoppingCart, TrendingUp, History, Settings, LogOut, User } from 'lucide-react';
+import { History, Settings, LogOut, User } from 'lucide-react';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -17,21 +17,18 @@ const Index = () => {
   const transactions = [
     {
       type: 'exchange',
-      icon: ArrowUpDown,
       title: t.exchange,
       description: 'Exchange gold with reduction calculations',
       path: '/transaction/exchange'
     },
     {
       type: 'purchase',
-      icon: ShoppingCart,
       title: t.purchase,
       description: 'Purchase gold with purity assessment',
       path: '/transaction/purchase'
     },
     {
       type: 'sale',
-      icon: TrendingUp,
       title: t.sale,
       description: 'Sell gold with market rate calculations',
       path: '/transaction/sale'
@@ -124,11 +121,6 @@ const Index = () => {
                 onClick={() => navigate(transaction.path)}
               >
                 <CardContent className="p-12 text-center">
-                  {/* Sharp Icon Container */}
-                  <div className="inline-flex items-center justify-center w-24 h-24 bg-primary mb-8 group-hover:bg-accent transition-colors duration-200">
-                    <transaction.icon className="w-12 h-12 text-primary-foreground" />
-                  </div>
-                  
                   {/* Sharp Typography */}
                   <h3 className="text-2xl font-bold text-foreground mb-4 uppercase tracking-wide">
                     {transaction.title}

@@ -120,35 +120,24 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Mobile-first Transaction Cards Grid */}
-        <div className="w-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-            {transactions.map((transaction, index) => (
-              <Card 
-                key={transaction.type}
-                className="group bg-card border-2 border-border hover:border-primary cursor-pointer transition-all duration-200 hover:shadow-lg active:scale-[0.98] touch-manipulation"
-                onClick={() => navigate(transaction.path)}
-              >
-                <CardContent className="p-6 sm:p-8 md:p-10 lg:p-12 text-center">
-                  {/* Mobile-optimized Typography */}
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-3 sm:mb-4 uppercase tracking-wide leading-tight">
-                    {transaction.title}
-                  </h3>
-                  
-                  <p className="text-muted-foreground mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed">
-                    {transaction.description}
-                  </p>
-
-                  {/* Action Button */}
-                  <div className="border-t border-border pt-4 sm:pt-6">
-                    <span className="text-primary font-semibold uppercase tracking-wider text-xs sm:text-sm">
-                      {language === 'ar' ? 'ابدأ الآن' : 'START NOW'}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+        {/* Single Line Menu */}
+        <div className="w-full flex flex-col sm:flex-row gap-2 sm:gap-4">
+          {transactions.map((transaction, index) => (
+            <Card 
+              key={transaction.type}
+              className="flex-1 group bg-card border border-border hover:border-primary cursor-pointer transition-all duration-200 hover:shadow-lg active:scale-[0.98] touch-manipulation"
+              onClick={() => navigate(transaction.path)}
+            >
+              <CardContent className="p-3 sm:p-4 text-center">
+                <h3 className="text-sm sm:text-base font-bold text-foreground mb-1 uppercase tracking-wide">
+                  {transaction.title}
+                </h3>
+                <span className="text-primary font-medium text-xs sm:text-sm">
+                  {language === 'ar' ? 'ابدأ' : 'START'}
+                </span>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
         {/* Bottom Grid Accent */}

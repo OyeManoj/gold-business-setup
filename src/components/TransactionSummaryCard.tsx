@@ -7,11 +7,11 @@ interface TransactionSummaryCardProps {
 
 export function TransactionSummaryCard({ summary }: TransactionSummaryCardProps) {
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       {/* Basic Summary */}
-      <div className="p-3 bg-primary/10 rounded-lg">
+      <div className="p-2 bg-primary/10 rounded-lg">
         <h3 className="font-medium mb-2 text-sm">Summary</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
           <div>
             <span className="text-muted-foreground">Transactions: </span>
             <span className="font-medium">{summary.totalTransactions}</span>
@@ -36,11 +36,11 @@ export function TransactionSummaryCard({ summary }: TransactionSummaryCardProps)
       </div>
 
       {/* Average Prices */}
-      <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg">
-        <h3 className="font-medium mb-3">Average Prices</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg">
+        <h3 className="font-medium mb-2">Average Prices</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
-            <h4 className="text-sm font-medium text-green-700 dark:text-green-400 mb-2">Purchase Rates</h4>
+            <h4 className="text-sm font-medium text-green-700 dark:text-green-400 mb-1">Purchase Rates</h4>
             <div className="space-y-1 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Day:</span>
@@ -57,7 +57,7 @@ export function TransactionSummaryCard({ summary }: TransactionSummaryCardProps)
             </div>
           </div>
           <div>
-            <h4 className="text-sm font-medium text-red-700 dark:text-red-400 mb-2">Sale Rates</h4>
+            <h4 className="text-sm font-medium text-red-700 dark:text-red-400 mb-1">Sale Rates</h4>
             <div className="space-y-1 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Day:</span>
@@ -77,12 +77,12 @@ export function TransactionSummaryCard({ summary }: TransactionSummaryCardProps)
       </div>
 
       {/* Profit & Loss and Exchange Profit */}
-      <div className="p-4 bg-amber-50 dark:bg-amber-950/30 rounded-lg">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="p-3 bg-amber-50 dark:bg-amber-950/30 rounded-lg">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Profit & Loss */}
           <div>
-            <h3 className="font-medium mb-3">Profit & Loss</h3>
-            <div className="space-y-2 text-sm">
+            <h3 className="font-medium mb-2">Profit & Loss</h3>
+            <div className="space-y-1 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Day PnL:</span>
                 <span className={`font-medium ${summary.pnl.day >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
@@ -106,8 +106,8 @@ export function TransactionSummaryCard({ summary }: TransactionSummaryCardProps)
 
           {/* Exchange Profit */}
           <div>
-            <h3 className="font-medium mb-3">Exchange Profit (in grams)</h3>
-            <div className="space-y-2 text-sm">
+            <h3 className="font-medium mb-2">Exchange Profit (in grams)</h3>
+            <div className="space-y-1 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Day:</span>
                 <span className="font-medium text-green-600 dark:text-green-400">

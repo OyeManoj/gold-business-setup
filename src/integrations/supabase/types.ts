@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_logs: {
+        Row: {
+          action: string
+          created_at: string
+          custom_user_id: string | null
+          device_info: Json | null
+          id: string
+          ip_address: unknown | null
+          metadata: Json | null
+          new_data: Json | null
+          old_data: Json | null
+          resource_id: string | null
+          resource_type: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          custom_user_id?: string | null
+          device_info?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          new_data?: Json | null
+          old_data?: Json | null
+          resource_id?: string | null
+          resource_type: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          custom_user_id?: string | null
+          device_info?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          new_data?: Json | null
+          old_data?: Json | null
+          resource_id?: string | null
+          resource_type?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       business_profiles: {
         Row: {
           address: string | null

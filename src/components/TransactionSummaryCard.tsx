@@ -76,52 +76,57 @@ export function TransactionSummaryCard({ summary }: TransactionSummaryCardProps)
         </div>
       </div>
 
-      {/* Profit & Loss */}
+      {/* Profit & Loss and Exchange Profit */}
       <div className="p-4 bg-amber-50 dark:bg-amber-950/30 rounded-lg">
-        <h3 className="font-medium mb-3">Profit & Loss</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Day PnL:</span>
-            <span className={`font-medium ${summary.pnl.day >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-              {formatIndianCurrency(summary.pnl.day)}
-            </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Profit & Loss */}
+          <div>
+            <h3 className="font-medium mb-3">Profit & Loss</h3>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Day PnL:</span>
+                <span className={`font-medium ${summary.pnl.day >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                  {formatIndianCurrency(summary.pnl.day)}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Week PnL:</span>
+                <span className={`font-medium ${summary.pnl.week >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                  {formatIndianCurrency(summary.pnl.week)}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Month PnL:</span>
+                <span className={`font-medium ${summary.pnl.month >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                  {formatIndianCurrency(summary.pnl.month)}
+                </span>
+              </div>
+            </div>
           </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Week PnL:</span>
-            <span className={`font-medium ${summary.pnl.week >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-              {formatIndianCurrency(summary.pnl.week)}
-            </span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Month PnL:</span>
-            <span className={`font-medium ${summary.pnl.month >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-              {formatIndianCurrency(summary.pnl.month)}
-            </span>
-          </div>
-        </div>
-      </div>
 
-      {/* Exchange Profit */}
-      <div className="p-4 bg-purple-50 dark:bg-purple-950/30 rounded-lg">
-        <h3 className="font-medium mb-3">Exchange Profit (in grams)</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Day:</span>
-            <span className="font-medium text-green-600 dark:text-green-400">
-              {formatWeight(summary.exchangeProfit.day)}g
-            </span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Week:</span>
-            <span className="font-medium text-green-600 dark:text-green-400">
-              {formatWeight(summary.exchangeProfit.week)}g
-            </span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Month:</span>
-            <span className="font-medium text-green-600 dark:text-green-400">
-              {formatWeight(summary.exchangeProfit.month)}g
-            </span>
+          {/* Exchange Profit */}
+          <div>
+            <h3 className="font-medium mb-3">Exchange Profit (in grams)</h3>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Day:</span>
+                <span className="font-medium text-green-600 dark:text-green-400">
+                  {formatWeight(summary.exchangeProfit.day)}g
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Week:</span>
+                <span className="font-medium text-green-600 dark:text-green-400">
+                  {formatWeight(summary.exchangeProfit.week)}g
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Month:</span>
+                <span className="font-medium text-green-600 dark:text-green-400">
+                  {formatWeight(summary.exchangeProfit.month)}g
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

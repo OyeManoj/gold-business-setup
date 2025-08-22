@@ -44,24 +44,24 @@ All colors MUST be HSL.
     --warning: 45 100% 50%;
     --warning-foreground: 0 0% 15%;
 
-    /* Deep black business colors */
-    --dark: 0 0% 5%;
-    --dark-light: 0 0% 12%;
-    --dark-medium: 0 0% 20%;
+    /* Light business colors */
+    --dark: 0 0% 75%;
+    --dark-light: 0 0% 82%;
+    --dark-medium: 0 0% 70%;
     --gray: 0 0% 40%;
     --gray-light: 0 0% 50%;
-    --light-gray: 0 0% 25%;
+    --light-gray: 0 0% 65%;
     --off-white: 0 0% 92%;
     --pure-white: 0 0% 98%;
-    --charcoal: 0 0% 8%;
-    --slate: 0 0% 30%;
+    --charcoal: 0 0% 78%;
+    --slate: 0 0% 60%;
 
-    /* Dark accent variations */
-    --accent-1: 0 0% 15%;
+    /* Light accent variations */
+    --accent-1: 0 0% 75%;
     --accent-1-light: 0 0% 70%;
-    --accent-2: 0 0% 22%;
+    --accent-2: 0 0% 72%;
     --accent-2-light: 0 0% 60%;
-    --accent-3: 0 0% 18%;
+    --accent-3: 0 0% 78%;
     --accent-3-light: 0 0% 65%;
 
     /* Enhanced modern gradients */

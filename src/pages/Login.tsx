@@ -71,10 +71,10 @@ const Login = () => {
                 onChange={handleInputChange('userId')}
                 placeholder="1234"
                 maxLength={4}
-                className="text-center text-lg md:text-xl font-mono tracking-widest border-2 border-border focus:border-primary h-12 md:h-14"
+                className="text-center text-base font-mono tracking-widest border-2 border-border focus:border-primary h-12 md:h-14"
                 required
               />
-              <p className="text-xs text-muted-foreground">Enter 4-digit User ID</p>
+              <p className="text-sm text-muted-foreground">Enter 4-digit User ID</p>
             </div>
 
             <div className="space-y-2">
@@ -89,15 +89,15 @@ const Login = () => {
                 onChange={handleInputChange('pin')}
                 placeholder="••••"
                 maxLength={4}
-                className="text-center text-lg md:text-xl font-mono tracking-widest border-2 border-border focus:border-primary h-12 md:h-14"
+                className="text-center text-base font-mono tracking-widest border-2 border-border focus:border-primary h-12 md:h-14"
                 required
               />
-              <p className="text-xs text-muted-foreground">Enter 4-digit PIN</p>
+              <p className="text-sm text-muted-foreground">Enter 4-digit PIN</p>
             </div>
 
             <Button 
               type="submit" 
-              className="w-full h-12 md:h-14 text-base md:text-lg font-semibold border-2 border-transparent hover:border-primary/20" 
+              className="w-full h-12 md:h-14 text-base font-semibold border-2 border-transparent hover:border-primary/20" 
               size="lg"
               disabled={isLoading || formData.userId.length !== 4 || formData.pin.length !== 4}
             >

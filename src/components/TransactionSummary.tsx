@@ -47,7 +47,7 @@ export function TransactionSummary({
     <Card className="h-full bg-gradient-to-br from-gold-light/30 to-background border-2 border-gold/20">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xl">Transaction Summary</CardTitle>
+          <CardTitle className="text-base font-bold">Transaction Summary</CardTitle>
           <Badge className={getTypeColor(type)}>{type}</Badge>
         </div>
       </CardHeader>
@@ -90,13 +90,13 @@ export function TransactionSummary({
           </h4>
           <div className="space-y-3">
             <div className="flex justify-between items-center p-3 bg-card rounded-lg border">
-              <span className="font-medium">Fine Gold:</span>
-              <span className="text-lg font-bold text-primary">{formatWeight(fineGold)} g</span>
+              <span className="font-medium text-sm">Fine Gold:</span>
+              <span className="text-base font-bold text-primary">{formatWeight(fineGold)} g</span>
             </div>
             {type !== 'EXCHANGE' && (
               <div className="flex justify-between items-center p-3 bg-card rounded-lg border">
-                <span className="font-medium">Total Amount:</span>
-                <span className="text-xl font-bold text-green-600">{formatIndianCurrency(amount)}</span>
+                <span className="font-medium text-sm">Total Amount:</span>
+                <span className="text-base font-bold text-green-600">{formatIndianCurrency(amount)}</span>
               </div>
             )}
           </div>

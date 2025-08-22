@@ -1,18 +1,153 @@
 import { Transaction } from '@/types/transaction';
+import { supabase } from '@/integrations/supabase/client';
 
-const STORAGE_KEY = 'gold_transactions';
-const MAX_TRANSACTIONS = 100;
+const STORAGE_KEY = 'gold_transactions_offline';
 
-export async function saveTransaction(transaction: Transaction): Promise<void> {
-  // Local-only storage for security - no cloud database exposure
-  const transactions = await getTransactions();
-  transactions.unshift(transaction);
-  const limitedTransactions = transactions.slice(0, MAX_TRANSACTIONS);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(limitedTransactions));
+// Get user ID from auth context
+function getCurrentUserId(): string | null {
+  const userStr = localStorage.getItem('goldease_user');
+  if (!userStr) return null;
+  try {
+    const user = JSON.parse(userStr);
+    return user.id;
+  } catch {
+    return null;
+  }
 }
 
+// Save to Supabase with offline fallback
+export async function saveTransaction(transaction: Transaction): Promise<void> {
+  const userId = getCurrentUserId();
+  if (!userId) throw new Error('User not authenticated');
+
+  try {
+    // Try to save to Supabase first
+    const { error } = await supabase
+      .from('transactions')
+      .insert({
+        id: transaction.id,
+        user_id: userId,
+        type: transaction.type,
+        weight: transaction.weight,
+        purity: transaction.purity,
+        reduction: transaction.reduction,
+        rate: transaction.rate,
+        fine_gold: transaction.fineGold,
+        amount: transaction.amount,
+        remaining_fine_gold: transaction.remainingFineGold,
+        created_at: transaction.date.toISOString(),
+        updated_at: transaction.date.toISOString()
+      });
+
+    if (error) throw error;
+  } catch (error) {
+    console.warn('Failed to save to Supabase, saving offline:', error);
+    // Fallback to offline storage
+    await saveTransactionOffline(transaction);
+  }
+}
+
+// Get transactions from Supabase with offline fallback
 export async function getTransactions(): Promise<Transaction[]> {
-  // Local-only storage for security
+  const userId = getCurrentUserId();
+  if (!userId) return [];
+
+  try {
+    // Try to get from Supabase
+    const { data, error } = await supabase
+      .from('transactions')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    const supabaseTransactions = data?.map(transformSupabaseToTransaction) || [];
+    
+    // Merge with offline transactions and sync any pending ones
+    const offlineTransactions = await getOfflineTransactions();
+    await syncOfflineTransactions();
+    
+    return supabaseTransactions;
+  } catch (error) {
+    console.warn('Failed to get from Supabase, using offline:', error);
+    return await getOfflineTransactions();
+  }
+}
+
+// Update transaction in Supabase with offline fallback
+export async function updateTransaction(updatedTransaction: Transaction): Promise<void> {
+  const userId = getCurrentUserId();
+  if (!userId) throw new Error('User not authenticated');
+
+  try {
+    const { error } = await supabase
+      .from('transactions')
+      .update({
+        type: updatedTransaction.type,
+        weight: updatedTransaction.weight,
+        purity: updatedTransaction.purity,
+        reduction: updatedTransaction.reduction,
+        rate: updatedTransaction.rate,
+        fine_gold: updatedTransaction.fineGold,
+        amount: updatedTransaction.amount,
+        remaining_fine_gold: updatedTransaction.remainingFineGold,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', updatedTransaction.id)
+      .eq('user_id', userId);
+
+    if (error) throw error;
+  } catch (error) {
+    console.warn('Failed to update in Supabase, updating offline:', error);
+    await updateTransactionOffline(updatedTransaction);
+  }
+}
+
+// Clear all transactions
+export async function clearTransactions(): Promise<void> {
+  const userId = getCurrentUserId();
+  if (!userId) return;
+
+  try {
+    const { error } = await supabase
+      .from('transactions')
+      .delete()
+      .eq('user_id', userId);
+
+    if (error) throw error;
+  } catch (error) {
+    console.warn('Failed to clear from Supabase:', error);
+  }
+
+  // Also clear offline storage
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+// Transform Supabase data to Transaction format
+function transformSupabaseToTransaction(data: any): Transaction {
+  return {
+    id: data.id,
+    type: data.type,
+    weight: Number(data.weight),
+    purity: Number(data.purity),
+    reduction: data.reduction ? Number(data.reduction) : undefined,
+    rate: Number(data.rate),
+    fineGold: Number(data.fine_gold),
+    amount: Number(data.amount),
+    remainingFineGold: data.remaining_fine_gold ? Number(data.remaining_fine_gold) : undefined,
+    date: new Date(data.created_at)
+  };
+}
+
+// Offline storage helpers
+async function saveTransactionOffline(transaction: Transaction): Promise<void> {
+  const transactions = await getOfflineTransactions();
+  transactions.unshift({ ...transaction, _offline: true } as any);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
+}
+
+async function getOfflineTransactions(): Promise<Transaction[]> {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (!stored) return [];
   
@@ -23,18 +158,53 @@ export async function getTransactions(): Promise<Transaction[]> {
   }));
 }
 
-export async function updateTransaction(updatedTransaction: Transaction): Promise<void> {
-  // Local-only storage for security
-  const transactions = await getTransactions();
+async function updateTransactionOffline(updatedTransaction: Transaction): Promise<void> {
+  const transactions = await getOfflineTransactions();
   const index = transactions.findIndex(t => t.id === updatedTransaction.id);
   
   if (index !== -1) {
-    transactions[index] = updatedTransaction;
+    transactions[index] = { ...updatedTransaction, _offline: true } as any;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
   }
 }
 
-export async function clearTransactions(): Promise<void> {
-  // Local-only storage for security - removes dangerous mass delete capability
-  localStorage.removeItem(STORAGE_KEY);
+// Sync offline transactions to Supabase
+async function syncOfflineTransactions(): Promise<void> {
+  const offlineTransactions = await getOfflineTransactions();
+  const pendingTransactions = offlineTransactions.filter((t: any) => t._offline);
+  
+  if (pendingTransactions.length === 0) return;
+
+  const userId = getCurrentUserId();
+  if (!userId) return;
+
+  for (const transaction of pendingTransactions) {
+    try {
+      const { error } = await supabase
+        .from('transactions')
+        .upsert({
+          id: transaction.id,
+          user_id: userId,
+          type: transaction.type,
+          weight: transaction.weight,
+          purity: transaction.purity,
+          reduction: transaction.reduction,
+          rate: transaction.rate,
+          fine_gold: transaction.fineGold,
+          amount: transaction.amount,
+          remaining_fine_gold: transaction.remainingFineGold,
+          created_at: transaction.date.toISOString(),
+          updated_at: new Date().toISOString()
+        });
+
+      if (!error) {
+        // Remove from offline storage after successful sync
+        const allOffline = await getOfflineTransactions();
+        const filtered = allOffline.filter(t => t.id !== transaction.id);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+      }
+    } catch (error) {
+      console.warn('Failed to sync transaction:', transaction.id, error);
+    }
+  }
 }

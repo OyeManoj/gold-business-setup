@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { FilterSection } from '@/components/FilterSection';
 import { TransactionSummaryCard } from '@/components/TransactionSummaryCard';
 import { ExportControls } from '@/components/ExportControls';
-import { getTransactions, clearTransactions } from '@/utils/storage';
+import { clearTransactions } from '@/utils/storage';
 import { useTranslation } from '@/utils/translations';
 import { formatTransactionType } from '@/utils/exportUtils';
 import { useTransactionFilters } from '@/hooks/useTransactionFilters';
+import { useRealtimeTransactions } from '@/hooks/useRealtimeTransactions';
 import { ArrowLeft, Edit, History as HistoryIcon, Printer } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -21,15 +22,9 @@ export default function History() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [language, setLanguage] = useState<Language>('en');
-  const [transactions, setTransactions] = useState<any[]>([]);
   
-  useEffect(() => {
-    const loadTransactions = async () => {
-      const loadedTransactions = await getTransactions();
-      setTransactions(loadedTransactions);
-    };
-    loadTransactions();
-  }, []);
+  // Use realtime transactions hook for automatic sync across devices
+  const { transactions, isLoading, refreshTransactions } = useRealtimeTransactions();
   
   const {
     filters,
@@ -44,7 +39,7 @@ export default function History() {
 
   const handleClearHistory = async () => {
     await clearTransactions();
-    setTransactions([]);
+    await refreshTransactions();
     toast({
       title: "Success",
       description: "Transaction history cleared",

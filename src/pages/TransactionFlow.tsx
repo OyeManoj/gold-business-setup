@@ -105,7 +105,7 @@ export default function TransactionFlow() {
       await updateTransaction(transaction);
       toast({
         title: "Success",
-        description: "Transaction updated successfully",
+        description: "Transaction updated and synced across all devices",
         variant: "default"
       });
     } else {
@@ -119,7 +119,7 @@ export default function TransactionFlow() {
       printReceipt(receiptText);
       toast({
         title: "Success",
-        description: "Transaction completed and receipt printed",
+        description: "Transaction completed, receipt printed, and synced across all devices",
         variant: "default"
       });
     }

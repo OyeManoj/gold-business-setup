@@ -42,7 +42,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4 md:px-6 lg:px-8">
-      <Card className="w-full max-w-md md:max-w-lg lg:max-w-xl border-2 border-border shadow-xl">
+      <Card className="w-full max-w-2xl md:max-w-3xl lg:max-w-4xl border-2 border-border shadow-xl">
         <CardHeader className="text-center">
           <div className="mx-auto w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-4">
             <LogIn className="w-8 h-8 text-primary-foreground" />
@@ -51,8 +51,8 @@ const Login = () => {
           <p className="text-muted-foreground">Enter your 4-digit User ID and PIN</p>
         </CardHeader>
         
-        <CardContent className="p-6 md:p-8">
-          <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
+        <CardContent className="p-4 md:p-6">
+          <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
             {error && (
               <Alert variant="destructive">
                 <AlertDescription>{error}</AlertDescription>

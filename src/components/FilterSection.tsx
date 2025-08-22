@@ -9,14 +9,14 @@ interface FilterSectionProps {
 
 export function FilterSection({ filters, onFilterChange }: FilterSectionProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 p-4 bg-muted/50 rounded-lg">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3 p-3 bg-muted/50 rounded-lg border-2 border-border">
       <div>
         <label className="text-sm font-medium">From Date</label>
         <Input
           type="date"
           value={filters.dateFrom}
           onChange={(e) => onFilterChange('dateFrom', e.target.value)}
-          className="mt-1"
+          className="mt-0.5"
         />
       </div>
       <div>
@@ -25,13 +25,13 @@ export function FilterSection({ filters, onFilterChange }: FilterSectionProps) {
           type="date"
           value={filters.dateTo}
           onChange={(e) => onFilterChange('dateTo', e.target.value)}
-          className="mt-1"
+          className="mt-0.5"
         />
       </div>
       <div>
         <label className="text-sm font-medium">Transaction Type</label>
         <Select value={filters.typeFilter} onValueChange={(value) => onFilterChange('typeFilter', value)}>
-          <SelectTrigger className="mt-1">
+          <SelectTrigger className="mt-0.5">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

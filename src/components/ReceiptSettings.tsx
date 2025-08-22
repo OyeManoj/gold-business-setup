@@ -49,22 +49,22 @@ export function ReceiptSettingsComponent({ language }: ReceiptSettingsProps) {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
+    <Card className="w-full border-2 border-border">
+      <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2">
           <Receipt className="h-5 w-5 text-primary" />
           {language === 'ar' ? 'إعدادات الفاتورة' : 'Receipt Settings'}
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="space-y-4">
+      <CardContent className="space-y-4 p-4">
+        <div className="space-y-3">
           <h4 className="font-medium text-sm text-muted-foreground">
             {language === 'ar' 
               ? 'اختر تفاصيل العمل التي تريد إظهارها في الفواتير:' 
               : 'Choose which business details to display on receipts:'}
           </h4>
           
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label htmlFor="business-name" className="flex items-center gap-2 cursor-pointer">
                 <Building2 className="h-4 w-4" />

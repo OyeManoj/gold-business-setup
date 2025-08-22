@@ -44,16 +44,16 @@ export function BusinessProfileForm({ language }: BusinessProfileFormProps) {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
+    <Card className="w-full border-2 border-border">
+      <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2">
           <Building2 className="h-5 w-5 text-primary" />
           {language === 'ar' ? 'ملف العمل' : 'Business Profile'}
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
+      <CardContent className="p-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-1">
             <Label htmlFor="businessName" className="flex items-center gap-2">
               <Building2 className="h-4 w-4" />
               {language === 'ar' ? 'اسم العمل' : 'Business Name'}
@@ -68,7 +68,7 @@ export function BusinessProfileForm({ language }: BusinessProfileFormProps) {
           </div>
 
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <Label htmlFor="address" className="flex items-center gap-2">
               <MapPin className="h-4 w-4" />
               {language === 'ar' ? 'العنوان' : 'Address'}

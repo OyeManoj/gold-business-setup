@@ -42,18 +42,18 @@ const Index = () => {
       
       <div className="relative z-10 container mx-auto px-8 py-12">
         {/* Sharp Modern Header */}
-        <div className="text-center mb-24">
-          <h1 className="text-7xl md:text-8xl font-extrabold text-foreground mb-8 tracking-tighter">
+        <div className="text-center mb-8">
+          <h1 className="text-7xl md:text-8xl font-extrabold text-foreground mb-4 tracking-tighter">
             {language === 'ar' ? 'ذهب أمبيكا' : 'AMBIKA GOLD'}
           </h1>
           <p className="text-xl text-muted-foreground font-normal max-w-2xl mx-auto">
             {language === 'ar' ? 'نظام إدارة المعاملات المتقدم' : 'Advanced Transaction Management System'}
           </p>
-          <div className="w-32 h-1 bg-primary mx-auto mt-8"></div>
+          <div className="w-32 h-1 bg-primary mx-auto mt-4"></div>
         </div>
 
         {/* Sharp Navigation Bar */}
-        <div className="max-w-6xl mx-auto mb-16">
+        <div className="max-w-6xl mx-auto mb-12">
           <div className="bg-card border border-border shadow-md p-6">            
             <div className="flex flex-wrap items-center justify-between gap-6">
               <div className="flex items-center gap-6">

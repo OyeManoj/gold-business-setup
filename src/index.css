@@ -8,61 +8,61 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Modern color palette - Off-white background with black text */
-    --background: 0 0% 92%;
-    --foreground: 0 0% 10%;
+    /* Clean white background with black text */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
 
-    --card: 0 0% 95%;
-    --card-foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
 
-    --popover: 0 0% 95%;
-    --popover-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
 
-    --primary: 123 47% 32%;
-    --primary-foreground: 0 0% 10%;
-    --primary-glow: 123 47% 42%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 0 0% 20%;
 
-    --secondary: 0 0% 85%;
-    --secondary-foreground: 0 0% 10%;
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 0 0% 0%;
 
-    --muted: 0 0% 88%;
-    --muted-foreground: 0 0% 10%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 0%;
 
-    --accent: 210 67% 46%;
-    --accent-foreground: 0 0% 10%;
+    --accent: 0 0% 0%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 4 64% 49%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 80%;
-    --input: 0 0% 95%;
-    --ring: 210 67% 46%;
+    --border: 0 0% 90%;
+    --input: 0 0% 100%;
+    --ring: 0 0% 0%;
 
     --success: 123 47% 32%;
-    --success-foreground: 0 0% 98%;
+    --success-foreground: 0 0% 100%;
 
     --warning: 45 100% 50%;
-    --warning-foreground: 0 0% 15%;
+    --warning-foreground: 0 0% 0%;
 
-    /* Light business colors */
-    --dark: 0 0% 75%;
-    --dark-light: 0 0% 82%;
-    --dark-medium: 0 0% 70%;
-    --gray: 0 0% 40%;
-    --gray-light: 0 0% 50%;
-    --light-gray: 0 0% 65%;
-    --off-white: 0 0% 92%;
-    --pure-white: 0 0% 98%;
-    --charcoal: 0 0% 78%;
-    --slate: 0 0% 60%;
+    /* Clean white colors */
+    --dark: 0 0% 0%;
+    --dark-light: 0 0% 10%;
+    --dark-medium: 0 0% 20%;
+    --gray: 0 0% 0%;
+    --gray-light: 0 0% 0%;
+    --light-gray: 0 0% 0%;
+    --off-white: 0 0% 100%;
+    --pure-white: 0 0% 100%;
+    --charcoal: 0 0% 0%;
+    --slate: 0 0% 0%;
 
-    /* Light accent variations */
-    --accent-1: 0 0% 75%;
-    --accent-1-light: 0 0% 70%;
-    --accent-2: 0 0% 72%;
-    --accent-2-light: 0 0% 60%;
-    --accent-3: 0 0% 78%;
-    --accent-3-light: 0 0% 65%;
+    /* Clean accent variations */
+    --accent-1: 0 0% 0%;
+    --accent-1-light: 0 0% 10%;
+    --accent-2: 0 0% 0%;
+    --accent-2-light: 0 0% 10%;
+    --accent-3: 0 0% 0%;
+    --accent-3-light: 0 0% 10%;
 
     /* Enhanced modern gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--dark)) 0%, hsl(var(--charcoal)) 50%, hsl(var(--dark-medium)) 100%);

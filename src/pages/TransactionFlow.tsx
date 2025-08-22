@@ -272,41 +272,20 @@ export default function TransactionFlow() {
 
             {/* Summary Panel */}
             {showSummary && calculation && (
-              <div className="space-y-4">
-                <TransactionSummary
-                  type={transactionType}
-                  weight={parseFloat(formData.weight)}
-                  purity={transactionType === 'SALE' ? 100 : parseFloat(formData.purity)}
-                  rate={transactionType === 'EXCHANGE' ? 1 : parseFloat(formData.rate)}
-                  fineGold={calculation.fineGold}
-                  amount={calculation.amount}
-                  reduction={transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined}
-                  remainingFineGold={calculation.remainingFineGold}
-                  language={language}
-                />
-
-                {/* Compact Action Buttons */}
-                <div className="flex gap-3">
-                  <Button
-                    variant="success"
-                    size="default"
-                    onClick={handleConfirm}
-                    className="flex-1 py-2.5"
-                  >
-                    <Check size={16} className="mr-2" />
-                    {isEditMode ? 'Update' : t.confirm}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="default"
-                    onClick={() => setShowSummary(false)}
-                    className="flex-1 py-2.5"
-                  >
-                    <X size={16} className="mr-2" />
-                    Edit
-                  </Button>
-                </div>
-              </div>
+              <TransactionSummary
+                type={transactionType}
+                weight={parseFloat(formData.weight)}
+                purity={transactionType === 'SALE' ? 100 : parseFloat(formData.purity)}
+                rate={transactionType === 'EXCHANGE' ? 1 : parseFloat(formData.rate)}
+                fineGold={calculation.fineGold}
+                amount={calculation.amount}
+                reduction={transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined}
+                remainingFineGold={calculation.remainingFineGold}
+                language={language}
+                isEditMode={isEditMode}
+                onConfirm={handleConfirm}
+                onEdit={() => setShowSummary(false)}
+              />
             )}
           </div>
         </div>

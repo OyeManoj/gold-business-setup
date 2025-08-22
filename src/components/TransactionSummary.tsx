@@ -1,8 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { TransactionType } from "@/types/transaction";
 import { formatIndianCurrency, formatIndianRate, formatWeight, formatPercentage } from '@/utils/indianFormatting';
+import { Check, X } from 'lucide-react';
 
 interface TransactionSummaryProps {
   type: TransactionType;
@@ -12,9 +14,11 @@ interface TransactionSummaryProps {
   fineGold: number;
   amount: number;
   reduction?: number;
-  
   remainingFineGold?: number;
   language: string;
+  isEditMode?: boolean;
+  onConfirm: () => void;
+  onEdit: () => void;
 }
 
 export function TransactionSummary({
@@ -25,8 +29,10 @@ export function TransactionSummary({
   fineGold,
   amount,
   reduction,
-  
   remainingFineGold,
+  isEditMode,
+  onConfirm,
+  onEdit,
 }: TransactionSummaryProps) {
   const getTypeColor = (type: TransactionType) => {
     switch (type) {
@@ -94,6 +100,30 @@ export function TransactionSummary({
               </div>
             )}
           </div>
+        </div>
+
+        <Separator />
+
+        {/* Action Buttons */}
+        <div className="flex gap-3">
+          <Button
+            variant="success"
+            size="default"
+            onClick={onConfirm}
+            className="flex-1 py-2.5"
+          >
+            <Check size={16} className="mr-2" />
+            {isEditMode ? 'UPDATE' : 'CONFIRM & PRINT'}
+          </Button>
+          <Button
+            variant="outline"
+            size="default"
+            onClick={onEdit}
+            className="flex-1 py-2.5"
+          >
+            <X size={16} className="mr-2" />
+            EDIT
+          </Button>
         </div>
 
       </CardContent>

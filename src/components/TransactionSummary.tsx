@@ -105,21 +105,21 @@ export function TransactionSummary({
         <Separator />
 
         {/* Action Buttons */}
-        <div className="flex gap-3">
+        <div className="flex gap-3 w-full">
           <Button
             variant="success"
-            size="default"
+            size="lg"
             onClick={onConfirm}
-            className="flex-1 py-2.5"
+            className="flex-1 py-2.5 text-sm font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]"
           >
             <Check size={16} className="mr-2" />
             {isEditMode ? 'UPDATE' : 'CONFIRM & PRINT'}
           </Button>
           <Button
             variant="outline"
-            size="default"
+            size="lg"
             onClick={onEdit}
-            className="flex-1 py-2.5"
+            className="flex-1 py-2.5 text-sm font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]"
           >
             <X size={16} className="mr-2" />
             EDIT

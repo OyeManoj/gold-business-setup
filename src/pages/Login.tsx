@@ -110,7 +110,7 @@ const Login = () => {
               <h4 className="text-sm font-medium text-foreground mb-2">Demo Accounts:</h4>
               <div className="space-y-1 text-xs text-muted-foreground">
                 <p>Admin: ID <span className="font-mono">1001</span>, PIN <span className="font-mono">1234</span> (Full Access)</p>
-                <p>Employee: ID <span className="font-mono">1002</span>, PIN <span className="font-mono">9999</span> (No History Access)</p>
+                <p>Employee: ID <span className="font-mono">1002</span>, PIN <span className="font-mono">1234</span> (No History Access)</p>
               </div>
             </div>
           </div>

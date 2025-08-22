@@ -45,7 +45,7 @@ const Index = () => {
       </div>
 
       {/* Transaction Cards in Single Line */}
-      <div className="flex gap-2 sm:gap-3 max-w-4xl mx-auto overflow-x-auto">
+      <div className="flex gap-2 sm:gap-4 justify-center items-stretch overflow-x-auto pb-2">
         {transactions.map((transaction, index) => (
           <Card 
             key={transaction.type}

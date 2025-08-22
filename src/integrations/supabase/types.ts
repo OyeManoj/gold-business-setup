@@ -233,6 +233,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      verify_login_credentials: {
+        Args: { input_pin: string; input_user_id: string }
+        Returns: Json
+      }
     }
     Enums: {
       app_role: "admin" | "business_owner" | "user"

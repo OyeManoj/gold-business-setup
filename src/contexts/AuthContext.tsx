@@ -42,36 +42,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return { success: false, error: 'User ID and PIN must be 4 digits' };
       }
 
-      // Query the custom_users table
-      const { data, error } = await supabase
-        .from('custom_users')
-        .select('id, user_id, name, role')
-        .eq('user_id', userId)
-        .eq('pin', pin)
-        .eq('is_active', true)
-        .single();
+      // Call the secure verification function
+      const { data, error } = await supabase.rpc('verify_login_credentials', {
+        input_user_id: userId,
+        input_pin: pin
+      });
 
-      if (error || !data) {
-        return { success: false, error: 'Invalid User ID or PIN' };
+      if (error) {
+        console.error('Login error:', error);
+        return { success: false, error: 'Authentication failed' };
       }
 
-      // Update last login
-      await supabase
-        .from('custom_users')
-        .update({ last_login: new Date().toISOString() })
-        .eq('id', data.id);
+      if (data?.success) {
+        const userData: User = {
+          id: data.user.id,
+          userId: data.user.user_id,
+          name: data.user.name || 'User',
+          role: data.user.role as 'admin' | 'employee'
+        };
 
-      const userData: User = {
-        id: data.id,
-        userId: data.user_id,
-        name: data.name || 'User',
-        role: data.role as 'admin' | 'employee'
-      };
-
-      setUser(userData);
-      localStorage.setItem('goldease_user', JSON.stringify(userData));
-
-      return { success: true };
+        setUser(userData);
+        localStorage.setItem('goldease_user', JSON.stringify(userData));
+        return { success: true };
+      } else {
+        return { success: false, error: data?.error || 'Invalid User ID or PIN' };
+      }
     } catch (error) {
       console.error('Login error:', error);
       return { success: false, error: 'Login failed. Please try again.' };

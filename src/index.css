@@ -8,72 +8,72 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Pure white shades only */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 15%;
+    /* Modern symmetric color palette - Sharp design */
+    --background: 0 0% 98%;
+    --foreground: 0 0% 8%;
 
-    --card: 0 0% 98%;
-    --card-foreground: 0 0% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 8%;
 
-    --popover: 0 0% 97%;
-    --popover-foreground: 0 0% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 8%;
 
-    --primary: 0 0% 92%;
-    --primary-foreground: 0 0% 15%;
-    --primary-glow: 0 0% 88%;
+    --primary: 220 70% 45%;
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 220 70% 55%;
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 15%;
+    --secondary: 0 0% 94%;
+    --secondary-foreground: 0 0% 8%;
 
-    --muted: 0 0% 94%;
-    --muted-foreground: 0 0% 15%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 0 0% 90%;
-    --accent-foreground: 0 0% 15%;
+    --accent: 280 60% 50%;
+    --accent-foreground: 0 0% 98%;
 
-    --destructive: 4 64% 49%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 93%;
-    --input: 0 0% 98%;
-    --ring: 0 0% 85%;
+    --border: 0 0% 88%;
+    --input: 0 0% 100%;
+    --ring: 220 70% 45%;
 
-    --success: 123 47% 32%;
-    --success-foreground: 0 0% 100%;
+    --success: 120 65% 45%;
+    --success-foreground: 0 0% 98%;
 
-    --warning: 45 100% 50%;
-    --warning-foreground: 0 0% 15%;
+    --warning: 40 95% 55%;
+    --warning-foreground: 0 0% 8%;
 
-    /* White shade variations */
-    --dark: 0 0% 95%;
-    --dark-light: 0 0% 97%;
-    --dark-medium: 0 0% 93%;
-    --gray: 0 0% 90%;
-    --gray-light: 0 0% 92%;
-    --light-gray: 0 0% 94%;
+    /* Modern geometric colors */
+    --dark: 0 0% 12%;
+    --dark-light: 0 0% 20%;
+    --dark-medium: 0 0% 16%;
+    --gray: 0 0% 45%;
+    --gray-light: 0 0% 65%;
+    --light-gray: 0 0% 85%;
     --off-white: 0 0% 98%;
     --pure-white: 0 0% 100%;
-    --charcoal: 0 0% 88%;
-    --slate: 0 0% 90%;
+    --charcoal: 0 0% 15%;
+    --slate: 0 0% 50%;
 
-    /* White accent variations */
-    --accent-1: 0 0% 96%;
-    --accent-1-light: 0 0% 98%;
-    --accent-2: 0 0% 94%;
-    --accent-2-light: 0 0% 96%;
-    --accent-3: 0 0% 92%;
-    --accent-3-light: 0 0% 94%;
+    /* Sharp accent variations */
+    --accent-1: 200 60% 50%;
+    --accent-1-light: 200 60% 70%;
+    --accent-2: 160 55% 45%;
+    --accent-2-light: 160 55% 65%;
+    --accent-3: 320 65% 50%;
+    --accent-3-light: 320 65% 70%;
 
-    /* Enhanced modern gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--dark)) 0%, hsl(var(--charcoal)) 50%, hsl(var(--dark-medium)) 100%);
-    --gradient-secondary: linear-gradient(135deg, hsl(var(--accent-1)) 0%, hsl(var(--dark-light)) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(var(--accent-1)) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--dark-light)) 50%, hsl(var(--background)) 100%);
-    --gradient-button: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--dark-medium)) 100%);
-    --gradient-border: linear-gradient(90deg, hsl(var(--border)) 0%, hsl(var(--accent-1)) 50%, hsl(var(--border)) 100%);
+    /* Sharp geometric gradients */
+    --gradient-primary: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--primary-glow)) 100%);
+    --gradient-secondary: linear-gradient(180deg, hsl(var(--accent-1)) 0%, hsl(var(--accent-2)) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%);
+    --gradient-hero: linear-gradient(0deg, hsl(var(--background)) 0%, hsl(var(--muted)) 50%, hsl(var(--background)) 100%);
+    --gradient-button: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+    --gradient-border: linear-gradient(90deg, hsl(var(--border)) 0%, hsl(var(--primary)) 50%, hsl(var(--border)) 100%);
 
-    /* Modern spacing and layout */
-    --radius: 16px;
+    /* Sharp geometric spacing */
+    --radius: 0px;
     --spacing-xs: 4px;
     --spacing-sm: 8px;
     --spacing-md: 16px;
@@ -81,32 +81,32 @@ All colors MUST be HSL.
     --spacing-xl: 32px;
     --spacing-2xl: 48px;
     --spacing-3xl: 64px;
-    --spacing-4xl: 80px;
+    --spacing-4xl: 96px;
 
-    /* Light white shadows */
-    --shadow-sm: 0 2px 8px 0 hsl(0 0% 85% / 0.3), 0 1px 4px 0 hsl(0 0% 90% / 0.2);
-    --shadow-md: 0 8px 24px -4px hsl(0 0% 80% / 0.4), 0 4px 12px -2px hsl(0 0% 85% / 0.25);
-    --shadow-lg: 0 16px 40px -8px hsl(0 0% 75% / 0.5), 0 8px 20px -4px hsl(0 0% 80% / 0.3);
-    --shadow-xl: 0 24px 60px -12px hsl(0 0% 70% / 0.6), 0 12px 30px -8px hsl(0 0% 75% / 0.35);
-    --shadow-elegant: 0 12px 40px hsl(0 0% 85% / 0.45);
-    --shadow-dark: 0 16px 50px hsl(0 0% 80% / 0.55);
-    --shadow-light: 0 6px 20px hsl(0 0% 90% / 0.15);
-    --shadow-strong: 0 20px 60px hsl(0 0% 75% / 0.5);
-    --shadow-soft: 0 4px 16px hsl(0 0% 92% / 0.2);
+    /* Sharp geometric shadows */
+    --shadow-sm: 0 2px 8px 0 hsl(220 70% 45% / 0.15), 0 1px 4px 0 hsl(220 70% 45% / 0.1);
+    --shadow-md: 0 4px 16px 0 hsl(220 70% 45% / 0.2), 0 2px 8px 0 hsl(220 70% 45% / 0.15);
+    --shadow-lg: 0 8px 32px 0 hsl(220 70% 45% / 0.25), 0 4px 16px 0 hsl(220 70% 45% / 0.2);
+    --shadow-xl: 0 16px 48px 0 hsl(220 70% 45% / 0.3), 0 8px 24px 0 hsl(220 70% 45% / 0.25);
+    --shadow-elegant: 0 12px 36px hsl(220 70% 45% / 0.2);
+    --shadow-dark: 0 8px 24px hsl(0 0% 8% / 0.3);
+    --shadow-light: 0 4px 12px hsl(220 70% 45% / 0.1);
+    --shadow-strong: 0 16px 40px hsl(220 70% 45% / 0.25);
+    --shadow-soft: 0 2px 8px hsl(220 70% 45% / 0.08);
 
-    /* Transitions */
-    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-fast: all 0.2s ease-out;
+    /* Sharp transitions */
+    --transition-smooth: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --transition-fast: all 0.15s ease;
 
-    /* Light sidebar */
-    --sidebar-background: 0 0% 99%;
-    --sidebar-foreground: 0 0% 15%;
-    --sidebar-primary: 0 0% 95%;
-    --sidebar-primary-foreground: 0 0% 15%;
-    --sidebar-accent: 0 0% 97%;
-    --sidebar-accent-foreground: 0 0% 15%;
-    --sidebar-border: 0 0% 93%;
-    --sidebar-ring: 0 0% 88%;
+    /* Modern sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 8%;
+    --sidebar-primary: 220 70% 45%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 8%;
+    --sidebar-border: 0 0% 88%;
+    --sidebar-ring: 220 70% 45%;
   }
 
   .dark {

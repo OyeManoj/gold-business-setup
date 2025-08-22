@@ -37,7 +37,12 @@ export function useRealtimeTransactions() {
     };
 
     const userId = getCurrentUserId();
-    if (!userId) return;
+    if (!userId) {
+      console.warn('No user ID found for realtime subscription');
+      return;
+    }
+
+    console.log('Setting up realtime subscription for user:', userId);
 
     const channel = supabase
       .channel('transactions-changes')
@@ -50,20 +55,25 @@ export function useRealtimeTransactions() {
           filter: `user_id=eq.${userId}`
         },
         async (payload) => {
-          console.log('Realtime update:', payload);
+          const transactionId = (payload.new as any)?.id || (payload.old as any)?.id || 'unknown';
+          console.log('Realtime transaction update received:', payload.eventType, transactionId);
           
           // Reload transactions when any change occurs
           try {
             const data = await getTransactions();
             setTransactions(data);
+            console.log('Transactions reloaded after realtime update');
           } catch (error) {
             console.error('Failed to reload transactions after realtime update:', error);
           }
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log('Realtime subscription status:', status);
+      });
 
     return () => {
+      console.log('Cleaning up realtime subscription');
       supabase.removeChannel(channel);
     };
   }, []);

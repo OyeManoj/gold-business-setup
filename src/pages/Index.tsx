@@ -52,55 +52,47 @@ const Index = () => {
           <div className="w-16 sm:w-24 md:w-32 h-1 bg-primary mx-auto mt-2 sm:mt-4"></div>
         </div>
 
-        {/* Mobile-first Navigation Bar */}
+        {/* Single Row Navigation */}
         <div className="w-full mb-6 sm:mb-8 md:mb-12">
-          <div className="bg-card border border-border shadow-md p-3 sm:p-4 md:p-6 rounded-lg">            
-            <div className="flex flex-col gap-4 sm:gap-6">
-              {/* Top row - Language and main actions */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6">
-                <LanguageToggle
-                  currentLanguage={language}
-                  onLanguageChange={setLanguage}
-                />
+          <div className="bg-card border border-border shadow-md p-3 sm:p-4 rounded-lg">            
+            <div className="flex items-center justify-between gap-3 sm:gap-4 overflow-x-auto">
+              <LanguageToggle
+                currentLanguage={language}
+                onLanguageChange={setLanguage}
+              />
+              
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate('/business-profile')}
+                  className="flex items-center gap-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground text-sm whitespace-nowrap"
+                >
+                  <Settings size={16} />
+                  <span className="font-medium hidden sm:inline">{language === 'ar' ? 'ملف العمل' : 'Business Profile'}</span>
+                  <span className="font-medium sm:hidden">{language === 'ar' ? 'الملف' : 'Profile'}</span>
+                </Button>
                 
-                <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 w-full sm:w-auto">
+                {hasPermission('history') && (
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => navigate('/business-profile')}
-                    className="flex items-center gap-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground text-sm w-full sm:w-auto justify-center"
+                    onClick={() => navigate('/history')}
+                    className="flex items-center gap-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground text-sm whitespace-nowrap"
                   >
-                    <Settings size={14} className="sm:hidden" />
-                    <Settings size={16} className="hidden sm:block" />
-                    <span className="font-medium hidden sm:inline">{language === 'ar' ? 'ملف العمل' : 'Business Profile'}</span>
-                    <span className="font-medium sm:hidden">{language === 'ar' ? 'الملف' : 'Profile'}</span>
+                    <History size={16} />
+                    <span className="font-medium">{t.history}</span>
                   </Button>
-                  
-                  {hasPermission('history') && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => navigate('/history')}
-                      className="flex items-center gap-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground text-sm w-full sm:w-auto justify-center"
-                    >
-                      <History size={14} className="sm:hidden" />
-                      <History size={16} className="hidden sm:block" />
-                      <span className="font-medium">{t.history}</span>
-                    </Button>
-                  )}
-                </div>
+                )}
               </div>
 
-              {/* User Profile Section - Full width on mobile */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 border-t pt-3 sm:border-t-0 sm:pt-0">
-                <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 md:px-6 py-2 sm:py-3 bg-muted border border-border rounded-lg w-full sm:w-auto">
-                  <User size={16} className="text-primary sm:hidden" />
-                  <User size={20} className="text-primary hidden sm:block" />
-                  <div className="flex flex-col min-w-0 flex-1">
-                    <span className="font-semibold text-foreground text-sm sm:text-base truncate">{user?.name}</span>
-                    <span className="text-xs sm:text-sm text-muted-foreground truncate">
-                      <span className="sm:hidden">#{user?.userId}</span>
-                      <span className="hidden sm:inline">ID: {user?.userId} • {user?.role?.toUpperCase()}</span>
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="flex items-center gap-2 px-3 py-2 bg-muted border border-border rounded-lg">
+                  <User size={16} className="text-primary" />
+                  <div className="flex flex-col min-w-0">
+                    <span className="font-semibold text-foreground text-sm truncate">{user?.name}</span>
+                    <span className="text-xs text-muted-foreground truncate">
+                      ID: {user?.userId} • {user?.role?.toUpperCase()}
                     </span>
                   </div>
                 </div>
@@ -109,11 +101,11 @@ const Index = () => {
                   variant="outline"
                   size="sm"
                   onClick={logout}
-                  className="flex items-center gap-2 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground text-sm w-full sm:w-auto justify-center"
+                  className="flex items-center gap-2 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground text-sm whitespace-nowrap"
                 >
-                  <LogOut size={14} className="sm:hidden" />
-                  <LogOut size={16} className="hidden sm:block" />
-                  <span className="font-medium">{language === 'ar' ? 'تسجيل الخروج' : 'Logout'}</span>
+                  <LogOut size={16} />
+                  <span className="font-medium hidden sm:inline">{language === 'ar' ? 'تسجيل الخروج' : 'Logout'}</span>
+                  <span className="font-medium sm:hidden">{language === 'ar' ? 'خروج' : 'Out'}</span>
                 </Button>
               </div>
             </div>

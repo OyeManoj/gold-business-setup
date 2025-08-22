@@ -64,7 +64,10 @@ export function DeviceTracker() {
             <Card>
               <CardContent className="p-4 text-center text-muted-foreground">
                 <Monitor className="mx-auto mb-2 opacity-50" size={32} />
-                No active devices found
+                <div>No active devices found</div>
+                <div className="text-xs mt-1">
+                  {isLoading ? 'Loading devices...' : 'Try refreshing to detect devices'}
+                </div>
               </CardContent>
             </Card>
           ) : (
@@ -118,6 +121,11 @@ export function DeviceTracker() {
                             <span className={`text-xs font-medium ${status.color}`}>
                               {status.text}
                             </span>
+                            {status.status === 'online' && (
+                              <Badge variant="secondary" className="text-xs px-1.5 py-0.5 bg-green-100 text-green-700">
+                                Synced
+                              </Badge>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -131,7 +139,12 @@ export function DeviceTracker() {
         
         <div className="flex justify-between items-center pt-3 border-t">
           <div className="text-xs text-muted-foreground">
-            Updates automatically
+            <div>Updates in real-time</div>
+            {onlineCount > 0 && (
+              <div className="text-green-600 mt-1">
+                ✓ {onlineCount} device{onlineCount > 1 ? 's' : ''} synced
+              </div>
+            )}
           </div>
           <Button 
             variant="outline" 

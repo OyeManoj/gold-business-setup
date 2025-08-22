@@ -122,20 +122,40 @@ export function useDeviceTracking() {
   useEffect(() => {
     const user = getCurrentUser();
     if (!user) {
+      console.log('Device tracking: No user found');
       setIsLoading(false);
       return;
     }
 
+    console.log('Device tracking: Initializing for user', user.userId);
+
     const initializeSession = async () => {
-      const sessionId = await registerDeviceSession();
-      if (sessionId) {
-        setCurrentSessionId(sessionId);
+      try {
+        const sessionId = await registerDeviceSession();
+        console.log('Device tracking: Session registered', sessionId);
+        if (sessionId) {
+          setCurrentSessionId(sessionId);
+        }
+        await loadUserSessions();
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Device tracking: Failed to initialize session', error);
+        setIsLoading(false);
       }
-      await loadUserSessions();
-      setIsLoading(false);
     };
 
     initializeSession();
+  }, []);
+
+  // Setup presence channel when session is ready
+  useEffect(() => {
+    const user = getCurrentUser();
+    if (!user || !currentSessionId) {
+      console.log('Device tracking: User or session not ready', { user: !!user, currentSessionId });
+      return;
+    }
+
+    console.log('Device tracking: Setting up presence for session', currentSessionId);
 
     // Setup presence channel
     const deviceInfo = getDeviceInfo();
@@ -144,6 +164,8 @@ export function useDeviceTracking() {
         const state = presenceChannel.presenceState();
         const onlineSessionIds = new Set<string>();
         
+        console.log('Device tracking: Presence sync', state);
+        
         Object.values(state).forEach((presences: any) => {
           presences.forEach((presence: any) => {
             onlineSessionIds.add(presence.session_id);
@@ -151,21 +173,28 @@ export function useDeviceTracking() {
         });
         
         setOnlineDevices(onlineSessionIds);
+        console.log('Device tracking: Online devices updated', Array.from(onlineSessionIds));
       })
       .on('presence', { event: 'join' }, ({ newPresences }) => {
-        console.log('New device joined:', newPresences);
+        console.log('Device tracking: New device joined:', newPresences);
       })
       .on('presence', { event: 'leave' }, ({ leftPresences }) => {
-        console.log('Device left:', leftPresences);
+        console.log('Device tracking: Device left:', leftPresences);
       });
 
     presenceChannel.subscribe(async (status) => {
-      if (status === 'SUBSCRIBED' && currentSessionId) {
-        await presenceChannel.track({
-          session_id: currentSessionId,
-          device_name: deviceInfo.device_name,
-          online_at: new Date().toISOString()
-        });
+      console.log('Device tracking: Presence channel status', status);
+      if (status === 'SUBSCRIBED') {
+        try {
+          const trackingResult = await presenceChannel.track({
+            session_id: currentSessionId,
+            device_name: deviceInfo.device_name,
+            online_at: new Date().toISOString()
+          });
+          console.log('Device tracking: Presence tracking started', trackingResult);
+        } catch (error) {
+          console.error('Device tracking: Failed to start presence tracking', error);
+        }
       }
     });
 
@@ -173,6 +202,7 @@ export function useDeviceTracking() {
     const activityInterval = setInterval(() => {
       if (currentSessionId) {
         updateSessionActivity(currentSessionId);
+        console.log('Device tracking: Activity updated for session', currentSessionId);
       }
     }, 30000); // Update every 30 seconds
 
@@ -187,14 +217,16 @@ export function useDeviceTracking() {
           table: 'user_sessions',
           filter: `user_id=eq.${user.userId}`
         },
-        () => {
+        (payload) => {
+          console.log('Device tracking: Session change detected', payload);
           loadUserSessions();
         }
       )
       .subscribe();
 
-    // Cleanup on unmount or user change
+    // Cleanup on unmount or session change
     return () => {
+      console.log('Device tracking: Cleaning up presence and session channels');
       presenceChannel.unsubscribe();
       sessionChannel.unsubscribe();
       clearInterval(activityInterval);
@@ -206,11 +238,11 @@ export function useDeviceTracking() {
           .update({ is_active: false })
           .eq('id', currentSessionId)
           .then(() => {
-            console.log('Session marked as inactive');
+            console.log('Device tracking: Session marked as inactive', currentSessionId);
           });
       }
     };
-  }, [currentSessionId]);
+  }, [currentSessionId]); // This effect depends on currentSessionId
 
   const getDeviceStatus = (device: DeviceSession) => {
     const isOnline = onlineDevices.has(device.id);

@@ -68,7 +68,7 @@ const Index = () => {
                     variant="outline"
                     size="sm"
                     onClick={() => navigate('/business-profile')}
-                    className="flex items-center gap-1.5 sm:gap-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground text-xs sm:text-sm px-2 sm:px-3 py-1.5 sm:py-2 min-h-[36px] sm:min-h-[40px]"
+                    className="flex items-center gap-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground text-sm w-full sm:w-auto justify-center"
                   >
                     <Settings size={14} className="sm:hidden" />
                     <Settings size={16} className="hidden sm:block" />
@@ -81,7 +81,7 @@ const Index = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => navigate('/history')}
-                      className="flex items-center gap-1.5 sm:gap-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground text-xs sm:text-sm px-2 sm:px-3 py-1.5 sm:py-2 min-h-[36px] sm:min-h-[40px]"
+                      className="flex items-center gap-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground text-sm w-full sm:w-auto justify-center"
                     >
                       <History size={14} className="sm:hidden" />
                       <History size={16} className="hidden sm:block" />
@@ -109,7 +109,7 @@ const Index = () => {
                   variant="outline"
                   size="sm"
                   onClick={logout}
-                  className="flex items-center gap-1.5 sm:gap-2 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground text-xs sm:text-sm px-2 sm:px-3 py-1.5 sm:py-2 min-h-[36px] sm:min-h-[40px] w-full sm:w-auto justify-center sm:justify-start"
+                  className="flex items-center gap-2 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground text-sm w-full sm:w-auto justify-center"
                 >
                   <LogOut size={14} className="sm:hidden" />
                   <LogOut size={16} className="hidden sm:block" />

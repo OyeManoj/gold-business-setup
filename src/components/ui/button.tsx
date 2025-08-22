@@ -19,11 +19,11 @@ const buttonVariants = cva(
         success: "bg-success text-success-foreground hover:bg-success/90 border-2 border-success shadow-md hover:shadow-lg",
       },
       size: {
-        default: "h-10 px-6 py-2",
-        sm: "h-8 px-4 text-xs",
-        lg: "h-12 px-8 text-base",
-        icon: "h-10 w-10",
-        transaction: "h-14 px-8 py-3 text-base min-w-[180px]",
+        default: "h-12 px-6 py-3 min-w-[48px] touch-target",
+        sm: "h-10 px-4 text-sm min-w-[40px] touch-target", 
+        lg: "h-14 px-8 text-base min-w-[56px] touch-target",
+        icon: "h-12 w-12 touch-target",
+        transaction: "h-16 px-8 py-4 text-base min-w-[200px] touch-target",
       },
     },
     defaultVariants: {

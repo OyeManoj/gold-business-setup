@@ -6,6 +6,7 @@ import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { useTranslation } from '@/utils/translations';
 import { useAuth } from '@/contexts/AuthContext';
 import { History, Settings, LogOut, User } from 'lucide-react';
+import { DeviceTracker } from '@/components/DeviceTracker';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -87,6 +88,8 @@ const Index = () => {
               </div>
 
               <div className="flex items-center gap-2 sm:gap-3">
+                <DeviceTracker />
+                
                 <div className="flex items-center gap-2 px-3 py-2 bg-muted border border-border rounded-lg">
                   <User size={16} className="text-primary" />
                   <div className="flex flex-col min-w-0">

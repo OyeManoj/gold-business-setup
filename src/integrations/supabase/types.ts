@@ -221,6 +221,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_sessions: {
+        Row: {
+          browser_info: string | null
+          created_at: string
+          device_name: string | null
+          device_type: string | null
+          id: string
+          is_active: boolean
+          last_seen: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          browser_info?: string | null
+          created_at?: string
+          device_name?: string | null
+          device_type?: string | null
+          id?: string
+          is_active?: boolean
+          last_seen?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          browser_info?: string | null
+          created_at?: string
+          device_name?: string | null
+          device_type?: string | null
+          id?: string
+          is_active?: boolean
+          last_seen?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

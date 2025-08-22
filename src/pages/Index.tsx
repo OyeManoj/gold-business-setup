@@ -1,15 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { LanguageToggle, Language } from '@/components/LanguageToggle';
+import { Language } from '@/components/LanguageToggle';
 import { useTranslation } from '@/utils/translations';
-import { useAuth } from '@/contexts/AuthContext';
-import { History, Settings, LogOut, User } from 'lucide-react';
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user, logout, hasPermission } = useAuth();
   const [language, setLanguage] = useState<Language>('en');
   const t = useTranslation(language);
 
@@ -36,114 +32,43 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Modern Grid Background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:32px_32px] opacity-30"></div>
-      
-      <div className="relative z-10 container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
-        {/* Mobile-first Modern Header */}
-        <div className="text-center mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-foreground mb-2 sm:mb-4 tracking-tighter leading-tight">
-            {language === 'ar' ? 'ذهب أمبيكا' : 'AMBIKA GOLD'}
-          </h1>
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground font-normal max-w-2xl mx-auto px-2">
-            {language === 'ar' ? 'نظام إدارة المعاملات المتقدم' : 'Advanced Transaction Management System'}
-          </p>
-          <div className="w-16 sm:w-24 md:w-32 h-1 bg-primary mx-auto mt-2 sm:mt-4"></div>
-        </div>
+    <div className="p-4 sm:p-6 lg:p-8">
+      {/* Welcome Header */}
+      <div className="text-center mb-8">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2">
+          Welcome to Ambika Gold
+        </h1>
+        <p className="text-muted-foreground text-sm sm:text-base">
+          Choose a transaction type to get started
+        </p>
+        <div className="w-24 h-1 bg-primary mx-auto mt-4"></div>
+      </div>
 
-        {/* Mobile-first Navigation Bar */}
-        <div className="w-full mb-6 sm:mb-8 md:mb-12">
-          <div className="bg-card border border-border shadow-md p-3 sm:p-4 md:p-6 rounded-lg">            
-            <div className="flex flex-col gap-4 sm:gap-6">
-              {/* Top row - Language and main actions */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6">
-                <LanguageToggle
-                  currentLanguage={language}
-                  onLanguageChange={setLanguage}
-                />
-                
-                <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 w-full sm:w-auto">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => navigate('/business-profile')}
-                    className="flex items-center gap-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground text-sm w-full sm:w-auto justify-center"
-                  >
-                    <Settings size={14} className="sm:hidden" />
-                    <Settings size={16} className="hidden sm:block" />
-                    <span className="font-medium hidden sm:inline">{language === 'ar' ? 'ملف العمل' : 'Business Profile'}</span>
-                    <span className="font-medium sm:hidden">{language === 'ar' ? 'الملف' : 'Profile'}</span>
-                  </Button>
-                  
-                  {hasPermission('history') && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => navigate('/history')}
-                      className="flex items-center gap-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground text-sm w-full sm:w-auto justify-center"
-                    >
-                      <History size={14} className="sm:hidden" />
-                      <History size={16} className="hidden sm:block" />
-                      <span className="font-medium">{t.history}</span>
-                    </Button>
-                  )}
-                </div>
-              </div>
+      {/* Transaction Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto">
+        {transactions.map((transaction, index) => (
+          <Card 
+            key={transaction.type}
+            className="group bg-card border-2 border-border hover:border-primary cursor-pointer transition-all duration-200 hover:shadow-lg active:scale-[0.98] touch-manipulation"
+            onClick={() => navigate(transaction.path)}
+          >
+            <CardContent className="p-6 sm:p-8 text-center">
+              <h3 className="text-lg sm:text-xl font-bold text-foreground mb-3 uppercase tracking-wide">
+                {transaction.title}
+              </h3>
+              
+              <p className="text-muted-foreground mb-6 text-sm sm:text-base">
+                {transaction.description}
+              </p>
 
-              {/* User Profile Section - Full width on mobile */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 border-t pt-3 sm:border-t-0 sm:pt-0">
-                <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 md:px-6 py-2 sm:py-3 bg-muted border border-border rounded-lg w-full sm:w-auto">
-                  <User size={16} className="text-primary sm:hidden" />
-                  <User size={20} className="text-primary hidden sm:block" />
-                  <div className="flex flex-col min-w-0 flex-1">
-                    <span className="font-semibold text-foreground text-sm sm:text-base truncate">{user?.name}</span>
-                    <span className="text-xs sm:text-sm text-muted-foreground truncate">
-                      <span className="sm:hidden">#{user?.userId}</span>
-                      <span className="hidden sm:inline">ID: {user?.userId} • {user?.role?.toUpperCase()}</span>
-                    </span>
-                  </div>
-                </div>
-                
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={logout}
-                  className="flex items-center gap-2 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground text-sm w-full sm:w-auto justify-center"
-                >
-                  <LogOut size={14} className="sm:hidden" />
-                  <LogOut size={16} className="hidden sm:block" />
-                  <span className="font-medium">{language === 'ar' ? 'تسجيل الخروج' : 'Logout'}</span>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Single Line Menu */}
-        <div className="w-full flex flex-col sm:flex-row gap-2 sm:gap-4">
-          {transactions.map((transaction, index) => (
-            <Card 
-              key={transaction.type}
-              className="flex-1 group bg-card border border-border hover:border-primary cursor-pointer transition-all duration-200 hover:shadow-lg active:scale-[0.98] touch-manipulation"
-              onClick={() => navigate(transaction.path)}
-            >
-              <CardContent className="p-3 sm:p-4 text-center">
-                <h3 className="text-sm sm:text-base font-bold text-foreground mb-1 uppercase tracking-wide">
-                  {transaction.title}
-                </h3>
-                <span className="text-primary font-medium text-xs sm:text-sm">
-                  {language === 'ar' ? 'ابدأ' : 'START'}
+              <div className="border-t border-border pt-4">
+                <span className="text-primary font-semibold uppercase tracking-wider text-xs sm:text-sm">
+                  {language === 'ar' ? 'ابدأ الآن' : 'START NOW'}
                 </span>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Bottom Grid Accent */}
-        <div className="text-center mt-24">
-          <div className="w-48 h-1 bg-primary mx-auto"></div>
-        </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   );

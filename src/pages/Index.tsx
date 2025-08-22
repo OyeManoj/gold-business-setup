@@ -40,37 +40,40 @@ const Index = () => {
       {/* Modern Grid Background */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:32px_32px] opacity-30"></div>
       
-      <div className="relative z-10 container mx-auto px-8 py-12">
-        {/* Sharp Modern Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-7xl md:text-8xl font-extrabold text-foreground mb-4 tracking-tighter">
+      <div className="relative z-10 container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+        {/* Mobile-first Modern Header */}
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-foreground mb-2 sm:mb-4 tracking-tighter leading-tight">
             {language === 'ar' ? 'ذهب أمبيكا' : 'AMBIKA GOLD'}
           </h1>
-          <p className="text-xl text-muted-foreground font-normal max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground font-normal max-w-2xl mx-auto px-2">
             {language === 'ar' ? 'نظام إدارة المعاملات المتقدم' : 'Advanced Transaction Management System'}
           </p>
-          <div className="w-32 h-1 bg-primary mx-auto mt-4"></div>
+          <div className="w-16 sm:w-24 md:w-32 h-1 bg-primary mx-auto mt-2 sm:mt-4"></div>
         </div>
 
-        {/* Sharp Navigation Bar */}
-        <div className="max-w-6xl mx-auto mb-12">
-          <div className="bg-card border border-border shadow-md p-6">            
-            <div className="flex flex-wrap items-center justify-between gap-6">
-              <div className="flex items-center gap-6">
+        {/* Mobile-first Navigation Bar */}
+        <div className="w-full mb-6 sm:mb-8 md:mb-12">
+          <div className="bg-card border border-border shadow-md p-3 sm:p-4 md:p-6 rounded-lg">            
+            <div className="flex flex-col gap-4 sm:gap-6">
+              {/* Top row - Language and main actions */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6">
                 <LanguageToggle
                   currentLanguage={language}
                   onLanguageChange={setLanguage}
                 />
                 
-                <div className="flex items-center gap-4">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 w-full sm:w-auto">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => navigate('/business-profile')}
-                    className="flex items-center gap-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                    className="flex items-center gap-1.5 sm:gap-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground text-xs sm:text-sm px-2 sm:px-3 py-1.5 sm:py-2 min-h-[36px] sm:min-h-[40px]"
                   >
-                    <Settings size={16} />
-                    <span className="font-medium">{language === 'ar' ? 'ملف العمل' : 'Business Profile'}</span>
+                    <Settings size={14} className="sm:hidden" />
+                    <Settings size={16} className="hidden sm:block" />
+                    <span className="font-medium hidden sm:inline">{language === 'ar' ? 'ملف العمل' : 'Business Profile'}</span>
+                    <span className="font-medium sm:hidden">{language === 'ar' ? 'الملف' : 'Profile'}</span>
                   </Button>
                   
                   {hasPermission('history') && (
@@ -78,22 +81,27 @@ const Index = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => navigate('/history')}
-                      className="flex items-center gap-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground"
+                      className="flex items-center gap-1.5 sm:gap-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground text-xs sm:text-sm px-2 sm:px-3 py-1.5 sm:py-2 min-h-[36px] sm:min-h-[40px]"
                     >
-                      <History size={16} />
+                      <History size={14} className="sm:hidden" />
+                      <History size={16} className="hidden sm:block" />
                       <span className="font-medium">{t.history}</span>
                     </Button>
                   )}
                 </div>
               </div>
 
-              {/* User Profile Section */}
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-3 px-6 py-3 bg-muted border border-border">
-                  <User size={20} className="text-primary" />
-                  <div className="flex flex-col">
-                    <span className="font-semibold text-foreground">{user?.name}</span>
-                    <span className="text-sm text-muted-foreground">ID: {user?.userId} • {user?.role?.toUpperCase()}</span>
+              {/* User Profile Section - Full width on mobile */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 border-t pt-3 sm:border-t-0 sm:pt-0">
+                <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 md:px-6 py-2 sm:py-3 bg-muted border border-border rounded-lg w-full sm:w-auto">
+                  <User size={16} className="text-primary sm:hidden" />
+                  <User size={20} className="text-primary hidden sm:block" />
+                  <div className="flex flex-col min-w-0 flex-1">
+                    <span className="font-semibold text-foreground text-sm sm:text-base truncate">{user?.name}</span>
+                    <span className="text-xs sm:text-sm text-muted-foreground truncate">
+                      <span className="sm:hidden">#{user?.userId}</span>
+                      <span className="hidden sm:inline">ID: {user?.userId} • {user?.role?.toUpperCase()}</span>
+                    </span>
                   </div>
                 </div>
                 
@@ -101,9 +109,10 @@ const Index = () => {
                   variant="outline"
                   size="sm"
                   onClick={logout}
-                  className="flex items-center gap-2 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                  className="flex items-center gap-1.5 sm:gap-2 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground text-xs sm:text-sm px-2 sm:px-3 py-1.5 sm:py-2 min-h-[36px] sm:min-h-[40px] w-full sm:w-auto justify-center sm:justify-start"
                 >
-                  <LogOut size={16} />
+                  <LogOut size={14} className="sm:hidden" />
+                  <LogOut size={16} className="hidden sm:block" />
                   <span className="font-medium">{language === 'ar' ? 'تسجيل الخروج' : 'Logout'}</span>
                 </Button>
               </div>
@@ -111,28 +120,28 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Sharp Transaction Cards Grid */}
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Mobile-first Transaction Cards Grid */}
+        <div className="w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {transactions.map((transaction, index) => (
               <Card 
                 key={transaction.type}
-                className="group bg-card border-2 border-border hover:border-primary cursor-pointer transition-all duration-200 hover:shadow-lg"
+                className="group bg-card border-2 border-border hover:border-primary cursor-pointer transition-all duration-200 hover:shadow-lg active:scale-[0.98] touch-manipulation"
                 onClick={() => navigate(transaction.path)}
               >
-                <CardContent className="p-12 text-center">
-                  {/* Sharp Typography */}
-                  <h3 className="text-2xl font-bold text-foreground mb-4 uppercase tracking-wide">
+                <CardContent className="p-6 sm:p-8 md:p-10 lg:p-12 text-center">
+                  {/* Mobile-optimized Typography */}
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-3 sm:mb-4 uppercase tracking-wide leading-tight">
                     {transaction.title}
                   </h3>
                   
-                  <p className="text-muted-foreground mb-8 text-base leading-relaxed">
+                  <p className="text-muted-foreground mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed">
                     {transaction.description}
                   </p>
 
                   {/* Action Button */}
-                  <div className="border-t border-border pt-6">
-                    <span className="text-primary font-semibold uppercase tracking-wider text-sm">
+                  <div className="border-t border-border pt-4 sm:pt-6">
+                    <span className="text-primary font-semibold uppercase tracking-wider text-xs sm:text-sm">
                       {language === 'ar' ? 'ابدأ الآن' : 'START NOW'}
                     </span>
                   </div>

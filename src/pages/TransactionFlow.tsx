@@ -150,18 +150,19 @@ export default function TransactionFlow() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-off-white to-background">
-      <div className="container mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8 flex flex-col min-h-screen">
-        {/* Compact Header */}
-        <div className="flex items-center justify-between mb-8 flex-shrink-0">
+      <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6 lg:py-8 flex flex-col min-h-screen">
+        {/* Mobile-first Compact Header */}
+        <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-8 flex-shrink-0">
           <div className="flex items-center">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => navigate('/')}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/80 hover:shadow-sm transition-all duration-200"
+              className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg hover:bg-white/80 hover:shadow-sm transition-all duration-200 min-h-[36px] sm:min-h-[40px] touch-manipulation"
             >
-              <ArrowLeft size={18} />
-              <span className="font-medium">{t.back}</span>
+              <ArrowLeft size={16} className="sm:hidden" />
+              <ArrowLeft size={18} className="hidden sm:block" />
+              <span className="font-medium text-sm sm:text-base">{t.back}</span>
             </Button>
           </div>
           
@@ -172,20 +173,20 @@ export default function TransactionFlow() {
         </div>
 
         <div className="w-full flex-1 flex flex-col">
-          <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 flex-1">
-            {/* Compact Input Form */}
-            <Card className="h-fit md:h-full border-2 border-border shadow-xl bg-white/95 backdrop-blur-sm rounded-xl">
-              <CardHeader className="pb-3 md:pb-4 bg-gradient-to-r from-white/80 to-off-white/80 rounded-t-xl border-b-2 border-border/50 px-4 md:px-6 py-3 md:py-4">
-                <div className="flex items-center gap-3 mb-3">
-                  <Badge className={`${getTransactionColor(transactionType)} text-white px-3 py-1.5 text-sm font-bold rounded-lg shadow-sm border border-white/20`}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6 flex-1">
+            {/* Mobile-first Compact Input Form */}
+            <Card className="h-fit lg:h-full border-2 border-border shadow-xl bg-white/95 backdrop-blur-sm rounded-xl">
+              <CardHeader className="pb-2 sm:pb-3 md:pb-4 bg-gradient-to-r from-white/80 to-off-white/80 rounded-t-xl border-b-2 border-border/50 px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
+                <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                  <Badge className={`${getTransactionColor(transactionType)} text-white px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm font-bold rounded-lg shadow-sm border border-white/20`}>
                     {t[transactionType.toLowerCase() as keyof typeof t]}
                   </Badge>
                 </div>
-                <CardTitle className="text-xl font-bold text-dark tracking-tight">
+                <CardTitle className="text-lg sm:text-xl font-bold text-dark tracking-tight">
                   {isEditMode ? 'Edit Transaction' : 'Transaction Details'}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3 md:space-y-4 p-4 md:p-6">
+              <CardContent className="space-y-3 sm:space-y-4 p-3 sm:p-4 md:p-6">
                 {/* Average Prices Display */}
                 <DayAveragePrices transactionType={transactionType} />
                 
@@ -252,19 +253,19 @@ export default function TransactionFlow() {
                   />
                 )}
 
-                {/* Compact Calculate Button */}
+                {/* Mobile-optimized Calculate Button */}
                 <Button
                   variant="default"
                   size="lg"
                   onClick={handleCalculate}
-                  className="w-full py-2.5 text-sm font-bold rounded-lg bg-gradient-to-r from-dark to-charcoal hover:from-charcoal hover:to-dark shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]"
+                  className="w-full py-3 sm:py-2.5 text-sm sm:text-base font-bold rounded-lg bg-gradient-to-r from-dark to-charcoal hover:from-charcoal hover:to-dark shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] active:scale-[0.99] touch-manipulation min-h-[44px] sm:min-h-[40px]"
                   disabled={
                     !formData.weight || 
                     (transactionType !== 'EXCHANGE' && !formData.rate)
                   }
                 >
                   <Calculator size={16} className="mr-2" />
-                  {isEditMode ? 'Update Transaction' : 'Calculate Transaction'}
+                  <span className="text-sm sm:text-base">{isEditMode ? 'Update Transaction' : 'Calculate Transaction'}</span>
                 </Button>
               </CardContent>
             </Card>

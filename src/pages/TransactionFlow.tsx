@@ -15,6 +15,7 @@ import { useTranslation } from '@/utils/translations';
 import { validateTransactionForm, FormData } from '@/utils/formValidation';
 import { ArrowLeft, Check, X, Calculator } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuditLog } from '@/hooks/useAuditLog';
 import { Badge } from '@/components/ui/badge';
 import { DayAveragePrices } from '@/components/DayAveragePrices';
 import { formatWeight, formatIndianCurrency } from '@/utils/indianFormatting';
@@ -23,6 +24,7 @@ export default function TransactionFlow() {
   const { type, transactionId } = useParams<{ type: string; transactionId?: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { logTransaction } = useAuditLog();
   
   const [language, setLanguage] = useState<Language>('en');
   const [formData, setFormData] = useState<FormData>({
@@ -103,6 +105,8 @@ export default function TransactionFlow() {
 
     if (isEditMode) {
       await updateTransaction(transaction);
+      // Log transaction update
+      await logTransaction('update', transaction, editingTransaction);
       toast({
         title: "Success",
         description: "Transaction updated and synced across all devices",
@@ -110,6 +114,8 @@ export default function TransactionFlow() {
       });
     } else {
       await saveTransaction(transaction);
+      // Log transaction creation
+      await logTransaction('create', transaction);
       
       // Get business profile and receipt settings for receipt generation
       const businessProfile = await getBusinessProfile();

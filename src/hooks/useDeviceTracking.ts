@@ -46,39 +46,38 @@ export function useDeviceTracking() {
     return 'Unknown Browser';
   };
 
-  // Get current user info
-  const getCurrentUser = () => {
-    const userStr = localStorage.getItem('goldease_user');
-    if (!userStr) {
-      console.log('Device tracking: No user in localStorage');
-      return null;
-    }
+  // Get current user info from Supabase auth
+  const getCurrentUser = async () => {
     try {
-      const user = JSON.parse(userStr);
-      console.log('Device tracking: Retrieved user from localStorage:', user);
-      return user;
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        console.log('Device tracking: No authenticated user');
+        return null;
+      }
+      console.log('Device tracking: Retrieved user from Supabase auth:', user);
+      return { id: user.id, email: user.email };
     } catch (error) {
-      console.error('Device tracking: Failed to parse user from localStorage:', error);
+      console.error('Device tracking: Error getting user from Supabase:', error);
       return null;
     }
   };
 
   // Register current device session
   const registerDeviceSession = async () => {
-    const user = getCurrentUser();
+    const user = await getCurrentUser();
     if (!user) {
       console.log('Device tracking: Cannot register session - no user');
       return null;
     }
 
     const deviceInfo = getDeviceInfo();
-    console.log('Device tracking: Registering session with info:', { userId: user.userId, deviceInfo });
+    console.log('Device tracking: Registering session with info:', { userId: user.id, deviceInfo });
     
     try {
       const { data, error } = await supabase
         .from('user_sessions')
         .insert({
-          user_id: user.userId,
+          user_id: user.id,
           ...deviceInfo
         })
         .select()
@@ -115,18 +114,18 @@ export function useDeviceTracking() {
 
   // Load user sessions
   const loadUserSessions = async () => {
-    const user = getCurrentUser();
+    const user = await getCurrentUser();
     if (!user) {
       console.log('Device tracking: Cannot load sessions - no user');
       return;
     }
 
-    console.log('Device tracking: Loading sessions for user:', user.userId);
+    console.log('Device tracking: Loading sessions for user:', user.id);
     try {
       const { data, error } = await supabase
         .from('user_sessions')
         .select('*')
-        .eq('user_id', user.userId)
+        .eq('user_id', user.id)
         .order('last_seen', { ascending: false });
 
       if (error) {
@@ -143,16 +142,16 @@ export function useDeviceTracking() {
 
   // Setup presence tracking
   useEffect(() => {
-    const user = getCurrentUser();
-    if (!user) {
-      console.log('Device tracking: No user found');
-      setIsLoading(false);
-      return;
-    }
+    const initializeTracking = async () => {
+      const user = await getCurrentUser();
+      if (!user) {
+        console.log('Device tracking: No user found');
+        setIsLoading(false);
+        return;
+      }
 
-    console.log('Device tracking: Initializing for user', user.userId);
+      console.log('Device tracking: Initializing for user', user.id);
 
-    const initializeSession = async () => {
       try {
         const sessionId = await registerDeviceSession();
         console.log('Device tracking: Session registered', sessionId);
@@ -167,22 +166,23 @@ export function useDeviceTracking() {
       }
     };
 
-    initializeSession();
+    initializeTracking();
   }, []);
 
   // Setup presence channel when session is ready
   useEffect(() => {
-    const user = getCurrentUser();
-    if (!user || !currentSessionId) {
-      console.log('Device tracking: User or session not ready', { user: !!user, currentSessionId });
-      return;
-    }
+    const setupPresence = async () => {
+      const user = await getCurrentUser();
+      if (!user || !currentSessionId) {
+        console.log('Device tracking: User or session not ready', { user: !!user, currentSessionId });
+        return;
+      }
 
-    console.log('Device tracking: Setting up presence for session', currentSessionId);
+      console.log('Device tracking: Setting up presence for session', currentSessionId);
 
-    // Setup presence channel
-    const deviceInfo = getDeviceInfo();
-    const presenceChannel = supabase.channel(`user_presence_${user.userId}`)
+      // Setup presence channel
+      const deviceInfo = getDeviceInfo();
+      const presenceChannel = supabase.channel(`user_presence_${user.id}`)
       .on('presence', { event: 'sync' }, () => {
         const state = presenceChannel.presenceState();
         const onlineSessionIds = new Set<string>();
@@ -229,42 +229,45 @@ export function useDeviceTracking() {
       }
     }, 30000); // Update every 30 seconds
 
-    // Setup realtime subscription for sessions
-    const sessionChannel = supabase
-      .channel('user-sessions-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'user_sessions',
-          filter: `user_id=eq.${user.userId}`
-        },
-        (payload) => {
-          console.log('Device tracking: Session change detected', payload);
-          loadUserSessions();
-        }
-      )
-      .subscribe();
+      // Setup realtime subscription for sessions
+      const sessionChannel = supabase
+        .channel('user-sessions-changes')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'user_sessions',
+            filter: `user_id=eq.${user.id}`
+          },
+          (payload) => {
+            console.log('Device tracking: Session change detected', payload);
+            loadUserSessions();
+          }
+        )
+        .subscribe();
 
-    // Cleanup on unmount or session change
-    return () => {
-      console.log('Device tracking: Cleaning up presence and session channels');
-      presenceChannel.unsubscribe();
-      sessionChannel.unsubscribe();
-      clearInterval(activityInterval);
-      
-      // Mark session as inactive
-      if (currentSessionId) {
-        supabase
-          .from('user_sessions')
-          .update({ is_active: false })
-          .eq('id', currentSessionId)
-          .then(() => {
-            console.log('Device tracking: Session marked as inactive', currentSessionId);
-          });
-      }
+      // Cleanup on unmount or session change
+      return () => {
+        console.log('Device tracking: Cleaning up presence and session channels');
+        presenceChannel.unsubscribe();
+        sessionChannel.unsubscribe();
+        clearInterval(activityInterval);
+        
+        // Mark session as inactive
+        if (currentSessionId) {
+          supabase
+            .from('user_sessions')
+            .update({ is_active: false })
+            .eq('id', currentSessionId)
+            .then(() => {
+              console.log('Device tracking: Session marked as inactive', currentSessionId);
+            });
+        }
+      };
     };
+
+    setupPresence();
   }, [currentSessionId]); // This effect depends on currentSessionId
 
   const getDeviceStatus = (device: DeviceSession) => {

@@ -1,17 +1,21 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { User, Session } from '@supabase/supabase-js';
 
-interface User {
+interface UserProfile {
   id: string;
-  userId: string;
+  user_id: string;
   name: string;
   role: 'admin' | 'employee';
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (userId: string, pin: string) => Promise<{ success: boolean; error?: string }>;
-  logout: () => void;
+  profile: UserProfile | null;
+  session: Session | null;
+  signUp: (email: string, password: string, name: string) => Promise<{ error?: string }>;
+  signIn: (email: string, password: string) => Promise<{ error?: string }>;
+  signOut: () => Promise<void>;
   isLoading: boolean;
   hasPermission: (permission: string) => boolean;
 }
@@ -20,72 +24,86 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is already logged in
-    const savedUser = localStorage.getItem('goldease_user');
-    if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch (error) {
-        localStorage.removeItem('goldease_user');
+    // Set up auth state listener FIRST
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        
+        // Fetch user profile when logged in
+        if (session?.user) {
+          setTimeout(async () => {
+            const { data: profileData } = await supabase
+              .from('profiles')
+              .select('*')
+              .eq('user_id', session.user.id)
+              .single();
+            
+            if (profileData) {
+              setProfile(profileData);
+            }
+          }, 0);
+        } else {
+          setProfile(null);
+        }
+        
+        setIsLoading(false);
       }
-    }
-    setIsLoading(false);
+    );
+
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setIsLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const login = async (userId: string, pin: string): Promise<{ success: boolean; error?: string }> => {
-    try {
-      // Validate input format
-      if (!/^\d{4}$/.test(userId) || !/^\d{4}$/.test(pin)) {
-        return { success: false, error: 'User ID and PIN must be 4 digits' };
+  const signUp = async (email: string, password: string, name: string) => {
+    const redirectUrl = `${window.location.origin}/`;
+    
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: redirectUrl,
+        data: {
+          name: name
+        }
       }
-
-      // Call the secure verification function
-      const { data, error } = await supabase.rpc('verify_login_credentials', {
-        input_user_id: userId,
-        input_pin: pin
-      });
-
-      if (error) {
-        console.error('Login error:', error);
-        return { success: false, error: 'Authentication failed' };
-      }
-
-      if (data?.success) {
-        const userData: User = {
-          id: data.user.id,
-          userId: data.user.user_id,
-          name: data.user.name || 'User',
-          role: data.user.role as 'admin' | 'employee'
-        };
-
-        setUser(userData);
-        localStorage.setItem('goldease_user', JSON.stringify(userData));
-        return { success: true };
-      } else {
-        return { success: false, error: data?.error || 'Invalid User ID or PIN' };
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      return { success: false, error: 'Login failed. Please try again.' };
-    }
+    });
+    
+    return { error: error?.message };
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('goldease_user');
+  const signIn = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+    
+    return { error: error?.message };
+  };
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
   };
 
   const hasPermission = (permission: string): boolean => {
-    if (!user) return false;
+    if (!profile) return false;
     
     // Admin has all permissions
-    if (user.role === 'admin') return true;
+    if (profile.role === 'admin') return true;
     
     // Define employee restrictions
-    if (user.role === 'employee') {
+    if (profile.role === 'employee') {
       const restrictedPermissions = ['history'];
       return !restrictedPermissions.includes(permission);
     }
@@ -94,7 +112,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading, hasPermission }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      profile, 
+      session, 
+      signUp, 
+      signIn, 
+      signOut, 
+      isLoading, 
+      hasPermission 
+    }}>
       {children}
     </AuthContext.Provider>
   );

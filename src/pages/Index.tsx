@@ -10,7 +10,7 @@ import { DeviceTracker } from '@/components/DeviceTracker';
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user, logout, hasPermission } = useAuth();
+  const { user, profile, signOut, hasPermission } = useAuth();
   const [language, setLanguage] = useState<Language>('en');
   const t = useTranslation(language);
 
@@ -93,9 +93,9 @@ const Index = () => {
                 <div className="flex items-center gap-2 px-3 py-2 bg-muted border border-border rounded-lg">
                   <User size={16} className="text-primary" />
                   <div className="flex flex-col min-w-0">
-                    <span className="font-semibold text-foreground text-sm truncate">{user?.name}</span>
+                    <span className="font-semibold text-foreground text-sm truncate">{profile?.name || user?.email}</span>
                     <span className="text-xs text-muted-foreground truncate">
-                      ID: {user?.userId} • {user?.role?.toUpperCase()}
+                      {profile?.role?.toUpperCase() || 'USER'}
                     </span>
                   </div>
                 </div>
@@ -103,7 +103,7 @@ const Index = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={logout}
+                  onClick={signOut}
                   className="flex items-center gap-2 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground text-sm whitespace-nowrap"
                 >
                   <LogOut size={16} />

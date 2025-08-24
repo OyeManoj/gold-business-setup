@@ -3,21 +3,15 @@ import { supabase } from '@/integrations/supabase/client';
 
 const STORAGE_KEY = 'gold_transactions_offline';
 
-// Get user ID from auth context
-function getCurrentUserId(): string | null {
-  const userStr = localStorage.getItem('goldease_user');
-  if (!userStr) return null;
-  try {
-    const user = JSON.parse(userStr);
-    return user.id;
-  } catch {
-    return null;
-  }
+// Get user ID from Supabase auth
+async function getCurrentUserId(): Promise<string | null> {
+  const { data: { user } } = await supabase.auth.getUser();
+  return user?.id || null;
 }
 
 // Save to Supabase with offline fallback
 export async function saveTransaction(transaction: Transaction): Promise<void> {
-  const userId = getCurrentUserId();
+  const userId = await getCurrentUserId();
   if (!userId) throw new Error('User not authenticated');
 
   try {
@@ -49,7 +43,7 @@ export async function saveTransaction(transaction: Transaction): Promise<void> {
 
 // Get transactions from Supabase with offline fallback
 export async function getTransactions(): Promise<Transaction[]> {
-  const userId = getCurrentUserId();
+  const userId = await getCurrentUserId();
   if (!userId) return [];
 
   try {
@@ -77,7 +71,7 @@ export async function getTransactions(): Promise<Transaction[]> {
 
 // Update transaction in Supabase with offline fallback
 export async function updateTransaction(updatedTransaction: Transaction): Promise<void> {
-  const userId = getCurrentUserId();
+  const userId = await getCurrentUserId();
   if (!userId) throw new Error('User not authenticated');
 
   try {
@@ -106,7 +100,7 @@ export async function updateTransaction(updatedTransaction: Transaction): Promis
 
 // Clear all transactions
 export async function clearTransactions(): Promise<void> {
-  const userId = getCurrentUserId();
+  const userId = await getCurrentUserId();
   if (!userId) return;
 
   try {
@@ -175,7 +169,7 @@ async function syncOfflineTransactions(): Promise<void> {
   
   if (pendingTransactions.length === 0) return;
 
-  const userId = getCurrentUserId();
+  const userId = await getCurrentUserId();
   if (!userId) return;
 
   for (const transaction of pendingTransactions) {

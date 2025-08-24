@@ -1,110 +1,211 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
-import { LogIn, KeyRound, User } from 'lucide-react';
+import { LogIn, UserPlus, Mail, Lock, User } from 'lucide-react';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
-  const [formData, setFormData] = useState({
-    userId: '',
-    pin: ''
+  const { signIn, signUp, user } = useAuth();
+  const [signInData, setSignInData] = useState({
+    email: '',
+    password: ''
+  });
+  const [signUpData, setSignUpData] = useState({
+    name: '',
+    email: '',
+    password: ''
   });
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
+
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     setIsLoading(true);
 
-    const result = await login(formData.userId, formData.pin);
+    const result = await signIn(signInData.email, signInData.password);
     
-    if (result.success) {
-      navigate('/');
+    if (result.error) {
+      setError(result.error);
     } else {
-      setError(result.error || 'Login failed');
+      navigate('/');
     }
     
     setIsLoading(false);
   };
 
-  const handleInputChange = (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, '').slice(0, 4); // Only digits, max 4
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
     setError('');
+    setSuccess('');
+    setIsLoading(true);
+
+    const result = await signUp(signUpData.email, signUpData.password, signUpData.name);
+    
+    if (result.error) {
+      setError(result.error);
+    } else {
+      setSuccess('Account created! Please check your email to verify your account.');
+    }
+    
+    setIsLoading(false);
   };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4 md:px-6 lg:px-8">
-      <Card className="w-full max-w-2xl md:max-w-3xl lg:max-w-4xl border-2 border-border shadow-xl">
+      <Card className="w-full max-w-2xl border-2 border-border shadow-xl">
         <CardHeader className="text-center">
           <div className="mx-auto w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-4">
             <LogIn className="w-8 h-8 text-primary-foreground" />
           </div>
-          <CardTitle className="text-2xl font-bold">Gold Ease Login</CardTitle>
-          <p className="text-muted-foreground">Enter your 4-digit User ID and PIN</p>
+          <CardTitle className="text-2xl font-bold">Gold Ease</CardTitle>
+          <p className="text-muted-foreground">Access your account</p>
         </CardHeader>
         
-        <CardContent className="p-4 md:p-6">
-          <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
-            {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
+        <CardContent className="p-6">
+          <Tabs defaultValue="signin" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="signin">Sign In</TabsTrigger>
+              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            </TabsList>
             
-            <div className="space-y-2">
-              <Label htmlFor="userId" className="flex items-center gap-2">
-                <User className="w-4 h-4" />
-                User ID
-              </Label>
-              <Input
-                id="userId"
-                type="text"
-                value={formData.userId}
-                onChange={handleInputChange('userId')}
-                placeholder="1234"
-                maxLength={4}
-                className="text-center text-base font-mono tracking-widest border-2 border-border focus:border-primary h-12 md:h-14"
-                required
-              />
-              <p className="text-sm text-muted-foreground">Enter 4-digit User ID</p>
-            </div>
+            <TabsContent value="signin" className="space-y-4 mt-6">
+              <form onSubmit={handleSignIn} className="space-y-4">
+                {error && (
+                  <Alert variant="destructive">
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
+                
+                <div className="space-y-2">
+                  <Label htmlFor="signin-email" className="flex items-center gap-2">
+                    <Mail className="w-4 h-4" />
+                    Email
+                  </Label>
+                  <Input
+                    id="signin-email"
+                    type="email"
+                    value={signInData.email}
+                    onChange={(e) => setSignInData(prev => ({ ...prev, email: e.target.value }))}
+                    placeholder="Enter your email"
+                    className="h-12"
+                    required
+                  />
+                </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="pin" className="flex items-center gap-2">
-                <KeyRound className="w-4 h-4" />
-                PIN
-              </Label>
-              <Input
-                id="pin"
-                type="password"
-                value={formData.pin}
-                onChange={handleInputChange('pin')}
-                placeholder="••••"
-                maxLength={4}
-                className="text-center text-base font-mono tracking-widest border-2 border-border focus:border-primary h-12 md:h-14"
-                required
-              />
-              <p className="text-sm text-muted-foreground">Enter 4-digit PIN</p>
-            </div>
+                <div className="space-y-2">
+                  <Label htmlFor="signin-password" className="flex items-center gap-2">
+                    <Lock className="w-4 h-4" />
+                    Password
+                  </Label>
+                  <Input
+                    id="signin-password"
+                    type="password"
+                    value={signInData.password}
+                    onChange={(e) => setSignInData(prev => ({ ...prev, password: e.target.value }))}
+                    placeholder="Enter your password"
+                    className="h-12"
+                    required
+                  />
+                </div>
 
-            <Button 
-              type="submit" 
-              className="w-full h-12 md:h-14 text-base font-semibold border-2 border-transparent hover:border-primary/20" 
-              size="lg"
-              disabled={isLoading || formData.userId.length !== 4 || formData.pin.length !== 4}
-            >
-              {isLoading ? 'Signing In...' : 'Sign In'}
-            </Button>
-          </form>
+                <Button 
+                  type="submit" 
+                  className="w-full h-12 text-base font-semibold" 
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Signing In...' : 'Sign In'}
+                </Button>
+              </form>
+            </TabsContent>
+            
+            <TabsContent value="signup" className="space-y-4 mt-6">
+              <form onSubmit={handleSignUp} className="space-y-4">
+                {error && (
+                  <Alert variant="destructive">
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
+                
+                {success && (
+                  <Alert>
+                    <AlertDescription>{success}</AlertDescription>
+                  </Alert>
+                )}
+                
+                <div className="space-y-2">
+                  <Label htmlFor="signup-name" className="flex items-center gap-2">
+                    <User className="w-4 h-4" />
+                    Name
+                  </Label>
+                  <Input
+                    id="signup-name"
+                    type="text"
+                    value={signUpData.name}
+                    onChange={(e) => setSignUpData(prev => ({ ...prev, name: e.target.value }))}
+                    placeholder="Enter your full name"
+                    className="h-12"
+                    required
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="signup-email" className="flex items-center gap-2">
+                    <Mail className="w-4 h-4" />
+                    Email
+                  </Label>
+                  <Input
+                    id="signup-email"
+                    type="email"
+                    value={signUpData.email}
+                    onChange={(e) => setSignUpData(prev => ({ ...prev, email: e.target.value }))}
+                    placeholder="Enter your email"
+                    className="h-12"
+                    required
+                  />
+                </div>
 
+                <div className="space-y-2">
+                  <Label htmlFor="signup-password" className="flex items-center gap-2">
+                    <Lock className="w-4 h-4" />
+                    Password
+                  </Label>
+                  <Input
+                    id="signup-password"
+                    type="password"
+                    value={signUpData.password}
+                    onChange={(e) => setSignUpData(prev => ({ ...prev, password: e.target.value }))}
+                    placeholder="Create a password"
+                    className="h-12"
+                    required
+                  />
+                </div>
+
+                <Button 
+                  type="submit" 
+                  className="w-full h-12 text-base font-semibold" 
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Creating Account...' : 'Sign Up'}
+                </Button>
+              </form>
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
     </div>

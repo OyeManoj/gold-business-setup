@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { ReceiptSettings } from '@/types/receiptSettings';
+import { SecureStorage } from './encryption';
 
 const STORAGE_KEY = 'receiptSettings';
 
@@ -18,8 +19,13 @@ export async function getReceiptSettings(): Promise<ReceiptSettings> {
       return stored ? JSON.parse(stored) : defaultSettings;
     }
 
-    // Try to get from Supabase storage (future implementation)
-    // For now, use localStorage
+    // Try secure storage first
+    const secureStored = await SecureStorage.getSecureItem<ReceiptSettings>(STORAGE_KEY, user.id);
+    if (secureStored) {
+      return secureStored;
+    }
+
+    // Fallback to localStorage
     const stored = localStorage.getItem(STORAGE_KEY);
     return stored ? JSON.parse(stored) : defaultSettings;
   } catch (error) {
@@ -32,13 +38,13 @@ export async function saveReceiptSettings(settings: ReceiptSettings): Promise<vo
   try {
     const { data: { user } } = await supabase.auth.getUser();
     
-    // Save to localStorage
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-    
     if (user) {
-      // Future: Save to Supabase storage
-      // This could be implemented with a receipt_settings table
+      // Use secure encrypted storage
+      await SecureStorage.setSecureItem(STORAGE_KEY, settings, user.id);
     }
+    
+    // Save to localStorage as fallback
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
   } catch (error) {
     console.error('Error saving receipt settings:', error);
   }

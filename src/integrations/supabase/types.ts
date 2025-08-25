@@ -242,7 +242,7 @@ export type Database = {
           remaining_fine_gold: number | null
           type: string
           updated_at: string
-          user_id: string | null
+          user_id: string
           weight: number
         }
         Insert: {
@@ -256,7 +256,7 @@ export type Database = {
           remaining_fine_gold?: number | null
           type: string
           updated_at?: string
-          user_id?: string | null
+          user_id: string
           weight: number
         }
         Update: {
@@ -270,7 +270,7 @@ export type Database = {
           remaining_fine_gold?: number | null
           type?: string
           updated_at?: string
-          user_id?: string | null
+          user_id?: string
           weight?: number
         }
         Relationships: []

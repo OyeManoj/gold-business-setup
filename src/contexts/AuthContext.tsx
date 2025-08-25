@@ -93,6 +93,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signOut = async () => {
+    // Clear all secure offline data before signing out
+    if (user?.id) {
+      const { SecureStorage } = await import('@/utils/encryption');
+      SecureStorage.clearUserData(user.id);
+    }
+    
     await supabase.auth.signOut();
   };
 

@@ -1,5 +1,6 @@
 import { Transaction } from '@/types/transaction';
 import { supabase } from '@/integrations/supabase/client';
+import { SecureStorage } from './encryption';
 
 const STORAGE_KEY = 'gold_transactions_offline';
 
@@ -114,7 +115,10 @@ export async function clearTransactions(): Promise<void> {
     console.warn('Failed to clear from Supabase:', error);
   }
 
-  // Also clear offline storage
+  // Also clear secure offline storage
+  if (userId) {
+    await SecureStorage.removeSecureItem('transactions_offline', userId);
+  }
   localStorage.removeItem(STORAGE_KEY);
 }
 
@@ -134,14 +138,34 @@ function transformSupabaseToTransaction(data: any): Transaction {
   };
 }
 
-// Offline storage helpers
+// Secure offline storage helpers
 async function saveTransactionOffline(transaction: Transaction): Promise<void> {
+  const userId = await getCurrentUserId();
+  if (!userId) return;
+
   const transactions = await getOfflineTransactions();
   transactions.unshift({ ...transaction, _offline: true } as any);
+  
+  // Use both secure storage and fallback for compatibility
+  await SecureStorage.setSecureItem('transactions_offline', transactions, userId);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
 }
 
 async function getOfflineTransactions(): Promise<Transaction[]> {
+  const userId = await getCurrentUserId();
+  
+  // Try secure storage first
+  if (userId) {
+    const secureStored = await SecureStorage.getSecureItem<Transaction[]>('transactions_offline', userId);
+    if (secureStored) {
+      return secureStored.map((t: any) => ({
+        ...t,
+        date: new Date(t.date)
+      }));
+    }
+  }
+  
+  // Fallback to localStorage
   const stored = localStorage.getItem(STORAGE_KEY);
   if (!stored) return [];
   
@@ -153,11 +177,17 @@ async function getOfflineTransactions(): Promise<Transaction[]> {
 }
 
 async function updateTransactionOffline(updatedTransaction: Transaction): Promise<void> {
+  const userId = await getCurrentUserId();
+  if (!userId) return;
+
   const transactions = await getOfflineTransactions();
   const index = transactions.findIndex(t => t.id === updatedTransaction.id);
   
   if (index !== -1) {
     transactions[index] = { ...updatedTransaction, _offline: true } as any;
+    
+    // Update both secure storage and fallback
+    await SecureStorage.setSecureItem('transactions_offline', transactions, userId);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
   }
 }
@@ -195,6 +225,11 @@ async function syncOfflineTransactions(): Promise<void> {
         // Remove from offline storage after successful sync
         const allOffline = await getOfflineTransactions();
         const filtered = allOffline.filter(t => t.id !== transaction.id);
+        
+        // Update both secure storage and fallback
+        if (userId) {
+          await SecureStorage.setSecureItem('transactions_offline', filtered, userId);
+        }
         localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
       }
     } catch (error) {

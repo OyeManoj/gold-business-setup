@@ -8,19 +8,18 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
-import { LogIn, UserPlus, Mail, Lock, User, Shield } from 'lucide-react';
+import { LogIn, UserPlus, Hash, Lock, User, Shield } from 'lucide-react';
 
 const Login = () => {
   const navigate = useNavigate();
   const { signIn, signUp, user } = useAuth();
   const [signInData, setSignInData] = useState({
-    email: '',
-    password: ''
+    userId: '',
+    pin: ''
   });
   const [signUpData, setSignUpData] = useState({
     name: '',
-    email: '',
-    password: '',
+    pin: '',
     role: 'employee' as 'admin' | 'employee'
   });
   const [error, setError] = useState('');
@@ -40,7 +39,7 @@ const Login = () => {
     setSuccess('');
     setIsLoading(true);
 
-    const result = await signIn(signInData.email, signInData.password);
+    const result = await signIn(signInData.userId, signInData.pin);
     
     if (result.error) {
       setError(result.error);
@@ -57,12 +56,14 @@ const Login = () => {
     setSuccess('');
     setIsLoading(true);
 
-    const result = await signUp(signUpData.email, signUpData.password, signUpData.name, signUpData.role);
+    const result = await signUp(signUpData.name, signUpData.pin, signUpData.role);
     
     if (result.error) {
       setError(result.error);
     } else {
-      setSuccess('Account created! Please check your email to verify your account.');
+      setSuccess(`Account created! Your User ID is: ${result.userId}. Please save this ID for login.`);
+      // Clear form after successful signup
+      setSignUpData({ name: '', pin: '', role: 'employee' });
     }
     
     setIsLoading(false);
@@ -95,33 +96,41 @@ const Login = () => {
                 )}
                 
                 <div className="space-y-2">
-                  <Label htmlFor="signin-email" className="flex items-center gap-2">
-                    <Mail className="w-4 h-4" />
-                    Email
+                  <Label htmlFor="signin-userid" className="flex items-center gap-2">
+                    <Hash className="w-4 h-4" />
+                    User ID
                   </Label>
                   <Input
-                    id="signin-email"
-                    type="email"
-                    value={signInData.email}
-                    onChange={(e) => setSignInData(prev => ({ ...prev, email: e.target.value }))}
-                    placeholder="Enter your email"
-                    className="h-12"
+                    id="signin-userid"
+                    type="text"
+                    value={signInData.userId}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '').slice(0, 4);
+                      setSignInData(prev => ({ ...prev, userId: value }));
+                    }}
+                    placeholder="Enter 4-digit User ID"
+                    className="h-12 text-center text-lg tracking-widest"
+                    maxLength={4}
                     required
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="signin-password" className="flex items-center gap-2">
+                  <Label htmlFor="signin-pin" className="flex items-center gap-2">
                     <Lock className="w-4 h-4" />
-                    Password
+                    PIN
                   </Label>
                   <Input
-                    id="signin-password"
+                    id="signin-pin"
                     type="password"
-                    value={signInData.password}
-                    onChange={(e) => setSignInData(prev => ({ ...prev, password: e.target.value }))}
-                    placeholder="Enter your password"
-                    className="h-12"
+                    value={signInData.pin}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '').slice(0, 4);
+                      setSignInData(prev => ({ ...prev, pin: value }));
+                    }}
+                    placeholder="Enter 4-digit PIN"
+                    className="h-12 text-center text-lg tracking-widest"
+                    maxLength={4}
                     required
                   />
                 </div>
@@ -167,33 +176,21 @@ const Login = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email" className="flex items-center gap-2">
-                    <Mail className="w-4 h-4" />
-                    Email
-                  </Label>
-                  <Input
-                    id="signup-email"
-                    type="email"
-                    value={signUpData.email}
-                    onChange={(e) => setSignUpData(prev => ({ ...prev, email: e.target.value }))}
-                    placeholder="Enter your email"
-                    className="h-12"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password" className="flex items-center gap-2">
+                  <Label htmlFor="signup-pin" className="flex items-center gap-2">
                     <Lock className="w-4 h-4" />
-                    Password
+                    PIN
                   </Label>
                   <Input
-                    id="signup-password"
+                    id="signup-pin"
                     type="password"
-                    value={signUpData.password}
-                    onChange={(e) => setSignUpData(prev => ({ ...prev, password: e.target.value }))}
-                    placeholder="Create a password"
-                    className="h-12"
+                    value={signUpData.pin}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '').slice(0, 4);
+                      setSignUpData(prev => ({ ...prev, pin: value }));
+                    }}
+                    placeholder="Create 4-digit PIN"
+                    className="h-12 text-center text-lg tracking-widest"
+                    maxLength={4}
                     required
                   />
                 </div>

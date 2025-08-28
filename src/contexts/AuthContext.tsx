@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { User, Session } from '@supabase/supabase-js';
 
 interface UserProfile {
   id: string;
@@ -9,12 +8,18 @@ interface UserProfile {
   role: 'admin' | 'employee';
 }
 
+interface CustomUser {
+  id: string;
+  user_id: string;
+  name: string;
+  role: 'admin' | 'employee';
+}
+
 interface AuthContextType {
-  user: User | null;
+  user: CustomUser | null;
   profile: UserProfile | null;
-  session: Session | null;
-  signUp: (email: string, password: string, name: string, role?: 'admin' | 'employee') => Promise<{ error?: string }>;
-  signIn: (email: string, password: string) => Promise<{ error?: string }>;
+  signUp: (name: string, pin: string, role?: 'admin' | 'employee') => Promise<{ error?: string; userId?: string }>;
+  signIn: (userId: string, pin: string) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
   isLoading: boolean;
   hasPermission: (permission: string) => boolean;
@@ -23,84 +28,91 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<CustomUser | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        // Fetch user profile when logged in
-        if (session?.user) {
-          setTimeout(async () => {
-            const { data: profileData } = await supabase
-              .from('profiles')
-              .select('*')
-              .eq('user_id', session.user.id)
-              .single();
-            
-            if (profileData) {
-              setProfile(profileData);
-            }
-          }, 0);
-        } else {
-          setProfile(null);
-        }
-        
-        setIsLoading(false);
+    // Check for stored session
+    const storedUser = localStorage.getItem('currentUser');
+    if (storedUser) {
+      try {
+        const userData = JSON.parse(storedUser);
+        setUser(userData);
+        setProfile(userData);
+      } catch (error) {
+        console.error('Error parsing stored user:', error);
+        localStorage.removeItem('currentUser');
       }
-    );
-
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setIsLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    }
+    setIsLoading(false);
   }, []);
 
-  const signUp = async (email: string, password: string, name: string, role: 'admin' | 'employee' = 'employee') => {
-    const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
+  const signUp = async (name: string, pin: string, role: 'admin' | 'employee' = 'employee') => {
+    try {
+      // Generate a random 4-digit user ID
+      const userId = Math.floor(1000 + Math.random() * 9000).toString();
+      
+      const { data, error } = await supabase
+        .from('custom_users')
+        .insert({
+          user_id: userId,
+          pin: pin,
           name: name,
           role: role
+        })
+        .select()
+        .single();
+
+      if (error) {
+        if (error.code === '23505') { // Unique violation
+          return { error: 'User ID already exists. Please try again.' };
         }
+        return { error: error.message };
       }
-    });
-    
-    return { error: error?.message };
+
+      return { userId };
+    } catch (error: any) {
+      return { error: error.message };
+    }
   };
 
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-    
-    return { error: error?.message };
+  const signIn = async (userId: string, pin: string) => {
+    try {
+      const { data, error } = await supabase.rpc('verify_login_credentials', {
+        input_user_id: userId,
+        input_pin: pin
+      });
+
+      if (error) {
+        return { error: error.message };
+      }
+
+      if (data?.success) {
+        const userData = data.user;
+        setUser(userData);
+        setProfile(userData);
+        localStorage.setItem('currentUser', JSON.stringify(userData));
+        return {};
+      } else {
+        return { error: 'Invalid credentials' };
+      }
+    } catch (error: any) {
+      return { error: error.message };
+    }
   };
 
   const signOut = async () => {
-    // Clear all secure offline data before signing out
+    // Clear local user data
+    setUser(null);
+    setProfile(null);
+    localStorage.removeItem('currentUser');
+    
+    // Clear all secure offline data
     if (user?.id) {
       const { SecureStorage } = await import('@/utils/encryption');
       SecureStorage.clearUserData(user.id);
     }
-    
-    await supabase.auth.signOut();
   };
 
   const hasPermission = (permission: string): boolean => {
@@ -122,7 +134,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider value={{ 
       user, 
       profile, 
-      session, 
       signUp, 
       signIn, 
       signOut, 

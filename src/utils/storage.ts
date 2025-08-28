@@ -4,10 +4,18 @@ import { SecureStorage } from './encryption';
 
 const STORAGE_KEY = 'gold_transactions_offline';
 
-// Get user ID from Supabase auth
+// Get user ID from custom auth
 async function getCurrentUserId(): Promise<string | null> {
-  const { data: { user } } = await supabase.auth.getUser();
-  return user?.id || null;
+  const storedUser = localStorage.getItem('currentUser');
+  if (storedUser) {
+    try {
+      const userData = JSON.parse(storedUser);
+      return userData.id;
+    } catch {
+      return null;
+    }
+  }
+  return null;
 }
 
 // Save to Supabase with offline fallback

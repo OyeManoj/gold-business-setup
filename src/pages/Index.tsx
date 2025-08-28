@@ -93,7 +93,7 @@ const Index = () => {
                 <div className="flex items-center gap-2 px-3 py-2 bg-muted border border-border rounded-lg">
                   <User size={16} className="text-primary" />
                   <div className="flex flex-col min-w-0">
-                    <span className="font-semibold text-foreground text-sm truncate">{profile?.name || user?.email}</span>
+                    <span className="font-semibold text-foreground text-sm truncate">{profile?.name || user?.name}</span>
                     <span className="text-xs text-muted-foreground truncate">
                       {profile?.role?.toUpperCase() || 'USER'}
                     </span>

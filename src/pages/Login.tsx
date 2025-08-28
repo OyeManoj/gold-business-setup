@@ -6,8 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
-import { LogIn, UserPlus, Mail, Lock, User } from 'lucide-react';
+import { LogIn, UserPlus, Mail, Lock, User, Shield } from 'lucide-react';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -19,7 +20,8 @@ const Login = () => {
   const [signUpData, setSignUpData] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    role: 'employee' as 'admin' | 'employee'
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -55,7 +57,7 @@ const Login = () => {
     setSuccess('');
     setIsLoading(true);
 
-    const result = await signUp(signUpData.email, signUpData.password, signUpData.name);
+    const result = await signUp(signUpData.email, signUpData.password, signUpData.name, signUpData.role);
     
     if (result.error) {
       setError(result.error);
@@ -194,6 +196,27 @@ const Login = () => {
                     className="h-12"
                     required
                   />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="signup-role" className="flex items-center gap-2">
+                    <Shield className="w-4 h-4" />
+                    Role
+                  </Label>
+                  <Select 
+                    value={signUpData.role} 
+                    onValueChange={(value: 'admin' | 'employee') => 
+                      setSignUpData(prev => ({ ...prev, role: value }))
+                    }
+                  >
+                    <SelectTrigger className="h-12">
+                      <SelectValue placeholder="Select your role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="employee">Employee</SelectItem>
+                      <SelectItem value="admin">Admin</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <Button 

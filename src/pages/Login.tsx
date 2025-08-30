@@ -29,7 +29,7 @@ const Login = () => {
   const [availableUserIds, setAvailableUserIds] = useState<string[]>([]);
   const [useManualInput, setUseManualInput] = useState(false);
 
-  // Fetch available user IDs
+  // Fetch available user IDs and set up real-time subscription
   useEffect(() => {
     const fetchUserIds = async () => {
       try {
@@ -48,6 +48,28 @@ const Login = () => {
     };
 
     fetchUserIds();
+
+    // Set up real-time subscription for new user signups
+    const subscription = supabase
+      .channel('custom_users_changes')
+      .on('postgres_changes', 
+        { 
+          event: 'INSERT', 
+          schema: 'public', 
+          table: 'custom_users' 
+        }, 
+        (payload) => {
+          const newUser = payload.new as any;
+          if (newUser.is_active) {
+            setAvailableUserIds(prev => [newUser.user_id, ...prev]);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   // Redirect if already logged in

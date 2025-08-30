@@ -11,16 +11,18 @@ const defaultSettings: ReceiptSettings = {
 
 export async function getReceiptSettings(): Promise<ReceiptSettings> {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const storedUser = localStorage.getItem('currentUser');
     
-    if (!user) {
+    if (!storedUser) {
       // Return from localStorage if not authenticated
       const stored = localStorage.getItem(STORAGE_KEY);
       return stored ? JSON.parse(stored) : defaultSettings;
     }
 
+    const userData = JSON.parse(storedUser);
+    
     // Try secure storage first
-    const secureStored = await SecureStorage.getSecureItem<ReceiptSettings>(STORAGE_KEY, user.id);
+    const secureStored = await SecureStorage.getSecureItem<ReceiptSettings>(STORAGE_KEY, userData.id);
     if (secureStored) {
       return secureStored;
     }
@@ -36,11 +38,12 @@ export async function getReceiptSettings(): Promise<ReceiptSettings> {
 
 export async function saveReceiptSettings(settings: ReceiptSettings): Promise<void> {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const storedUser = localStorage.getItem('currentUser');
     
-    if (user) {
+    if (storedUser) {
+      const userData = JSON.parse(storedUser);
       // Use secure encrypted storage
-      await SecureStorage.setSecureItem(STORAGE_KEY, settings, user.id);
+      await SecureStorage.setSecureItem(STORAGE_KEY, settings, userData.id);
     }
     
     // Save to localStorage as fallback

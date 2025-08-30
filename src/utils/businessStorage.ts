@@ -4,10 +4,18 @@ import { supabase } from '@/integrations/supabase/client';
 
 const BUSINESS_STORAGE_KEY = 'business_profile';
 
-// Get current user ID from Supabase
+// Get current user ID from custom auth
 const getCurrentUserId = async (): Promise<string | null> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  return user?.id || null;
+  const storedUser = localStorage.getItem('currentUser');
+  if (storedUser) {
+    try {
+      const userData = JSON.parse(storedUser);
+      return userData.id;
+    } catch {
+      return null;
+    }
+  }
+  return null;
 };
 
 export async function saveBusinessProfile(profile: BusinessProfile): Promise<void> {

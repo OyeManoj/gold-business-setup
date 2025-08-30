@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 import { LogIn, UserPlus, Hash, Lock, User, Shield } from 'lucide-react';
 
 const Login = () => {
@@ -25,6 +26,29 @@ const Login = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [availableUserIds, setAvailableUserIds] = useState<string[]>([]);
+  const [useManualInput, setUseManualInput] = useState(false);
+
+  // Fetch available user IDs
+  useEffect(() => {
+    const fetchUserIds = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('custom_users')
+          .select('user_id')
+          .eq('is_active', true)
+          .order('created_at', { ascending: false });
+        
+        if (!error && data) {
+          setAvailableUserIds(data.map(user => user.user_id));
+        }
+      } catch (error) {
+        console.error('Error fetching user IDs:', error);
+      }
+    };
+
+    fetchUserIds();
+  }, []);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -100,19 +124,65 @@ const Login = () => {
                     <Hash className="w-4 h-4" />
                     User ID
                   </Label>
-                  <Input
-                    id="signin-userid"
-                    type="text"
-                    value={signInData.userId}
-                    onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, '').slice(0, 4);
-                      setSignInData(prev => ({ ...prev, userId: value }));
-                    }}
-                    placeholder="Enter 4-digit User ID"
-                    className="h-12 text-center text-lg tracking-widest"
-                    maxLength={4}
-                    required
-                  />
+                  
+                  {!useManualInput && availableUserIds.length > 0 ? (
+                    <>
+                      <Select 
+                        value={signInData.userId} 
+                        onValueChange={(value) => setSignInData(prev => ({ ...prev, userId: value }))}
+                      >
+                        <SelectTrigger className="h-12 text-center text-lg tracking-widest">
+                          <SelectValue placeholder="Select User ID" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {availableUserIds.map((userId) => (
+                            <SelectItem key={userId} value={userId} className="text-center tracking-widest">
+                              {userId}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setUseManualInput(true)}
+                        className="w-full text-sm"
+                      >
+                        Enter User ID manually instead
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Input
+                        id="signin-userid"
+                        type="text"
+                        value={signInData.userId}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, '').slice(0, 4);
+                          setSignInData(prev => ({ ...prev, userId: value }));
+                        }}
+                        placeholder="Enter 4-digit User ID"
+                        className="h-12 text-center text-lg tracking-widest"
+                        maxLength={4}
+                        required
+                      />
+                      {availableUserIds.length > 0 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setUseManualInput(false);
+                            setSignInData(prev => ({ ...prev, userId: '' }));
+                          }}
+                          className="w-full text-sm"
+                        >
+                          Select from existing User IDs instead
+                        </Button>
+                      )}
+                    </>
+                  )}
                 </div>
 
                 <div className="space-y-2">

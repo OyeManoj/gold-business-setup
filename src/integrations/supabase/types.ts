@@ -344,6 +344,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      register_custom_user: {
+        Args: { input_name: string; input_pin: string; input_role?: string }
+        Returns: Json
+      }
       verify_login_credentials: {
         Args: { input_pin: string; input_user_id: string }
         Returns: Json

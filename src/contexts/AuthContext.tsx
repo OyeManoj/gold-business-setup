@@ -50,28 +50,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = async (name: string, pin: string, role: 'admin' | 'employee' = 'employee') => {
     try {
-      // Generate a random 4-digit user ID
-      const userId = Math.floor(1000 + Math.random() * 9000).toString();
-      
-      const { data, error } = await supabase
-        .from('custom_users')
-        .insert({
-          user_id: userId,
-          pin: pin,
-          name: name,
-          role: role
-        })
-        .select()
-        .single();
+      const { data, error } = await supabase.rpc('register_custom_user', {
+        input_name: name,
+        input_pin: pin,
+        input_role: role
+      });
 
       if (error) {
-        if (error.code === '23505') { // Unique violation
-          return { error: 'User ID already exists. Please try again.' };
-        }
         return { error: error.message };
       }
 
-      return { userId };
+      if (data?.success) {
+        return { userId: data.user_id };
+      } else {
+        return { error: data?.error || 'Registration failed' };
+      }
     } catch (error: any) {
       return { error: error.message };
     }

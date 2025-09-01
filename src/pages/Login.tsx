@@ -9,7 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { LogIn, UserPlus, Hash, Lock, User, Shield } from 'lucide-react';
+import { Hash, Lock, User, Shield } from 'lucide-react';
+import goldEaseLogo from '@/assets/gold-ease-logo.png';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -117,10 +118,16 @@ const Login = () => {
     <div className="min-h-screen bg-background flex items-center justify-center px-4 md:px-6 lg:px-8">
       <Card className="w-full max-w-2xl border-2 border-border shadow-xl">
         <CardHeader className="text-center">
-          <div className="mx-auto w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-4">
-            <LogIn className="w-8 h-8 text-primary-foreground" />
+          <div className="mx-auto w-20 h-20 mb-4 flex items-center justify-center">
+            <img 
+              src={goldEaseLogo} 
+              alt="Gold Ease Logo" 
+              className="w-full h-full object-contain"
+            />
           </div>
-          <CardTitle className="text-2xl font-bold">Gold Ease</CardTitle>
+          <CardTitle className="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+            Gold Ease
+          </CardTitle>
           <p className="text-muted-foreground">Access your account</p>
         </CardHeader>
         

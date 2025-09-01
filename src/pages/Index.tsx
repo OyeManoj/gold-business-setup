@@ -5,12 +5,14 @@ import { Card, CardContent } from '@/components/ui/card';
 import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { useTranslation } from '@/utils/translations';
 import { useAuth } from '@/contexts/AuthContext';
+import { useAppTitle } from '@/hooks/useAppTitle';
 import { History, Settings, LogOut, User } from 'lucide-react';
 import { DeviceTracker } from '@/components/DeviceTracker';
 
 const Index = () => {
   const navigate = useNavigate();
   const { user, profile, signOut, hasPermission } = useAuth();
+  const { appTitle } = useAppTitle();
   const [language, setLanguage] = useState<Language>('en');
   const t = useTranslation(language);
 
@@ -44,9 +46,9 @@ const Index = () => {
       <div className="relative z-10 container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         {/* Mobile-first Modern Header */}
         <div className="text-center mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-foreground mb-2 sm:mb-4 tracking-tighter leading-tight">
-            {language === 'ar' ? 'ذهب أمبيكا' : 'AMBIKA GOLD'}
-          </h1>
+           <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-foreground mb-2 sm:mb-4 tracking-tighter leading-tight">
+             {language === 'ar' ? (appTitle === 'Gold Ease' ? 'ذهب أمبيكا' : appTitle) : appTitle.toUpperCase()}
+           </h1>
           <p className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground font-normal max-w-2xl mx-auto px-2">
             {language === 'ar' ? 'نظام إدارة المعاملات المتقدم' : 'Advanced Transaction Management System'}
           </p>

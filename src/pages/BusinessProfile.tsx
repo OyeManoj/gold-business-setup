@@ -4,10 +4,12 @@ import { Button } from '@/components/ui/button';
 import { BusinessProfileForm } from '@/components/BusinessProfileForm';
 import { ReceiptSettingsComponent } from '@/components/ReceiptSettings';
 import { LanguageToggle, Language } from '@/components/LanguageToggle';
+import { useAppTitle } from '@/hooks/useAppTitle';
 import { ArrowLeft } from 'lucide-react';
 
 const BusinessProfile = () => {
   const navigate = useNavigate();
+  const { refreshBusinessProfile } = useAppTitle();
   const [language, setLanguage] = useState<Language>('en');
 
   return (
@@ -37,7 +39,7 @@ const BusinessProfile = () => {
 
         {/* Business Profile Form */}
         <div className="space-y-4 md:space-y-6">
-          <BusinessProfileForm language={language} />
+          <BusinessProfileForm language={language} onProfileUpdated={refreshBusinessProfile} />
           <ReceiptSettingsComponent language={language} />
         </div>
       </div>

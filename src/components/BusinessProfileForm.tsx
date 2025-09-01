@@ -5,35 +5,96 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
-import { BusinessProfile } from '@/types/business';
-import { getBusinessProfile, saveBusinessProfile } from '@/utils/businessStorage';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 import { Building2, Phone, MapPin, Save } from 'lucide-react';
+
+interface BusinessProfile {
+  name: string;
+  phone?: string;
+  address: string;
+}
 
 interface BusinessProfileFormProps {
   language: string;
+  onProfileUpdated?: () => void;
 }
 
-export function BusinessProfileForm({ language }: BusinessProfileFormProps) {
+export function BusinessProfileForm({ language, onProfileUpdated }: BusinessProfileFormProps) {
+  const { user } = useAuth();
   const [profile, setProfile] = useState<BusinessProfile>({
     name: '',
+    phone: '',
     address: ''
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const loadProfile = async () => {
-      const savedProfile = await getBusinessProfile();
-      setProfile(savedProfile);
+      if (!user?.id) return;
+
+      try {
+        const { data, error } = await supabase.rpc('get_user_business_profile', {
+          input_user_id: user.id
+        });
+
+        if (!error && data?.success && data.profile) {
+          setProfile({
+            name: data.profile.name || '',
+            phone: data.profile.phone || '',
+            address: data.profile.address || ''
+          });
+        }
+      } catch (error) {
+        console.error('Error loading business profile:', error);
+      }
     };
+
     loadProfile();
-  }, []);
+  }, [user?.id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await saveBusinessProfile(profile);
-    toast({
-      title: language === 'ar' ? 'تم الحفظ' : 'Saved Successfully',
-      description: language === 'ar' ? 'تم حفظ بيانات العمل بنجاح' : 'Business profile has been saved successfully.',
-    });
+    if (!user?.id) return;
+
+    setIsLoading(true);
+
+    try {
+      const { error } = await supabase
+        .from('business_profiles')
+        .upsert({
+          user_id: user.id,
+          name: profile.name,
+          phone: profile.phone || null,
+          address: profile.address
+        });
+
+      if (error) {
+        toast({
+          title: language === 'ar' ? 'خطأ' : 'Error',
+          description: language === 'ar' ? 'فشل في حفظ البيانات' : 'Failed to save profile',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      toast({
+        title: language === 'ar' ? 'تم الحفظ' : 'Saved Successfully',
+        description: language === 'ar' ? 'تم حفظ بيانات العمل بنجاح' : 'Business profile has been saved successfully.',
+      });
+
+      // Trigger refresh of app title
+      onProfileUpdated?.();
+    } catch (error) {
+      console.error('Error saving business profile:', error);
+      toast({
+        title: language === 'ar' ? 'خطأ' : 'Error',
+        description: language === 'ar' ? 'فشل في حفظ البيانات' : 'Failed to save profile',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleInputChange = (field: keyof BusinessProfile, value: string) => {
@@ -64,9 +125,23 @@ export function BusinessProfileForm({ language }: BusinessProfileFormProps) {
               onChange={(e) => handleInputChange('name', e.target.value)}
               placeholder={language === 'ar' ? 'أدخل اسم العمل' : 'Enter business name'}
               className="w-full"
+              required
             />
           </div>
 
+          <div className="space-y-1">
+            <Label htmlFor="phone" className="flex items-center gap-2">
+              <Phone className="h-4 w-4" />
+              {language === 'ar' ? 'رقم الهاتف' : 'Phone Number'}
+            </Label>
+            <Input
+              id="phone"
+              value={profile.phone}
+              onChange={(e) => handleInputChange('phone', e.target.value)}
+              placeholder={language === 'ar' ? 'أدخل رقم الهاتف' : 'Enter phone number'}
+              className="w-full"
+            />
+          </div>
 
           <div className="space-y-1">
             <Label htmlFor="address" className="flex items-center gap-2">
@@ -82,9 +157,12 @@ export function BusinessProfileForm({ language }: BusinessProfileFormProps) {
             />
           </div>
 
-          <Button type="submit" className="w-full flex items-center gap-2">
+          <Button type="submit" className="w-full flex items-center gap-2" disabled={isLoading}>
             <Save className="h-4 w-4" />
-            {language === 'ar' ? 'حفظ البيانات' : 'Save Profile'}
+            {isLoading 
+              ? (language === 'ar' ? 'جاري الحفظ...' : 'Saving...')
+              : (language === 'ar' ? 'حفظ البيانات' : 'Save Profile')
+            }
           </Button>
         </form>
       </CardContent>

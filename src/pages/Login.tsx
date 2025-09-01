@@ -33,14 +33,10 @@ const Login = () => {
   useEffect(() => {
     const fetchUserIds = async () => {
       try {
-        const { data, error } = await supabase
-          .from('custom_users')
-          .select('user_id')
-          .eq('is_active', true)
-          .order('created_at', { ascending: false });
+        const { data, error } = await supabase.rpc('get_active_user_ids');
         
         if (!error && data) {
-          setAvailableUserIds(data.map(user => user.user_id));
+          setAvailableUserIds(data);
         }
       } catch (error) {
         console.error('Error fetching user IDs:', error);

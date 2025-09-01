@@ -337,6 +337,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_active_user_ids: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

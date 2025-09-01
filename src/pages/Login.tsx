@@ -21,7 +21,9 @@ const Login = () => {
   const [signUpData, setSignUpData] = useState({
     name: '',
     pin: '',
-    role: 'employee' as 'admin' | 'employee'
+    role: 'employee' as 'admin' | 'employee',
+    userId: '',
+    useManualUserId: false
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -105,7 +107,7 @@ const Login = () => {
     } else {
       setSuccess(`Account created! Your User ID is: ${result.userId}. Please save this ID for login.`);
       // Clear form after successful signup
-      setSignUpData({ name: '', pin: '', role: 'employee' });
+      setSignUpData({ name: '', pin: '', role: 'employee', userId: '', useManualUserId: false });
     }
     
     setIsLoading(false);
@@ -281,6 +283,52 @@ const Login = () => {
                     maxLength={4}
                     required
                   />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2">
+                    <Hash className="w-4 h-4" />
+                    User ID
+                  </Label>
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="manual-userid"
+                        checked={signUpData.useManualUserId}
+                        onChange={(e) => setSignUpData(prev => ({ 
+                          ...prev, 
+                          useManualUserId: e.target.checked,
+                          userId: e.target.checked ? prev.userId : ''
+                        }))}
+                        className="rounded"
+                      />
+                      <Label htmlFor="manual-userid" className="text-sm font-normal">
+                        Choose my own User ID
+                      </Label>
+                    </div>
+                    
+                    {signUpData.useManualUserId && (
+                      <Input
+                        type="text"
+                        value={signUpData.userId}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, '').slice(0, 4);
+                          setSignUpData(prev => ({ ...prev, userId: value }));
+                        }}
+                        placeholder="Enter 4-digit User ID"
+                        className="h-12 text-center text-lg tracking-widest"
+                        maxLength={4}
+                        required
+                      />
+                    )}
+                    
+                    {!signUpData.useManualUserId && (
+                      <p className="text-sm text-muted-foreground">
+                        A random 4-digit User ID will be generated for you
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 <div className="space-y-2">

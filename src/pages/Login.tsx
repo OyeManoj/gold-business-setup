@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Hash, Lock, User, Shield } from 'lucide-react';
-import goldEaseLogo from '@/assets/gold-ease-logo.png';
+import goldBarsLogo from '@/assets/gold-bars-logo.png';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -120,7 +120,7 @@ const Login = () => {
         <CardHeader className="text-center">
           <div className="mx-auto w-20 h-20 mb-4 flex items-center justify-center">
             <img 
-              src={goldEaseLogo} 
+              src={goldBarsLogo} 
               alt="Gold Ease Logo" 
               className="w-full h-full object-contain"
             />

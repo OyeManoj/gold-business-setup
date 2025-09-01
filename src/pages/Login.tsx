@@ -100,7 +100,7 @@ const Login = () => {
     setSuccess('');
     setIsLoading(true);
 
-    const result = await signUp(signUpData.name, signUpData.pin, signUpData.role);
+    const result = await signUp(signUpData.name, signUpData.pin, signUpData.role, signUpData.useManualUserId ? signUpData.userId : undefined);
     
     if (result.error) {
       setError(result.error);

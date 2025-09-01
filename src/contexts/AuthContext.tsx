@@ -18,7 +18,7 @@ interface CustomUser {
 interface AuthContextType {
   user: CustomUser | null;
   profile: UserProfile | null;
-  signUp: (name: string, pin: string, role?: 'admin' | 'employee') => Promise<{ error?: string; userId?: string }>;
+  signUp: (name: string, pin: string, role?: 'admin' | 'employee', userId?: string) => Promise<{ error?: string; userId?: string }>;
   signIn: (userId: string, pin: string) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
   isLoading: boolean;
@@ -48,12 +48,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const signUp = async (name: string, pin: string, role: 'admin' | 'employee' = 'employee') => {
+  const signUp = async (name: string, pin: string, role: 'admin' | 'employee' = 'employee', userId?: string) => {
     try {
       const { data, error } = await supabase.rpc('register_custom_user', {
         input_name: name,
         input_pin: pin,
-        input_role: role
+        input_role: role,
+        input_user_id: userId || null
       });
 
       if (error) {

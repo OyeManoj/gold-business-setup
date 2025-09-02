@@ -31,18 +31,20 @@ export function BusinessProfileForm({ language, onProfileUpdated }: BusinessProf
 
   useEffect(() => {
     const loadProfile = async () => {
-      if (!user?.id) return;
+      if (!user?.user_id) return;
 
       try {
-        const { data, error } = await supabase.rpc('get_user_business_profile', {
-          input_user_id: user.id
-        });
+        const { data, error } = await supabase
+          .from('business_profiles')
+          .select('*')
+          .eq('user_id', user.user_id)
+          .maybeSingle();
 
-        if (!error && data?.success && data.profile) {
+        if (!error && data) {
           setProfile({
-            name: data.profile.name || '',
-            phone: data.profile.phone || '',
-            address: data.profile.address || ''
+            name: data.name || '',
+            phone: data.phone || '',
+            address: data.address || ''
           });
         }
       } catch (error) {
@@ -51,11 +53,11 @@ export function BusinessProfileForm({ language, onProfileUpdated }: BusinessProf
     };
 
     loadProfile();
-  }, [user?.id]);
+  }, [user?.user_id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user?.id) return;
+    if (!user?.user_id) return;
 
     setIsLoading(true);
 
@@ -63,7 +65,7 @@ export function BusinessProfileForm({ language, onProfileUpdated }: BusinessProf
       const { error } = await supabase
         .from('business_profiles')
         .upsert({
-          user_id: user.id,
+          user_id: user.user_id,
           name: profile.name,
           phone: profile.phone || null,
           address: profile.address

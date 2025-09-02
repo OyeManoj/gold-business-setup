@@ -10,7 +10,8 @@ async function getCurrentUserId(): Promise<string | null> {
   if (storedUser) {
     try {
       const userData = JSON.parse(storedUser);
-      return userData.id;
+      // Return the custom user_id (4-digit ID) not the database id
+      return userData.user_id;
     } catch {
       return null;
     }

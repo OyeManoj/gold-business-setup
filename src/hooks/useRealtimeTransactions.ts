@@ -26,15 +26,23 @@ export function useRealtimeTransactions() {
   // Set up realtime subscription
   useEffect(() => {
     const setupRealtime = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
+      // Get user ID from custom auth
+      const storedUser = localStorage.getItem('currentUser');
+      if (!storedUser) {
         console.warn('No authenticated user found for realtime subscription');
         return;
       }
+      
+      let customUserId;
+      try {
+        const userData = JSON.parse(storedUser);
+        customUserId = userData.user_id; // 4-digit custom user ID
+      } catch (error) {
+        console.error('Failed to parse stored user:', error);
+        return;
+      }
 
-      const userId = user.id;
-
-      console.log('Setting up realtime subscription for user:', userId);
+      console.log('Setting up realtime subscription for custom user:', customUserId);
 
       const channel = supabase
         .channel('transactions-changes')
@@ -44,7 +52,7 @@ export function useRealtimeTransactions() {
             event: '*',
             schema: 'public',
             table: 'transactions',
-            filter: `user_id=eq.${userId}`
+            filter: `user_id=eq.${customUserId}`
           },
           async (payload) => {
             const transactionId = (payload.new as any)?.id || (payload.old as any)?.id || 'unknown';

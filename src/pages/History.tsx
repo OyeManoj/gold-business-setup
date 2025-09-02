@@ -124,14 +124,12 @@ export default function History() {
           </CardHeader>
           
           <CardContent className="px-4 py-3">
-            {/* Compact Summary Section */}
-            {filteredTransactions.length > 0 && (
-              <div className="mb-4">
-                <div className="bg-muted/10 rounded-lg p-3 border border-border shadow-inner">
-                  <TransactionSummaryCard summary={summary} />
-                </div>
+            {/* Always show Summary Section */}
+            <div className="mb-4">
+              <div className="bg-muted/10 rounded-lg p-3 border border-border shadow-inner">
+                <TransactionSummaryCard summary={summary} />
               </div>
-            )}
+            </div>
             
             {filteredTransactions.length === 0 ? (
               <div className="text-center py-8">

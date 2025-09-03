@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { BusinessProfileForm } from '@/components/BusinessProfileForm';
@@ -9,8 +9,13 @@ import { ArrowLeft } from 'lucide-react';
 
 const BusinessProfile = () => {
   const navigate = useNavigate();
-  const { refreshBusinessProfile } = useAppTitle();
+  const { refreshBusinessProfile, appTitle } = useAppTitle();
   const [language, setLanguage] = useState<Language>('en');
+
+  // Update document title when appTitle changes
+  useEffect(() => {
+    document.title = `${appTitle} - Business Profile`;
+  }, [appTitle]);
 
   return (
     <div className="min-h-screen bg-background">

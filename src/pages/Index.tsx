@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -15,6 +15,11 @@ const Index = () => {
   const { appTitle } = useAppTitle();
   const [language, setLanguage] = useState<Language>('en');
   const t = useTranslation(language);
+
+  // Update document title when appTitle changes
+  useEffect(() => {
+    document.title = `${appTitle} - Business Management`;
+  }, [appTitle]);
 
 
   const transactions = [

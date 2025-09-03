@@ -69,6 +69,8 @@ export function BusinessProfileForm({ language, onProfileUpdated }: BusinessProf
           name: profile.name,
           phone: profile.phone || null,
           address: profile.address
+        }, {
+          onConflict: 'user_id'
         });
 
       if (error) {

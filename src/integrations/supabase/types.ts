@@ -342,7 +342,7 @@ export type Database = {
         Returns: Json
       }
       get_user_business_profile: {
-        Args: { input_user_id: string }
+        Args: { input_user_id: string } | { input_user_id: string }
         Returns: Json
       }
       has_role: {

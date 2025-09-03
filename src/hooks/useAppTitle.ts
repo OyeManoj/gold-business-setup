@@ -20,14 +20,14 @@ export function useAppTitle() {
 
   useEffect(() => {
     const fetchBusinessProfile = async () => {
-      if (!user?.id) {
+      if (!user?.user_id) {
         setIsLoading(false);
         return;
       }
 
       try {
         const { data, error } = await supabase.rpc('get_user_business_profile', {
-          input_user_id: user.id
+          input_user_id: user.user_id
         });
 
         if (!error && data?.success && data.profile) {
@@ -41,15 +41,15 @@ export function useAppTitle() {
     };
 
     fetchBusinessProfile();
-  }, [user?.id]);
+  }, [user?.user_id]);
 
   // Refresh business profile data
   const refreshBusinessProfile = async () => {
-    if (!user?.id) return;
+    if (!user?.user_id) return;
 
     try {
       const { data, error } = await supabase.rpc('get_user_business_profile', {
-        input_user_id: user.id
+        input_user_id: user.user_id
       });
 
       if (!error && data?.success && data.profile) {

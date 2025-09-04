@@ -20,6 +20,13 @@ export function useAppTitle() {
   const appTitle = (useBusinessNameAsTitle && businessProfile?.name) ? businessProfile.name : 'Gold Ease';
   const defaultTitle = 'Gold Ease';
 
+  console.log('useAppTitle debug:', {
+    useBusinessNameAsTitle,
+    businessProfileName: businessProfile?.name,
+    appTitle,
+    businessProfile
+  });
+
   useEffect(() => {
     const fetchData = async () => {
       if (!user?.user_id) {

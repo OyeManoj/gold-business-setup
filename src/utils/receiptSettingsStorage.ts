@@ -13,24 +13,34 @@ const defaultSettings: ReceiptSettings = {
 export async function getReceiptSettings(): Promise<ReceiptSettings> {
   try {
     const storedUser = localStorage.getItem('currentUser');
+    console.log('getReceiptSettings - storedUser:', storedUser);
     
     if (!storedUser) {
       // Return from localStorage if not authenticated
       const stored = localStorage.getItem(STORAGE_KEY);
-      return stored ? JSON.parse(stored) : defaultSettings;
+      console.log('getReceiptSettings - localStorage stored:', stored);
+      const result = stored ? JSON.parse(stored) : defaultSettings;
+      console.log('getReceiptSettings - returning (no user):', result);
+      return result;
     }
 
     const userData = JSON.parse(storedUser);
+    console.log('getReceiptSettings - userData:', userData);
     
     // Try secure storage first
     const secureStored = await SecureStorage.getSecureItem<ReceiptSettings>(STORAGE_KEY, userData.id);
+    console.log('getReceiptSettings - secureStored:', secureStored);
     if (secureStored) {
+      console.log('getReceiptSettings - returning secureStored:', secureStored);
       return secureStored;
     }
 
     // Fallback to localStorage
     const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : defaultSettings;
+    console.log('getReceiptSettings - localStorage fallback:', stored);
+    const result = stored ? JSON.parse(stored) : defaultSettings;
+    console.log('getReceiptSettings - returning fallback:', result);
+    return result;
   } catch (error) {
     console.error('Error loading receipt settings:', error);
     return defaultSettings;

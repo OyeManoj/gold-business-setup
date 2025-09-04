@@ -29,15 +29,22 @@ export function ReceiptSettingsComponent({ language }: ReceiptSettingsProps) {
   }, []);
 
   const handleSettingChange = async (key: keyof ReceiptSettings, value: boolean) => {
+    console.log('handleSettingChange:', key, value);
     const newSettings = { ...settings, [key]: value };
+    console.log('newSettings:', newSettings);
     setSettings(newSettings);
     
     try {
       await saveReceiptSettings(newSettings);
+      console.log('Settings saved successfully');
       
       // Refresh the app title hook to pick up the new settings
       if (refreshSettings) {
+        console.log('Calling refreshSettings...');
         await refreshSettings();
+        console.log('refreshSettings completed');
+      } else {
+        console.log('refreshSettings not available');
       }
       
       toast({

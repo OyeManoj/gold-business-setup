@@ -35,17 +35,23 @@ export function useAppTitle() {
       }
 
       try {
-        // Fetch business profile
+        // Fetch business profile using string user_id (not UUID)
         const { data, error } = await supabase.rpc('get_user_business_profile', {
-          input_user_id: user.user_id
+          input_user_id: user.user_id // This should be string like "1001"
         });
+
+        console.log('Business profile fetch result:', { data, error, userId: user.user_id });
 
         if (!error && data?.success && data.profile) {
           setBusinessProfile(data.profile);
+          console.log('Business profile set:', data.profile);
+        } else {
+          console.log('No business profile found or error:', { error, data });
         }
 
         // Fetch receipt settings to check app title preference
         const settings = await getReceiptSettings();
+        console.log('Receipt settings loaded:', settings);
         setUseBusinessNameAsTitle(settings.useBusinessNameAsAppTitle);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -63,13 +69,17 @@ export function useAppTitle() {
 
     try {
       const { data, error } = await supabase.rpc('get_user_business_profile', {
-        input_user_id: user.user_id
+        input_user_id: user.user_id // String user_id like "1001"
       });
+
+      console.log('Refresh business profile result:', { data, error, userId: user.user_id });
 
       if (!error && data?.success && data.profile) {
         setBusinessProfile(data.profile);
+        console.log('Business profile refreshed:', data.profile);
       } else {
         setBusinessProfile(null);
+        console.log('No business profile after refresh');
       }
 
       // Also refresh receipt settings when refreshing profile

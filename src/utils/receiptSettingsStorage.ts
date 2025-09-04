@@ -7,6 +7,7 @@ const STORAGE_KEY = 'receiptSettings';
 const defaultSettings: ReceiptSettings = {
   showBusinessName: true,
   showBusinessAddress: false,
+  useBusinessNameAsAppTitle: true,
 };
 
 export async function getReceiptSettings(): Promise<ReceiptSettings> {

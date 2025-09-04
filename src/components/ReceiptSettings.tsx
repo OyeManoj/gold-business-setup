@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Receipt, Building2, MapPin } from 'lucide-react';
+import { Receipt, Building2, MapPin, Globe } from 'lucide-react';
 import { ReceiptSettings } from '@/types/receiptSettings';
 import { getReceiptSettings, saveReceiptSettings } from '@/utils/receiptSettingsStorage';
 import { toast } from '@/hooks/use-toast';
@@ -15,6 +15,7 @@ export function ReceiptSettingsComponent({ language }: ReceiptSettingsProps) {
   const [settings, setSettings] = useState<ReceiptSettings>({
     showBusinessName: true,
     showBusinessAddress: false,
+    useBusinessNameAsAppTitle: true,
   });
 
   useEffect(() => {
@@ -87,6 +88,26 @@ export function ReceiptSettingsComponent({ language }: ReceiptSettingsProps) {
                 id="business-address"
                 checked={settings.showBusinessAddress}
                 onCheckedChange={(checked) => handleSettingChange('showBusinessAddress', checked)}
+              />
+            </div>
+          </div>
+
+          <div className="border-t pt-4">
+            <h4 className="font-medium text-sm text-muted-foreground mb-3">
+              {language === 'ar' 
+                ? 'إعدادات عنوان التطبيق:' 
+                : 'App Title Settings:'}
+            </h4>
+            
+            <div className="flex items-center justify-between">
+              <Label htmlFor="app-title" className="flex items-center gap-2 cursor-pointer">
+                <Globe className="h-4 w-4" />
+                {language === 'ar' ? 'استخدام اسم العمل كعنوان للتطبيق' : 'Use Business Name as App Title'}
+              </Label>
+              <Switch
+                id="app-title"
+                checked={settings.useBusinessNameAsAppTitle}
+                onCheckedChange={(checked) => handleSettingChange('useBusinessNameAsAppTitle', checked)}
               />
             </div>
           </div>

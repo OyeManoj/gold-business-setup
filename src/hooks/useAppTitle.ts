@@ -64,6 +64,10 @@ export function useAppTitle() {
       } else {
         setBusinessProfile(null);
       }
+
+      // Also refresh receipt settings when refreshing profile
+      const settings = await getReceiptSettings();
+      setUseBusinessNameAsTitle(settings.useBusinessNameAsAppTitle);
     } catch (error) {
       console.error('Error refreshing business profile:', error);
     }
@@ -75,6 +79,10 @@ export function useAppTitle() {
     businessProfile,
     isLoading,
     refreshBusinessProfile,
-    hasBusinessProfile: !!businessProfile
+    hasBusinessProfile: !!businessProfile,
+    refreshSettings: async () => {
+      const settings = await getReceiptSettings();
+      setUseBusinessNameAsTitle(settings.useBusinessNameAsAppTitle);
+    }
   };
 }

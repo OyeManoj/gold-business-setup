@@ -6,12 +6,14 @@ import { Receipt, Building2, MapPin, Globe } from 'lucide-react';
 import { ReceiptSettings } from '@/types/receiptSettings';
 import { getReceiptSettings, saveReceiptSettings } from '@/utils/receiptSettingsStorage';
 import { toast } from '@/hooks/use-toast';
+import { useAppTitle } from '@/hooks/useAppTitle';
 
 interface ReceiptSettingsProps {
   language: string;
 }
 
 export function ReceiptSettingsComponent({ language }: ReceiptSettingsProps) {
+  const { refreshSettings } = useAppTitle();
   const [settings, setSettings] = useState<ReceiptSettings>({
     showBusinessName: true,
     showBusinessAddress: false,
@@ -32,6 +34,12 @@ export function ReceiptSettingsComponent({ language }: ReceiptSettingsProps) {
     
     try {
       await saveReceiptSettings(newSettings);
+      
+      // Refresh the app title hook to pick up the new settings
+      if (refreshSettings) {
+        await refreshSettings();
+      }
+      
       toast({
         title: language === 'ar' ? 'تم الحفظ' : 'Settings Saved',
         description: language === 'ar' 

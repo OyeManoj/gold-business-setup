@@ -2,13 +2,8 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { getReceiptSettings } from '@/utils/receiptSettingsStorage';
-
-interface BusinessProfile {
-  id: string;
-  name: string;
-  phone?: string;
-  address?: string;
-}
+import { getBusinessProfile } from '@/utils/businessStorage';
+import { BusinessProfile } from '@/types/business';
 
 export function useAppTitle() {
   const { user } = useAuth();
@@ -29,24 +24,17 @@ export function useAppTitle() {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!user?.user_id) {
-        setIsLoading(false);
-        return;
-      }
-
       try {
-        // Fetch business profile using string user_id (not UUID)
-        const { data, error } = await supabase.rpc('get_user_business_profile', {
-          input_user_id: user.user_id // This should be string like "1001"
-        });
-
-        console.log('Business profile fetch result:', { data, error, userId: user.user_id });
-
-        if (!error && data?.success && data.profile) {
-          setBusinessProfile(data.profile);
-          console.log('Business profile set:', data.profile);
+        // Fetch business profile from offline storage (works both online and offline)
+        const profile = await getBusinessProfile();
+        console.log('Business profile from storage:', profile);
+        
+        if (profile && profile.name) {
+          setBusinessProfile(profile);
+          console.log('Business profile set:', profile);
         } else {
-          console.log('No business profile found or error:', { error, data });
+          setBusinessProfile(null);
+          console.log('No business profile found in storage');
         }
 
         // Fetch receipt settings to check app title preference
@@ -65,18 +53,14 @@ export function useAppTitle() {
 
   // Refresh business profile data
   const refreshBusinessProfile = async () => {
-    if (!user?.user_id) return;
-
     try {
-      const { data, error } = await supabase.rpc('get_user_business_profile', {
-        input_user_id: user.user_id // String user_id like "1001"
-      });
-
-      console.log('Refresh business profile result:', { data, error, userId: user.user_id });
-
-      if (!error && data?.success && data.profile) {
-        setBusinessProfile(data.profile);
-        console.log('Business profile refreshed:', data.profile);
+      // Use offline storage for refresh too (works both online and offline)
+      const profile = await getBusinessProfile();
+      console.log('Refresh business profile from storage:', profile);
+      
+      if (profile && profile.name) {
+        setBusinessProfile(profile);
+        console.log('Business profile refreshed:', profile);
       } else {
         setBusinessProfile(null);
         console.log('No business profile after refresh');

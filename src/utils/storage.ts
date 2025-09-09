@@ -4,19 +4,10 @@ import { SecureStorage } from './encryption';
 
 const STORAGE_KEY = 'gold_transactions_offline';
 
-// Get user ID from custom auth
+// Get user ID from Supabase auth
 async function getCurrentUserId(): Promise<string | null> {
-  const storedUser = localStorage.getItem('currentUser');
-  if (storedUser) {
-    try {
-      const userData = JSON.parse(storedUser);
-      // Return the custom user_id (4-digit ID) not the database id
-      return userData.user_id;
-    } catch {
-      return null;
-    }
-  }
-  return null;
+  const { data: { session } } = await supabase.auth.getSession();
+  return session?.user?.id || null;
 }
 
 // Save to Supabase with offline fallback
@@ -30,7 +21,7 @@ export async function saveTransaction(transaction: Transaction): Promise<void> {
       .from('transactions')
       .insert({
         id: transaction.id,
-        user_id: userId,
+        owner_id: userId,
         type: transaction.type,
         weight: transaction.weight,
         purity: transaction.purity,
@@ -61,7 +52,7 @@ export async function getTransactions(): Promise<Transaction[]> {
     const { data, error } = await supabase
       .from('transactions')
       .select('*')
-      .eq('user_id', userId)
+      .eq('owner_id', userId)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -99,7 +90,7 @@ export async function updateTransaction(updatedTransaction: Transaction): Promis
         updated_at: new Date().toISOString()
       })
       .eq('id', updatedTransaction.id)
-      .eq('user_id', userId);
+      .eq('owner_id', userId);
 
     if (error) throw error;
   } catch (error) {
@@ -117,7 +108,7 @@ export async function clearTransactions(): Promise<void> {
     const { error } = await supabase
       .from('transactions')
       .delete()
-      .eq('user_id', userId);
+      .eq('owner_id', userId);
 
     if (error) throw error;
   } catch (error) {
@@ -217,7 +208,7 @@ async function syncOfflineTransactions(): Promise<void> {
         .from('transactions')
         .upsert({
           id: transaction.id,
-          user_id: userId,
+          owner_id: userId,
           type: transaction.type,
           weight: transaction.weight,
           purity: transaction.purity,

@@ -1,25 +1,19 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { User, Session } from '@supabase/supabase-js';
 
 interface UserProfile {
   id: string;
-  user_id: string;
-  name: string;
-  role: 'admin' | 'employee';
-}
-
-interface CustomUser {
-  id: string;
-  user_id: string;
   name: string;
   role: 'admin' | 'employee';
 }
 
 interface AuthContextType {
-  user: CustomUser | null;
+  user: User | null;
+  session: Session | null;
   profile: UserProfile | null;
-  signUp: (name: string, pin: string, role?: 'admin' | 'employee', userId?: string) => Promise<{ error?: string; userId?: string }>;
-  signIn: (userId: string, pin: string) => Promise<{ error?: string }>;
+  signUp: (email: string, password: string, name: string, role?: 'admin' | 'employee') => Promise<{ error?: string }>;
+  signIn: (email: string, password: string) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
   isLoading: boolean;
   hasPermission: (permission: string) => boolean;
@@ -28,84 +22,133 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<CustomUser | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for stored session
-    const storedUser = localStorage.getItem('currentUser');
-    if (storedUser) {
-      try {
-        const userData = JSON.parse(storedUser);
-        setUser(userData);
-        setProfile(userData);
-      } catch (error) {
-        console.error('Error parsing stored user:', error);
-        localStorage.removeItem('currentUser');
+    // Set up auth state listener FIRST
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        
+        // Fetch user profile when session changes
+        if (session?.user) {
+          setTimeout(() => {
+            fetchUserProfile(session.user.id);
+          }, 0);
+        } else {
+          setProfile(null);
+        }
       }
-    }
-    setIsLoading(false);
+    );
+
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        fetchUserProfile(session.user.id);
+      }
+      setIsLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (name: string, pin: string, role: 'admin' | 'employee' = 'employee', userId?: string) => {
+  const fetchUserProfile = async (userId: string) => {
     try {
-      const { data, error } = await supabase.rpc('register_custom_user', {
-        input_name: name,
-        input_pin: pin,
-        input_role: role,
-        input_user_id: userId || null
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, name, role')
+        .eq('user_id', userId)
+        .single();
+
+      if (!error && data) {
+        setProfile(data);
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    }
+  };
+
+  const signUp = async (email: string, password: string, name: string, role: 'admin' | 'employee' = 'employee') => {
+    try {
+      const redirectUrl = `${window.location.origin}/`;
+      
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            name,
+            role
+          }
+        }
       });
 
       if (error) {
         return { error: error.message };
       }
 
-      if (data?.success) {
-        return { userId: data.user_id };
-      } else {
-        return { error: data?.error || 'Registration failed' };
+      if (data.user) {
+        // Create profile entry
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert({
+            user_id: data.user.id,
+            name,
+            role
+          });
+
+        if (profileError) {
+          console.error('Error creating profile:', profileError);
+        }
       }
+
+      return {};
     } catch (error: any) {
       return { error: error.message };
     }
   };
 
-  const signIn = async (userId: string, pin: string) => {
+  const signIn = async (email: string, password: string) => {
     try {
-      const { data, error } = await supabase.rpc('verify_login_credentials', {
-        input_user_id: userId,
-        input_pin: pin
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
       });
 
       if (error) {
         return { error: error.message };
       }
 
-      if (data?.success) {
-        const userData = data.user;
-        setUser(userData);
-        setProfile(userData);
-        localStorage.setItem('currentUser', JSON.stringify(userData));
-        return {};
-      } else {
-        return { error: 'Invalid credentials' };
-      }
+      return {};
     } catch (error: any) {
       return { error: error.message };
     }
   };
 
   const signOut = async () => {
-    // Clear local user data
-    setUser(null);
-    setProfile(null);
-    localStorage.removeItem('currentUser');
-    
-    // Clear all secure offline data
-    if (user?.id) {
-      const { SecureStorage } = await import('@/utils/encryption');
-      SecureStorage.clearUserData(user.id);
+    try {
+      // Clear secure offline data before signout
+      if (user?.id) {
+        const { SecureStorage } = await import('@/utils/encryption');
+        SecureStorage.clearUserData(user.id);
+      }
+      
+      await supabase.auth.signOut();
+      
+      // Clear local state
+      setUser(null);
+      setSession(null);
+      setProfile(null);
+      localStorage.removeItem('currentUser');
+    } catch (error) {
+      console.error('Error signing out:', error);
     }
   };
 
@@ -127,6 +170,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return (
     <AuthContext.Provider value={{ 
       user, 
+      session,
       profile, 
       signUp, 
       signIn, 

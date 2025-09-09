@@ -21,7 +21,7 @@ export function RoleProtectedRoute({ children, requiredPermission }: RoleProtect
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/auth" replace />;
   }
 
   if (!hasPermission(requiredPermission)) {

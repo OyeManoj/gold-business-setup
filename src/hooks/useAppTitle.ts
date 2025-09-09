@@ -49,7 +49,7 @@ export function useAppTitle() {
     };
 
     fetchData();
-  }, [user?.user_id]);
+  }, [user?.id]);
 
   // Refresh business profile data
   const refreshBusinessProfile = async () => {

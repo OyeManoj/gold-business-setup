@@ -7,7 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { RoleProtectedRoute } from "@/components/RoleProtectedRoute";
 import Index from "./pages/Index";
-import Login from "./pages/Login";
+import Auth from "./pages/Auth";
 import TransactionFlow from "./pages/TransactionFlow";
 import BusinessProfile from "./pages/BusinessProfile";
 import History from "./pages/History";
@@ -23,7 +23,8 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/login" element={<Auth />} />
             <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
             <Route path="/transaction/:type" element={<ProtectedRoute><TransactionFlow /></ProtectedRoute>} />
             <Route path="/transaction/:type/edit/:transactionId" element={<ProtectedRoute><TransactionFlow /></ProtectedRoute>} />

@@ -68,6 +68,7 @@ export type Database = {
           created_at: string
           id: string
           name: string
+          owner_id: string | null
           phone: string | null
           updated_at: string
           user_id: string | null
@@ -77,6 +78,7 @@ export type Database = {
           created_at?: string
           id?: string
           name: string
+          owner_id?: string | null
           phone?: string | null
           updated_at?: string
           user_id?: string | null
@@ -86,6 +88,7 @@ export type Database = {
           created_at?: string
           id?: string
           name?: string
+          owner_id?: string | null
           phone?: string | null
           updated_at?: string
           user_id?: string | null
@@ -236,6 +239,7 @@ export type Database = {
           created_at: string
           fine_gold: number
           id: string
+          owner_id: string | null
           purity: number
           rate: number
           reduction: number | null
@@ -250,6 +254,7 @@ export type Database = {
           created_at?: string
           fine_gold: number
           id?: string
+          owner_id?: string | null
           purity: number
           rate: number
           reduction?: number | null
@@ -264,6 +269,7 @@ export type Database = {
           created_at?: string
           fine_gold?: number
           id?: string
+          owner_id?: string | null
           purity?: number
           rate?: number
           reduction?: number | null

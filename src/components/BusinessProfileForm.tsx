@@ -31,13 +31,13 @@ export function BusinessProfileForm({ language, onProfileUpdated }: BusinessProf
 
   useEffect(() => {
     const loadProfile = async () => {
-      if (!user?.user_id) return;
+      if (!user?.id) return;
 
       try {
         const { data, error } = await supabase
           .from('business_profiles')
           .select('*')
-          .eq('user_id', user.user_id)
+          .eq('owner_id', user.id)
           .maybeSingle();
 
         if (!error && data) {
@@ -53,11 +53,11 @@ export function BusinessProfileForm({ language, onProfileUpdated }: BusinessProf
     };
 
     loadProfile();
-  }, [user?.user_id]);
+  }, [user?.id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user?.user_id) return;
+    if (!user?.id) return;
 
     setIsLoading(true);
 
@@ -65,12 +65,12 @@ export function BusinessProfileForm({ language, onProfileUpdated }: BusinessProf
       const { error } = await supabase
         .from('business_profiles')
         .upsert({
-          user_id: user.user_id,
+          owner_id: user.id,
           name: profile.name,
           phone: profile.phone || null,
           address: profile.address
         }, {
-          onConflict: 'user_id'
+          onConflict: 'owner_id'
         });
 
       if (error) {

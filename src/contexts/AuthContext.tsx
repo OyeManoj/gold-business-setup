@@ -12,8 +12,8 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   profile: UserProfile | null;
-  signUp: (email: string, password: string, name: string, role?: 'admin' | 'employee') => Promise<{ error?: string }>;
-  signIn: (email: string, password: string) => Promise<{ error?: string }>;
+  signUpWithPin: (name: string, pin: string, role?: 'admin' | 'employee') => Promise<{ error?: string; userId?: string }>;
+  signInWithPin: (userId: string, pin: string) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
   isLoading: boolean;
   hasPermission: (permission: string) => boolean;
@@ -28,34 +28,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        // Fetch user profile when session changes
-        if (session?.user) {
-          setTimeout(() => {
-            fetchUserProfile(session.user.id);
-          }, 0);
-        } else {
-          setProfile(null);
+    // Check for existing custom user session
+    const checkExistingUser = () => {
+      const savedUser = localStorage.getItem('currentUser');
+      if (savedUser) {
+        try {
+          const userData = JSON.parse(savedUser);
+          setUser({ 
+            id: userData.id, 
+            email: `${userData.user_id}@local`, 
+            created_at: userData.created_at || new Date().toISOString()
+          } as User);
+          setProfile({
+            id: userData.id,
+            name: userData.name,
+            role: userData.role
+          });
+        } catch (error) {
+          localStorage.removeItem('currentUser');
         }
       }
-    );
-
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchUserProfile(session.user.id);
-      }
       setIsLoading(false);
-    });
+    };
 
-    return () => subscription.unsubscribe();
+    checkExistingUser();
   }, []);
 
   const fetchUserProfile = async (userId: string) => {
@@ -74,57 +70,73 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signUp = async (email: string, password: string, name: string, role: 'admin' | 'employee' = 'employee') => {
+  const signUpWithPin = async (name: string, pin: string, role: 'admin' | 'employee' = 'employee') => {
     try {
-      const redirectUrl = `${window.location.origin}/`;
-      
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            name,
-            role
-          }
-        }
+      // Call the Supabase function to register user
+      const { data, error } = await supabase.rpc('register_custom_user', {
+        input_name: name,
+        input_pin: pin,
+        input_role: role
       });
 
       if (error) {
         return { error: error.message };
       }
 
-      if (data.user) {
-        // Create profile entry
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert({
-            user_id: data.user.id,
-            name,
-            role
-          });
-
-        if (profileError) {
-          console.error('Error creating profile:', profileError);
-        }
+      if (!data?.success) {
+        return { error: data?.error || 'Registration failed' };
       }
 
-      return {};
+      // Create a dummy session for the custom user
+      localStorage.setItem('currentUser', JSON.stringify(data.user));
+      
+      // Set user state to simulate authenticated state
+      setUser({ 
+        id: data.user.id, 
+        email: `${data.user.user_id}@local`, 
+        created_at: data.user.created_at 
+      } as User);
+      setProfile({
+        id: data.user.id,
+        name: data.user.name,
+        role: data.user.role
+      });
+
+      return { userId: data.user_id };
     } catch (error: any) {
       return { error: error.message };
     }
   };
 
-  const signIn = async (email: string, password: string) => {
+  const signInWithPin = async (userId: string, pin: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password
+      // Call the Supabase function to verify credentials
+      const { data, error } = await supabase.rpc('verify_login_credentials', {
+        input_user_id: userId,
+        input_pin: pin
       });
 
       if (error) {
         return { error: error.message };
       }
+
+      if (!data?.success) {
+        return { error: data?.error || 'Invalid credentials' };
+      }
+
+      // Store user info and simulate authenticated state
+      localStorage.setItem('currentUser', JSON.stringify(data.user));
+      
+      setUser({ 
+        id: data.user.id, 
+        email: `${data.user.user_id}@local`, 
+        created_at: new Date().toISOString() 
+      } as User);
+      setProfile({
+        id: data.user.id,
+        name: data.user.name,
+        role: data.user.role
+      });
 
       return {};
     } catch (error: any) {
@@ -139,8 +151,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const { SecureStorage } = await import('@/utils/encryption');
         SecureStorage.clearUserData(user.id);
       }
-      
-      await supabase.auth.signOut();
       
       // Clear local state
       setUser(null);
@@ -172,8 +182,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       user, 
       session,
       profile, 
-      signUp, 
-      signIn, 
+      signUpWithPin, 
+      signInWithPin, 
       signOut, 
       isLoading, 
       hasPermission 

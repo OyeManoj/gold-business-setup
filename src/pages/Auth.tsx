@@ -8,21 +8,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2, Mail, Lock, User } from 'lucide-react';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
+import { Loader2, User, KeyRound } from 'lucide-react';
 
 export default function Auth() {
   const navigate = useNavigate();
-  const { user, signIn, signUp } = useAuth();
+  const { user, signInWithPin, signUpWithPin } = useAuth();
   
   const [signInData, setSignInData] = useState({
-    email: '',
-    password: ''
+    userId: '',
+    pin: ''
   });
   
   const [signUpData, setSignUpData] = useState({
-    email: '',
-    password: '',
     name: '',
+    pin: '',
     role: 'employee' as 'admin' | 'employee'
   });
   
@@ -42,7 +42,13 @@ export default function Auth() {
     setError('');
     setIsLoading(true);
 
-    const { error } = await signIn(signInData.email, signInData.password);
+    if (!signInData.userId || !signInData.pin) {
+      setError('Please enter both User ID and PIN');
+      setIsLoading(false);
+      return;
+    }
+
+    const { error } = await signInWithPin(signInData.userId, signInData.pin);
     
     if (error) {
       setError(error);
@@ -59,13 +65,25 @@ export default function Auth() {
     setSuccess('');
     setIsLoading(true);
 
-    const { error } = await signUp(signUpData.email, signUpData.password, signUpData.name, signUpData.role);
+    if (!signUpData.name || !signUpData.pin) {
+      setError('Please fill in all fields');
+      setIsLoading(false);
+      return;
+    }
+
+    if (signUpData.pin.length !== 4) {
+      setError('PIN must be exactly 4 digits');
+      setIsLoading(false);
+      return;
+    }
+
+    const { error, userId } = await signUpWithPin(signUpData.name, signUpData.pin, signUpData.role);
     
     if (error) {
       setError(error);
     } else {
-      setSuccess('Account created successfully! Please check your email to verify your account.');
-      setSignUpData({ email: '', password: '', name: '', role: 'employee' });
+      setSuccess(`Account created successfully! Your User ID is: ${userId}. Please save this ID to sign in.`);
+      setSignUpData({ name: '', pin: '', role: 'employee' });
     }
     
     setIsLoading(false);
@@ -76,11 +94,11 @@ export default function Auth() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-            <User className="h-6 w-6 text-primary" />
+            <KeyRound className="h-6 w-6 text-primary" />
           </div>
-          <CardTitle className="text-2xl font-bold">Welcome</CardTitle>
+          <CardTitle className="text-2xl font-bold">PIN Authentication</CardTitle>
           <CardDescription>
-            Sign in to your account or create a new one
+            Enter your 4-digit User ID and PIN to access your account
           </CardDescription>
         </CardHeader>
         
@@ -98,36 +116,39 @@ export default function Auth() {
                 </Alert>
               )}
               
-              <form onSubmit={handleSignIn} className="space-y-4">
+              <form onSubmit={handleSignIn} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="signin-email">Email</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="signin-email"
-                      type="email"
-                      placeholder="Enter your email"
-                      className="pl-10"
-                      value={signInData.email}
-                      onChange={(e) => setSignInData(prev => ({ ...prev, email: e.target.value }))}
-                      required
-                    />
-                  </div>
+                  <Label htmlFor="signin-userid">User ID (4 digits)</Label>
+                  <Input
+                    id="signin-userid"
+                    type="text"
+                    placeholder="Enter your 4-digit User ID"
+                    maxLength={4}
+                    value={signInData.userId}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      setSignInData(prev => ({ ...prev, userId: value }));
+                    }}
+                    className="text-center text-lg tracking-widest"
+                    required
+                  />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="signin-password">Password</Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="signin-password"
-                      type="password"
-                      placeholder="Enter your password"
-                      className="pl-10"
-                      value={signInData.password}
-                      onChange={(e) => setSignInData(prev => ({ ...prev, password: e.target.value }))}
-                      required
-                    />
+                  <Label htmlFor="signin-pin">PIN (4 digits)</Label>
+                  <div className="flex justify-center">
+                    <InputOTP
+                      maxLength={4}
+                      value={signInData.pin}
+                      onChange={(value) => setSignInData(prev => ({ ...prev, pin: value }))}
+                    >
+                      <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                        <InputOTPSlot index={3} />
+                      </InputOTPGroup>
+                    </InputOTP>
                   </div>
                 </div>
                 
@@ -155,7 +176,7 @@ export default function Auth() {
                 </Alert>
               )}
               
-              <form onSubmit={handleSignUp} className="space-y-4">
+              <form onSubmit={handleSignUp} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="signup-name">Full Name</Label>
                   <div className="relative">
@@ -173,36 +194,24 @@ export default function Auth() {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="signup-email"
-                      type="email"
-                      placeholder="Enter your email"
-                      className="pl-10"
-                      value={signUpData.email}
-                      onChange={(e) => setSignUpData(prev => ({ ...prev, email: e.target.value }))}
-                      required
-                    />
+                  <Label htmlFor="signup-pin">Create 4-digit PIN</Label>
+                  <div className="flex justify-center">
+                    <InputOTP
+                      maxLength={4}
+                      value={signUpData.pin}
+                      onChange={(value) => setSignUpData(prev => ({ ...prev, pin: value }))}
+                    >
+                      <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                        <InputOTPSlot index={3} />
+                      </InputOTPGroup>
+                    </InputOTP>
                   </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="signup-password"
-                      type="password"
-                      placeholder="Create a password"
-                      className="pl-10"
-                      value={signUpData.password}
-                      onChange={(e) => setSignUpData(prev => ({ ...prev, password: e.target.value }))}
-                      required
-                      minLength={6}
-                    />
-                  </div>
+                  <p className="text-sm text-muted-foreground text-center">
+                    Choose a secure 4-digit PIN to protect your account
+                  </p>
                 </div>
                 
                 <div className="space-y-2">

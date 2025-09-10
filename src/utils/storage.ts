@@ -4,10 +4,10 @@ import { SecureStorage } from './encryption';
 
 const STORAGE_KEY = 'gold_transactions_offline';
 
-// Get user ID from Supabase auth
+// Get user ID from custom auth
 async function getCurrentUserId(): Promise<string | null> {
-  const { data: { session } } = await supabase.auth.getSession();
-  return session?.user?.id || null;
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+  return currentUser?.user_id || null;
 }
 
 // Save to Supabase with offline fallback
@@ -21,7 +21,7 @@ export async function saveTransaction(transaction: Transaction): Promise<void> {
       .from('transactions')
       .insert({
         id: transaction.id,
-        owner_id: userId,
+        user_id: userId,
         type: transaction.type,
         weight: transaction.weight,
         purity: transaction.purity,
@@ -52,7 +52,7 @@ export async function getTransactions(): Promise<Transaction[]> {
     const { data, error } = await supabase
       .from('transactions')
       .select('*')
-      .eq('owner_id', userId)
+      .eq('user_id', userId)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -90,7 +90,7 @@ export async function updateTransaction(updatedTransaction: Transaction): Promis
         updated_at: new Date().toISOString()
       })
       .eq('id', updatedTransaction.id)
-      .eq('owner_id', userId);
+      .eq('user_id', userId);
 
     if (error) throw error;
   } catch (error) {
@@ -108,7 +108,7 @@ export async function clearTransactions(): Promise<void> {
     const { error } = await supabase
       .from('transactions')
       .delete()
-      .eq('owner_id', userId);
+      .eq('user_id', userId);
 
     if (error) throw error;
   } catch (error) {
@@ -208,7 +208,7 @@ async function syncOfflineTransactions(): Promise<void> {
         .from('transactions')
         .upsert({
           id: transaction.id,
-          owner_id: userId,
+          user_id: userId,
           type: transaction.type,
           weight: transaction.weight,
           purity: transaction.purity,

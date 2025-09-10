@@ -11,7 +11,7 @@ import { DeviceTracker } from '@/components/DeviceTracker';
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user, profile, signOut, hasPermission } = useAuth();
+  const { user, signOut, hasPermission } = useAuth();
   const { appTitle } = useAppTitle();
   const [language, setLanguage] = useState<Language>('en');
   const t = useTranslation(language);
@@ -100,9 +100,9 @@ const Index = () => {
                 <div className="flex items-center gap-2 px-3 py-2 bg-muted border border-border rounded-lg">
                   <User size={16} className="text-primary" />
                   <div className="flex flex-col min-w-0">
-                    <span className="font-semibold text-foreground text-sm truncate">{profile?.name || user?.email}</span>
+                    <span className="font-semibold text-foreground text-sm truncate">{user?.name || 'User'}</span>
                     <span className="text-xs text-muted-foreground truncate">
-                      {profile?.role?.toUpperCase() || 'USER'}
+                      {user?.role?.toUpperCase() || 'USER'}
                     </span>
                   </div>
                 </div>

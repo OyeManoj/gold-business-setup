@@ -88,64 +88,75 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-            <Hash className="h-6 w-6 text-primary" />
+    <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5"></div>
+      <div className="absolute top-1/4 -left-32 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-1/4 -right-32 w-64 h-64 bg-accent/10 rounded-full blur-3xl"></div>
+      
+      <Card className="w-full max-w-md backdrop-blur-sm bg-card/90 shadow-elegant border-0 relative z-10 animate-scale-in">
+        <CardHeader className="text-center space-y-6 pb-8">
+          <div className="mx-auto h-16 w-16 rounded-2xl bg-gradient-primary flex items-center justify-center shadow-strong">
+            <Hash className="h-8 w-8 text-primary-foreground" />
           </div>
-          <CardTitle className="text-2xl font-bold">Gold Ease Access</CardTitle>
-          <CardDescription>
-            Enter your 4-digit User ID and PIN to access the system
-          </CardDescription>
+          <div className="space-y-2">
+            <CardTitle className="text-3xl font-semibold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+              Gold Ease Access
+            </CardTitle>
+            <CardDescription className="text-base text-muted-foreground leading-relaxed">
+              Secure 4-digit authentication system
+            </CardDescription>
+          </div>
         </CardHeader>
         
-        <CardContent>
+        <CardContent className="space-y-8">
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Register</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 bg-muted/50 p-1 rounded-xl">
+              <TabsTrigger value="signin" className="rounded-lg data-[state=active]:bg-gradient-primary data-[state=active]:text-primary-foreground transition-all duration-300">Sign In</TabsTrigger>
+              <TabsTrigger value="signup" className="rounded-lg data-[state=active]:bg-gradient-primary data-[state=active]:text-primary-foreground transition-all duration-300">Register</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="signin" className="space-y-4">
+            <TabsContent value="signin" className="space-y-6 mt-6">
               {error && (
-                <Alert variant="destructive">
+                <Alert variant="destructive" className="border-destructive/20 bg-destructive/5">
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
               
-              <form onSubmit={handleSignIn} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signin-userid">User ID (4 digits)</Label>
+              <form onSubmit={handleSignIn} className="space-y-6">
+                <div className="space-y-3">
+                  <Label htmlFor="signin-userid" className="text-sm font-medium">User ID (4 digits)</Label>
                   <div className="flex justify-center">
                     <InputOTP
                       maxLength={4}
                       value={signInData.userId}
                       onChange={(value) => setSignInData(prev => ({ ...prev, userId: value }))}
+                      className="gap-3"
                     >
-                      <InputOTPGroup>
-                        <InputOTPSlot index={0} />
-                        <InputOTPSlot index={1} />
-                        <InputOTPSlot index={2} />
-                        <InputOTPSlot index={3} />
+                      <InputOTPGroup className="gap-3">
+                        <InputOTPSlot index={0} className="w-12 h-12 text-lg font-semibold border-2 rounded-xl" />
+                        <InputOTPSlot index={1} className="w-12 h-12 text-lg font-semibold border-2 rounded-xl" />
+                        <InputOTPSlot index={2} className="w-12 h-12 text-lg font-semibold border-2 rounded-xl" />
+                        <InputOTPSlot index={3} className="w-12 h-12 text-lg font-semibold border-2 rounded-xl" />
                       </InputOTPGroup>
                     </InputOTP>
                   </div>
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="signin-pin">PIN (4 digits)</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="signin-pin" className="text-sm font-medium">PIN (4 digits)</Label>
                   <div className="flex justify-center">
                     <InputOTP
                       maxLength={4}
                       value={signInData.pin}
                       onChange={(value) => setSignInData(prev => ({ ...prev, pin: value }))}
+                      className="gap-3"
                     >
-                      <InputOTPGroup>
-                        <InputOTPSlot index={0} />
-                        <InputOTPSlot index={1} />
-                        <InputOTPSlot index={2} />
-                        <InputOTPSlot index={3} />
+                      <InputOTPGroup className="gap-3">
+                        <InputOTPSlot index={0} className="w-12 h-12 text-lg font-semibold border-2 rounded-xl" />
+                        <InputOTPSlot index={1} className="w-12 h-12 text-lg font-semibold border-2 rounded-xl" />
+                        <InputOTPSlot index={2} className="w-12 h-12 text-lg font-semibold border-2 rounded-xl" />
+                        <InputOTPSlot index={3} className="w-12 h-12 text-lg font-semibold border-2 rounded-xl" />
                       </InputOTPGroup>
                     </InputOTP>
                   </div>
@@ -153,29 +164,29 @@ export default function Auth() {
                 
                 <Button 
                   type="submit" 
-                  className="w-full"
+                  className="w-full h-12 bg-gradient-primary hover:opacity-90 shadow-strong text-lg font-medium transition-all duration-300"
                   disabled={isLoading || signInData.userId.length !== 4 || signInData.pin.length !== 4}
                 >
-                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
                   Sign In
                 </Button>
               </form>
             </TabsContent>
             
-            <TabsContent value="signup" className="space-y-4">
+            <TabsContent value="signup" className="space-y-6 mt-6">
               {error && (
-                <Alert variant="destructive">
+                <Alert variant="destructive" className="border-destructive/20 bg-destructive/5">
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
               
               {success && (
-                <Alert className="border-green-200 bg-green-50 text-green-800">
+                <Alert className="border-success/20 bg-success/5 text-success">
                   <CheckCircle className="h-4 w-4" />
                   <AlertDescription>
                     {success}
                     {newUserId && (
-                      <div className="mt-2 p-2 bg-white rounded text-center font-mono text-lg font-bold">
+                      <div className="mt-3 p-3 bg-card rounded-xl text-center font-mono text-lg font-bold border border-success/20">
                         {newUserId}
                       </div>
                     )}
@@ -183,16 +194,16 @@ export default function Auth() {
                 </Alert>
               )}
               
-              <form onSubmit={handleSignUp} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signup-name">Full Name</Label>
+              <form onSubmit={handleSignUp} className="space-y-6">
+                <div className="space-y-3">
+                  <Label htmlFor="signup-name" className="text-sm font-medium">Full Name</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="signup-name"
                       type="text"
                       placeholder="Enter your full name"
-                      className="pl-10"
+                      className="pl-10 h-12 border-2 rounded-xl"
                       value={signUpData.name}
                       onChange={(e) => setSignUpData(prev => ({ ...prev, name: e.target.value }))}
                       required
@@ -200,19 +211,20 @@ export default function Auth() {
                   </div>
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="signup-userid">Choose User ID (4 digits) - Optional</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="signup-userid" className="text-sm font-medium">Choose User ID (4 digits) - Optional</Label>
                   <div className="flex justify-center">
                     <InputOTP
                       maxLength={4}
                       value={signUpData.userId}
                       onChange={(value) => setSignUpData(prev => ({ ...prev, userId: value }))}
+                      className="gap-3"
                     >
-                      <InputOTPGroup>
-                        <InputOTPSlot index={0} />
-                        <InputOTPSlot index={1} />
-                        <InputOTPSlot index={2} />
-                        <InputOTPSlot index={3} />
+                      <InputOTPGroup className="gap-3">
+                        <InputOTPSlot index={0} className="w-12 h-12 text-lg font-semibold border-2 rounded-xl" />
+                        <InputOTPSlot index={1} className="w-12 h-12 text-lg font-semibold border-2 rounded-xl" />
+                        <InputOTPSlot index={2} className="w-12 h-12 text-lg font-semibold border-2 rounded-xl" />
+                        <InputOTPSlot index={3} className="w-12 h-12 text-lg font-semibold border-2 rounded-xl" />
                       </InputOTPGroup>
                     </InputOTP>
                   </div>
@@ -221,33 +233,34 @@ export default function Auth() {
                   </p>
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="signup-pin">Create PIN (4 digits)</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="signup-pin" className="text-sm font-medium">Create PIN (4 digits)</Label>
                   <div className="flex justify-center">
                     <InputOTP
                       maxLength={4}
                       value={signUpData.pin}
                       onChange={(value) => setSignUpData(prev => ({ ...prev, pin: value }))}
+                      className="gap-3"
                     >
-                      <InputOTPGroup>
-                        <InputOTPSlot index={0} />
-                        <InputOTPSlot index={1} />
-                        <InputOTPSlot index={2} />
-                        <InputOTPSlot index={3} />
+                      <InputOTPGroup className="gap-3">
+                        <InputOTPSlot index={0} className="w-12 h-12 text-lg font-semibold border-2 rounded-xl" />
+                        <InputOTPSlot index={1} className="w-12 h-12 text-lg font-semibold border-2 rounded-xl" />
+                        <InputOTPSlot index={2} className="w-12 h-12 text-lg font-semibold border-2 rounded-xl" />
+                        <InputOTPSlot index={3} className="w-12 h-12 text-lg font-semibold border-2 rounded-xl" />
                       </InputOTPGroup>
                     </InputOTP>
                   </div>
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="signup-role">Role</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="signup-role" className="text-sm font-medium">Role</Label>
                   <Select
                     value={signUpData.role}
                     onValueChange={(value: 'admin' | 'employee') => 
                       setSignUpData(prev => ({ ...prev, role: value }))
                     }
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="h-12 border-2 rounded-xl">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -259,10 +272,10 @@ export default function Auth() {
                 
                 <Button 
                   type="submit" 
-                  className="w-full"
+                  className="w-full h-12 bg-gradient-primary hover:opacity-90 shadow-strong text-lg font-medium transition-all duration-300"
                   disabled={isLoading || !signUpData.name || signUpData.pin.length !== 4 || (signUpData.userId.length > 0 && signUpData.userId.length !== 4)}
                 >
-                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
                   Create Account
                 </Button>
               </form>

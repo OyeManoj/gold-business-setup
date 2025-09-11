@@ -22,6 +22,7 @@ export default function Auth() {
   
   const [signUpData, setSignUpData] = useState({
     name: '',
+    userId: '',
     pin: '',
     role: 'employee' as 'admin' | 'employee'
   });
@@ -70,14 +71,19 @@ export default function Auth() {
       return;
     }
 
-    const { error, user_id } = await signUp(signUpData.name, signUpData.pin, signUpData.role);
+    if (signUpData.userId && signUpData.userId.length !== 4) {
+      setError('User ID must be exactly 4 digits');
+      return;
+    }
+
+    const { error, user_id } = await signUp(signUpData.name, signUpData.pin, signUpData.role, signUpData.userId);
     
     if (error) {
       setError(error);
     } else if (user_id) {
       setNewUserId(user_id);
       setSuccess(`Account created successfully! Your User ID is: ${user_id}`);
-      setSignUpData({ name: '', pin: '', role: 'employee' });
+      setSignUpData({ name: '', userId: '', pin: '', role: 'employee' });
     }
   };
 
@@ -195,6 +201,27 @@ export default function Auth() {
                 </div>
                 
                 <div className="space-y-2">
+                  <Label htmlFor="signup-userid">Choose User ID (4 digits) - Optional</Label>
+                  <div className="flex justify-center">
+                    <InputOTP
+                      maxLength={4}
+                      value={signUpData.userId}
+                      onChange={(value) => setSignUpData(prev => ({ ...prev, userId: value }))}
+                    >
+                      <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                        <InputOTPSlot index={3} />
+                      </InputOTPGroup>
+                    </InputOTP>
+                  </div>
+                  <p className="text-xs text-muted-foreground text-center">
+                    Leave empty for auto-generated ID
+                  </p>
+                </div>
+                
+                <div className="space-y-2">
                   <Label htmlFor="signup-pin">Create PIN (4 digits)</Label>
                   <div className="flex justify-center">
                     <InputOTP
@@ -233,7 +260,7 @@ export default function Auth() {
                 <Button 
                   type="submit" 
                   className="w-full"
-                  disabled={isLoading || !signUpData.name || signUpData.pin.length !== 4}
+                  disabled={isLoading || !signUpData.name || signUpData.pin.length !== 4 || (signUpData.userId.length > 0 && signUpData.userId.length !== 4)}
                 >
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Create Account

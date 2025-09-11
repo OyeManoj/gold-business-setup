@@ -73,12 +73,23 @@ const Index = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => navigate('/business-profile')}
+                  onClick={() => navigate('/profile')}
                   className="flex items-center gap-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground text-sm whitespace-nowrap"
                 >
+                  <User size={16} />
+                  <span className="font-medium hidden sm:inline">{language === 'ar' ? 'الملف الشخصي' : 'Profile'}</span>
+                  <span className="font-medium sm:hidden">{language === 'ar' ? 'ملف' : 'Profile'}</span>
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate('/business-profile')}
+                  className="flex items-center gap-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground text-sm whitespace-nowrap"
+                >
                   <Settings size={16} />
-                  <span className="font-medium hidden sm:inline">{language === 'ar' ? 'ملف العمل' : 'Business Profile'}</span>
-                  <span className="font-medium sm:hidden">{language === 'ar' ? 'الملف' : 'Profile'}</span>
+                  <span className="font-medium hidden sm:inline">{language === 'ar' ? 'ملف العمل' : 'Business'}</span>
+                  <span className="font-medium sm:hidden">{language === 'ar' ? 'عمل' : 'Biz'}</span>
                 </Button>
                 
                 {hasPermission('history') && (

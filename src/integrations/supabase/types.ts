@@ -281,6 +281,50 @@ export type Database = {
         }
         Relationships: []
       }
+      user_profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "custom_users"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -351,6 +395,10 @@ export type Database = {
         Args: { input_user_id: string } | { input_user_id: string }
         Returns: Json
       }
+      get_user_profile: {
+        Args: { input_user_id: string }
+        Returns: Json
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -367,6 +415,17 @@ export type Database = {
               input_role?: string
               input_user_id?: string
             }
+        Returns: Json
+      }
+      update_user_profile: {
+        Args: {
+          input_avatar_url?: string
+          input_bio?: string
+          input_display_name?: string
+          input_email?: string
+          input_phone?: string
+          input_user_id: string
+        }
         Returns: Json
       }
       verify_login_credentials: {

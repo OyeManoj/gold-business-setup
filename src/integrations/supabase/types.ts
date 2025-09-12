@@ -428,6 +428,15 @@ export type Database = {
         }
         Returns: Json
       }
+      upsert_business_profile: {
+        Args: {
+          input_address?: string
+          input_name: string
+          input_phone?: string
+          input_user_id: string
+        }
+        Returns: Json
+      }
       verify_login_credentials: {
         Args: { input_pin: string; input_user_id: string }
         Returns: Json

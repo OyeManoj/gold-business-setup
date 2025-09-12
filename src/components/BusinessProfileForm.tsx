@@ -34,17 +34,15 @@ export function BusinessProfileForm({ language, onProfileUpdated }: BusinessProf
       if (!user?.user_id) return;
 
       try {
-        const { data, error } = await supabase
-          .from('business_profiles')
-          .select('*')
-          .eq('user_id', user.user_id)
-          .maybeSingle();
+        const { data, error } = await supabase.rpc('get_user_business_profile', {
+          input_user_id: user.user_id
+        });
 
-        if (!error && data) {
+        if (!error && data?.success && data.profile) {
           setProfile({
-            name: data.name || '',
-            phone: data.phone || '',
-            address: data.address || ''
+            name: data.profile.name || '',
+            phone: data.profile.phone || '',
+            address: data.profile.address || ''
           });
         }
       } catch (error) {
@@ -62,21 +60,17 @@ export function BusinessProfileForm({ language, onProfileUpdated }: BusinessProf
     setIsLoading(true);
 
     try {
-      const { error } = await supabase
-        .from('business_profiles')
-        .upsert({
-          user_id: user.user_id,
-          name: profile.name,
-          phone: profile.phone || null,
-          address: profile.address
-        }, {
-          onConflict: 'user_id'
-        });
+      const { data, error } = await supabase.rpc('upsert_business_profile', {
+        input_user_id: user.user_id,
+        input_name: profile.name,
+        input_phone: profile.phone || null,
+        input_address: profile.address
+      });
 
-      if (error) {
+      if (error || !data?.success) {
         toast({
           title: language === 'ar' ? 'خطأ' : 'Error',
-          description: language === 'ar' ? 'فشل في حفظ البيانات' : 'Failed to save profile',
+          description: language === 'ar' ? 'فشل في حفظ البيانات' : data?.error || 'Failed to save profile',
           variant: 'destructive',
         });
         return;

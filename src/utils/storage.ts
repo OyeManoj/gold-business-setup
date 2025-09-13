@@ -16,25 +16,24 @@ export async function saveTransaction(transaction: Transaction): Promise<void> {
   if (!userId) throw new Error('User not authenticated');
 
   try {
-    // Try to save to Supabase first
-    const { error } = await supabase
-      .from('transactions')
-      .insert({
-        id: transaction.id,
-        user_id: userId,
-        type: transaction.type,
-        weight: transaction.weight,
-        purity: transaction.purity,
-        reduction: transaction.reduction,
-        rate: transaction.rate,
-        fine_gold: transaction.fineGold,
-        amount: transaction.amount,
-        remaining_fine_gold: transaction.remainingFineGold,
-        created_at: transaction.date.toISOString(),
-        updated_at: transaction.date.toISOString()
-      });
+    // Use secure RPC function to bypass RLS
+    const { data, error } = await supabase.rpc('upsert_transaction_for_custom_user', {
+      input_user_id: userId,
+      input_id: transaction.id,
+      input_type: transaction.type,
+      input_weight: transaction.weight,
+      input_purity: transaction.purity,
+      input_reduction: transaction.reduction,
+      input_rate: transaction.rate,
+      input_fine_gold: transaction.fineGold,
+      input_amount: transaction.amount,
+      input_remaining_fine_gold: transaction.remainingFineGold,
+      input_created_at: transaction.date.toISOString(),
+      input_updated_at: transaction.date.toISOString()
+    });
 
     if (error) throw error;
+    if (!data?.success) throw new Error(data?.error || 'Failed to save transaction');
   } catch (error) {
     console.warn('Failed to save to Supabase, saving offline:', error);
     // Fallback to offline storage
@@ -48,12 +47,10 @@ export async function getTransactions(): Promise<Transaction[]> {
   if (!userId) return [];
 
   try {
-    // Try to get from Supabase
-    const { data, error } = await supabase
-      .from('transactions')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
+    // Use secure RPC function to bypass RLS
+    const { data, error } = await supabase.rpc('get_transactions_for_custom_user', {
+      input_user_id: userId
+    });
 
     if (error) throw error;
 
@@ -76,23 +73,24 @@ export async function updateTransaction(updatedTransaction: Transaction): Promis
   if (!userId) throw new Error('User not authenticated');
 
   try {
-    const { error } = await supabase
-      .from('transactions')
-      .update({
-        type: updatedTransaction.type,
-        weight: updatedTransaction.weight,
-        purity: updatedTransaction.purity,
-        reduction: updatedTransaction.reduction,
-        rate: updatedTransaction.rate,
-        fine_gold: updatedTransaction.fineGold,
-        amount: updatedTransaction.amount,
-        remaining_fine_gold: updatedTransaction.remainingFineGold,
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', updatedTransaction.id)
-      .eq('user_id', userId);
+    // Use secure RPC function to bypass RLS
+    const { data, error } = await supabase.rpc('upsert_transaction_for_custom_user', {
+      input_user_id: userId,
+      input_id: updatedTransaction.id,
+      input_type: updatedTransaction.type,
+      input_weight: updatedTransaction.weight,
+      input_purity: updatedTransaction.purity,
+      input_reduction: updatedTransaction.reduction,
+      input_rate: updatedTransaction.rate,
+      input_fine_gold: updatedTransaction.fineGold,
+      input_amount: updatedTransaction.amount,
+      input_remaining_fine_gold: updatedTransaction.remainingFineGold,
+      input_created_at: updatedTransaction.date.toISOString(),
+      input_updated_at: new Date().toISOString()
+    });
 
     if (error) throw error;
+    if (!data?.success) throw new Error(data?.error || 'Failed to update transaction');
   } catch (error) {
     console.warn('Failed to update in Supabase, updating offline:', error);
     await updateTransactionOffline(updatedTransaction);
@@ -105,12 +103,13 @@ export async function clearTransactions(): Promise<void> {
   if (!userId) return;
 
   try {
-    const { error } = await supabase
-      .from('transactions')
-      .delete()
-      .eq('user_id', userId);
+    // Use secure RPC function to bypass RLS
+    const { data, error } = await supabase.rpc('delete_transactions_for_custom_user', {
+      input_user_id: userId
+    });
 
     if (error) throw error;
+    if (!data?.success) throw new Error(data?.error || 'Failed to clear transactions');
   } catch (error) {
     console.warn('Failed to clear from Supabase:', error);
   }
@@ -204,24 +203,23 @@ async function syncOfflineTransactions(): Promise<void> {
 
   for (const transaction of pendingTransactions) {
     try {
-      const { error } = await supabase
-        .from('transactions')
-        .upsert({
-          id: transaction.id,
-          user_id: userId,
-          type: transaction.type,
-          weight: transaction.weight,
-          purity: transaction.purity,
-          reduction: transaction.reduction,
-          rate: transaction.rate,
-          fine_gold: transaction.fineGold,
-          amount: transaction.amount,
-          remaining_fine_gold: transaction.remainingFineGold,
-          created_at: transaction.date.toISOString(),
-          updated_at: new Date().toISOString()
-        });
+      // Use secure RPC function to bypass RLS
+      const { data, error } = await supabase.rpc('upsert_transaction_for_custom_user', {
+        input_user_id: userId,
+        input_id: transaction.id,
+        input_type: transaction.type,
+        input_weight: transaction.weight,
+        input_purity: transaction.purity,
+        input_reduction: transaction.reduction,
+        input_rate: transaction.rate,
+        input_fine_gold: transaction.fineGold,
+        input_amount: transaction.amount,
+        input_remaining_fine_gold: transaction.remainingFineGold,
+        input_created_at: transaction.date.toISOString(),
+        input_updated_at: new Date().toISOString()
+      });
 
-      if (!error) {
+      if (!error && data?.success) {
         // Remove from offline storage after successful sync
         const allOffline = await getOfflineTransactions();
         const filtered = allOffline.filter(t => t.id !== transaction.id);

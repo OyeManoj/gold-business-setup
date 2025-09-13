@@ -387,9 +387,31 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      delete_transactions_for_custom_user: {
+        Args: { input_user_id: string }
+        Returns: Json
+      }
       get_active_user_ids: {
         Args: Record<PropertyKey, never>
         Returns: Json
+      }
+      get_transactions_for_custom_user: {
+        Args: { input_user_id: string }
+        Returns: {
+          amount: number
+          created_at: string
+          fine_gold: number
+          id: string
+          owner_id: string | null
+          purity: number
+          rate: number
+          reduction: number | null
+          remaining_fine_gold: number | null
+          type: string
+          updated_at: string
+          user_id: string
+          weight: number
+        }[]
       }
       get_user_business_profile: {
         Args: { input_user_id: string } | { input_user_id: string }
@@ -434,6 +456,23 @@ export type Database = {
           input_name: string
           input_phone?: string
           input_user_id: string
+        }
+        Returns: Json
+      }
+      upsert_transaction_for_custom_user: {
+        Args: {
+          input_amount: number
+          input_created_at: string
+          input_fine_gold: number
+          input_id: string
+          input_purity: number
+          input_rate: number
+          input_reduction: number
+          input_remaining_fine_gold: number
+          input_type: string
+          input_updated_at: string
+          input_user_id: string
+          input_weight: number
         }
         Returns: Json
       }

@@ -16,7 +16,7 @@ export async function saveTransaction(transaction: Transaction): Promise<void> {
   if (!userId) throw new Error('User not authenticated');
 
   try {
-    // Use secure RPC function to bypass RLS
+    // Use secure RPC to save transaction
     const { data, error } = await supabase.rpc('upsert_transaction_for_custom_user', {
       input_user_id: userId,
       input_id: transaction.id,
@@ -32,8 +32,9 @@ export async function saveTransaction(transaction: Transaction): Promise<void> {
       input_updated_at: transaction.date.toISOString()
     });
 
-    if (error) throw error;
-    if (!data?.success) throw new Error(data?.error || 'Failed to save transaction');
+    if (error || !data?.success) {
+      throw new Error(data?.error || 'Failed to save transaction');
+    }
   } catch (error) {
     console.warn('Failed to save to Supabase, saving offline:', error);
     // Fallback to offline storage
@@ -47,7 +48,7 @@ export async function getTransactions(): Promise<Transaction[]> {
   if (!userId) return [];
 
   try {
-    // Use secure RPC function to bypass RLS
+    // Use secure RPC to get transactions
     const { data, error } = await supabase.rpc('get_transactions_for_custom_user', {
       input_user_id: userId
     });
@@ -73,7 +74,7 @@ export async function updateTransaction(updatedTransaction: Transaction): Promis
   if (!userId) throw new Error('User not authenticated');
 
   try {
-    // Use secure RPC function to bypass RLS
+    // Use secure RPC to update transaction
     const { data, error } = await supabase.rpc('upsert_transaction_for_custom_user', {
       input_user_id: userId,
       input_id: updatedTransaction.id,
@@ -89,8 +90,9 @@ export async function updateTransaction(updatedTransaction: Transaction): Promis
       input_updated_at: new Date().toISOString()
     });
 
-    if (error) throw error;
-    if (!data?.success) throw new Error(data?.error || 'Failed to update transaction');
+    if (error || !data?.success) {
+      throw new Error(data?.error || 'Failed to update transaction');
+    }
   } catch (error) {
     console.warn('Failed to update in Supabase, updating offline:', error);
     await updateTransactionOffline(updatedTransaction);
@@ -103,13 +105,14 @@ export async function clearTransactions(): Promise<void> {
   if (!userId) return;
 
   try {
-    // Use secure RPC function to bypass RLS
+    // Use secure RPC to delete all transactions
     const { data, error } = await supabase.rpc('delete_transactions_for_custom_user', {
       input_user_id: userId
     });
 
-    if (error) throw error;
-    if (!data?.success) throw new Error(data?.error || 'Failed to clear transactions');
+    if (error || !data?.success) {
+      throw new Error(data?.error || 'Failed to clear transactions');
+    }
   } catch (error) {
     console.warn('Failed to clear from Supabase:', error);
   }
@@ -203,7 +206,7 @@ async function syncOfflineTransactions(): Promise<void> {
 
   for (const transaction of pendingTransactions) {
     try {
-      // Use secure RPC function to bypass RLS
+      // Use secure RPC to sync transaction
       const { data, error } = await supabase.rpc('upsert_transaction_for_custom_user', {
         input_user_id: userId,
         input_id: transaction.id,

@@ -70,16 +70,6 @@ const Index = () => {
               />
               
               <div className="flex items-center gap-2 sm:gap-3">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate('/profile')}
-                  className="flex items-center gap-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground text-sm whitespace-nowrap"
-                >
-                  <User size={16} />
-                  <span className="font-medium hidden sm:inline">{language === 'ar' ? 'الملف الشخصي' : 'Profile'}</span>
-                  <span className="font-medium sm:hidden">{language === 'ar' ? 'ملف' : 'Profile'}</span>
-                </Button>
                 
                 <Button
                   variant="outline"

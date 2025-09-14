@@ -10,7 +10,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import TransactionFlow from "./pages/TransactionFlow";
 import BusinessProfile from "./pages/BusinessProfile";
-import Profile from "./pages/Profile";
+
 import History from "./pages/History";
 import NotFound from "./pages/NotFound";
 
@@ -30,7 +30,7 @@ const App = () => (
             <Route path="/transaction/:type" element={<ProtectedRoute><TransactionFlow /></ProtectedRoute>} />
             <Route path="/transaction/:type/edit/:transactionId" element={<ProtectedRoute><TransactionFlow /></ProtectedRoute>} />
             <Route path="/business-profile" element={<ProtectedRoute><BusinessProfile /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            
             <Route path="/history" element={<ProtectedRoute><RoleProtectedRoute requiredPermission="history"><History /></RoleProtectedRoute></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>

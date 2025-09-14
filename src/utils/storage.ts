@@ -23,11 +23,11 @@ export async function saveTransaction(transaction: Transaction): Promise<void> {
       input_type: transaction.type,
       input_weight: transaction.weight,
       input_purity: transaction.purity,
-      input_reduction: transaction.reduction,
+      input_reduction: transaction.reduction ?? null,
       input_rate: transaction.rate,
       input_fine_gold: transaction.fineGold,
       input_amount: transaction.amount,
-      input_remaining_fine_gold: transaction.remainingFineGold,
+      input_remaining_fine_gold: transaction.remainingFineGold ?? null,
       input_created_at: transaction.date.toISOString(),
       input_updated_at: transaction.date.toISOString()
     });
@@ -81,11 +81,11 @@ export async function updateTransaction(updatedTransaction: Transaction): Promis
       input_type: updatedTransaction.type,
       input_weight: updatedTransaction.weight,
       input_purity: updatedTransaction.purity,
-      input_reduction: updatedTransaction.reduction,
+      input_reduction: updatedTransaction.reduction ?? null,
       input_rate: updatedTransaction.rate,
       input_fine_gold: updatedTransaction.fineGold,
       input_amount: updatedTransaction.amount,
-      input_remaining_fine_gold: updatedTransaction.remainingFineGold,
+      input_remaining_fine_gold: updatedTransaction.remainingFineGold ?? null,
       input_created_at: updatedTransaction.date.toISOString(),
       input_updated_at: new Date().toISOString()
     });
@@ -213,11 +213,11 @@ async function syncOfflineTransactions(): Promise<void> {
         input_type: transaction.type,
         input_weight: transaction.weight,
         input_purity: transaction.purity,
-        input_reduction: transaction.reduction,
+        input_reduction: transaction.reduction ?? null,
         input_rate: transaction.rate,
         input_fine_gold: transaction.fineGold,
         input_amount: transaction.amount,
-        input_remaining_fine_gold: transaction.remainingFineGold,
+        input_remaining_fine_gold: transaction.remainingFineGold ?? null,
         input_created_at: transaction.date.toISOString(),
         input_updated_at: new Date().toISOString()
       });

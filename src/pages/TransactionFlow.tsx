@@ -34,10 +34,6 @@ export default function TransactionFlow() {
     reduction: '',
     rate: '',
   });
-  const [customerData, setCustomerData] = useState({
-    name: '',
-    mobile: '',
-  });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showSummary, setShowSummary] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
@@ -232,9 +228,9 @@ export default function TransactionFlow() {
         </div>
 
         <div className="w-full flex-1 flex flex-col">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6 flex-1">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 flex-1">
             {/* Mobile-first Compact Input Form */}
-            <Card className="h-fit lg:h-full border-2 border-border shadow-xl bg-white/95 backdrop-blur-sm rounded-xl">
+            <Card className="h-fit lg:h-full lg:col-span-2 border-2 border-border shadow-xl bg-white/95 backdrop-blur-sm rounded-xl">
               <CardHeader className="pb-2 sm:pb-3 md:pb-4 bg-gradient-to-r from-white/80 to-off-white/80 rounded-t-xl border-b-2 border-border/50 px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
                 <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
                   <Badge className={`${getTransactionColor(transactionType)} text-white px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm font-bold rounded-lg shadow-sm border border-white/20`}>
@@ -246,31 +242,6 @@ export default function TransactionFlow() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 sm:space-y-6 p-4 sm:p-6">
-                {/* Customer Information Section */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">
-                    Customer Information
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <BusinessInput
-                      id="customerName"
-                      label="Customer Name"
-                      type="text"
-                      value={customerData.name}
-                      onChange={(e) => setCustomerData(prev => ({ ...prev, name: e.target.value }))}
-                      placeholder="Enter customer name"
-                    />
-                    <BusinessInput
-                      id="customerMobile"
-                      label="Mobile Number"
-                      type="tel"
-                      value={customerData.mobile}
-                      onChange={(e) => setCustomerData(prev => ({ ...prev, mobile: e.target.value }))}
-                      placeholder="Enter 10-digit mobile number"
-                    />
-                  </div>
-                </div>
-
                 {/* Average Prices Display */}
                 <DayAveragePrices transactionType={transactionType} />
 
@@ -281,7 +252,7 @@ export default function TransactionFlow() {
                      transactionType === 'PURCHASE' ? 'Gold Purchase Details' : 'Gold Sale Details'}
                   </h3>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     {/* Weight Input */}
                     <BusinessInput
                       id="weight"
@@ -348,7 +319,7 @@ export default function TransactionFlow() {
 
                     {/* Fine Weight Display (for Exchange) */}
                     {transactionType === 'EXCHANGE' && calculation && (
-                      <div className="md:col-span-2">
+                      <div>
                         <label className="text-sm font-medium text-foreground mb-2 block">
                           Fine Weight (g)
                         </label>

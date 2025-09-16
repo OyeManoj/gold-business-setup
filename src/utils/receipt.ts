@@ -39,12 +39,25 @@ export function generateReceiptText(
     return ' '.repeat(Math.max(0, padding)) + text;
   };
   
+  // Debug logging
+  console.log('generateReceiptText - Business Profile:', businessProfile);
+  console.log('generateReceiptText - Receipt Settings:', receiptSettings);
+  
   // Add business details if provided and enabled
   if (businessProfile && receiptSettings) {
     
+    console.log('Checking business name display conditions:');
+    console.log('- receiptSettings.showBusinessName:', receiptSettings.showBusinessName);
+    console.log('- businessProfile.name:', businessProfile.name);
+    
     if (receiptSettings.showBusinessName && businessProfile.name) {
       const businessName = businessProfile.name.toUpperCase();
+      console.log('Adding business name to receipt:', businessName);
       receipt += `${centerText(businessName)}\n`;
+    } else {
+      console.log('Business name NOT added to receipt because:');
+      console.log('- Show business name setting:', receiptSettings.showBusinessName);
+      console.log('- Business name exists:', !!businessProfile.name);
     }
     
     

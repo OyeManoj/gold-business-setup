@@ -170,18 +170,18 @@ export function printReceipt(receiptText: string): void {
           position: absolute !important;
           top: 0 !important;
           left: 0 !important;
-          width: 3in !important;
+          width: 2.8in !important;
           height: auto !important;
           font-size: 13px !important;
           font-weight: 700 !important;
           line-height: 1.1 !important;
-          margin: 0 !important;
+          margin: 0.1in !important;
           padding: 0 !important;
           page-break-inside: avoid !important;
         }
         @page {
           size: 3in auto;
-          margin: 0;
+          margin: 0.2in 0.1in;
           padding: 0;
         }
         html, body {
@@ -281,7 +281,7 @@ export function printReceipt(receiptText: string): void {
                 }
                 @page {
                   size: 3in auto;
-                  margin: 0 !important;
+                  margin: 0.2in 0.1in !important;
                   padding: 0 !important;
               }
             </style>

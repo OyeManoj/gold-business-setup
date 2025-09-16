@@ -134,7 +134,7 @@ const Index = () => {
                 className="group bg-card border-2 border-border hover:border-primary cursor-pointer transition-all duration-200 hover:shadow-lg active:scale-[0.98] touch-manipulation"
                 onClick={() => navigate(transaction.path)}
               >
-                <CardContent className="p-4 sm:p-5 md:p-6 text-center">
+                <CardContent className="p-2 sm:p-3 md:p-4 text-center">
                   {/* Mobile-optimized Typography */}
                   <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2 sm:mb-3 uppercase tracking-wide leading-tight">
                     {transaction.title}

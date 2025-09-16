@@ -227,9 +227,9 @@ export default function TransactionFlow() {
         </div>
 
         <div className="w-full flex-1 flex flex-col">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 sm:gap-6 flex-1">
             {/* Enhanced Input Form */}
-            <Card className="h-fit lg:h-full lg:col-span-2 border border-border shadow-lg bg-card backdrop-blur-sm rounded-lg">
+            <Card className="h-fit lg:h-full lg:col-span-3 border border-border shadow-lg bg-card backdrop-blur-sm rounded-lg">
               <CardHeader className="pb-2 bg-gradient-to-r from-card to-muted/50 rounded-t-lg border-b border-border px-3 sm:px-4 py-2 sm:py-3">
                 <div className="flex items-center gap-3 mb-2">
                   <Badge className={`${getTransactionColor(transactionType)} text-white px-3 py-1.5 text-sm font-semibold rounded-md shadow-sm`}>

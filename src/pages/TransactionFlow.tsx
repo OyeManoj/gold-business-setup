@@ -350,11 +350,11 @@ export default function TransactionFlow() {
 
             {/* Enhanced Live Calculation Summary */}
 {calculation && (
-  <Card className="h-fit border border-warning/30 bg-gradient-to-br from-warning/5 to-warning/10 backdrop-blur-sm rounded-lg shadow-md">
+  <Card className="h-fit border border-border bg-card backdrop-blur-sm rounded-lg shadow-sm">
     <CardHeader className="pb-2 pt-2 px-3">
       <div className="flex items-center gap-2">
-        <Badge className="bg-warning text-warning-foreground px-2 py-1 text-xs font-medium rounded-md shadow-sm">
-          📊
+        <Badge className="bg-muted text-foreground px-2 py-1 text-xs font-medium rounded-md">
+          CALC
         </Badge>
         <CardTitle className="text-base font-semibold text-foreground">
           {transactionType === 'EXCHANGE' ? 'Exchange Summary' : 
@@ -364,7 +364,7 @@ export default function TransactionFlow() {
     </CardHeader>
     <CardContent className="space-y-3 px-3 pb-3">
       {/* Main Output */}
-      <div className="bg-warning/10 border border-warning/20 rounded-lg p-3 text-center">
+      <div className="bg-muted border border-border rounded-lg p-3 text-center">
         <div className="text-xs font-medium text-foreground/70 mb-1">
           {transactionType === 'EXCHANGE' ? 'Fine Weight Output' : 
            transactionType === 'PURCHASE' ? 'Fine Gold Purchased' : 'Total Amount'}

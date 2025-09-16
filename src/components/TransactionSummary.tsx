@@ -36,15 +36,15 @@ export function TransactionSummary({
 }: TransactionSummaryProps) {
   const getTypeColor = (type: TransactionType) => {
     switch (type) {
-      case 'EXCHANGE': return 'bg-blue-100 text-blue-800';
-      case 'PURCHASE': return 'bg-green-100 text-green-800';
-      case 'SALE': return 'bg-orange-100 text-orange-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'EXCHANGE': return 'bg-muted text-foreground';
+      case 'PURCHASE': return 'bg-muted text-foreground';
+      case 'SALE': return 'bg-muted text-foreground';
+      default: return 'bg-muted text-foreground';
     }
   };
 
   return (
-    <Card className="h-full bg-gradient-to-br from-gold-light/30 to-background border-2 border-gold/20">
+    <Card className="h-full bg-card border border-border">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-base font-bold">Transaction Summary</CardTitle>

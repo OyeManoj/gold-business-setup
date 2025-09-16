@@ -151,11 +151,11 @@ export default function TransactionFlow() {
         });
       }
 
-      // Note: Auto-print functionality would need receipt settings update
-      // if (receiptSettings.autoPrint) {
-      //   const receiptText = generateReceiptText(transaction, businessProfile, language);
-      //   printReceipt(receiptText);
-      // }
+      // Auto-print functionality
+      if (receiptSettings.autoPrint) {
+        const receiptText = generateReceiptText(transaction, language, businessProfile, receiptSettings);
+        printReceipt(receiptText);
+      }
 
       navigate('/history');
     } catch (error) {

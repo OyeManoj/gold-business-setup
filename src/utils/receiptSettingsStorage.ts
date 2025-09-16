@@ -8,6 +8,7 @@ const defaultSettings: ReceiptSettings = {
   showBusinessName: true,
   showBusinessAddress: false,
   useBusinessNameAsAppTitle: true,
+  autoPrint: false,
 };
 
 export async function getReceiptSettings(): Promise<ReceiptSettings> {

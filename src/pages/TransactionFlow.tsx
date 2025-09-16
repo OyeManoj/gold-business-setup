@@ -204,20 +204,19 @@ export default function TransactionFlow() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-off-white to-background">
-      <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6 lg:py-8 flex flex-col min-h-screen">
-        {/* Mobile-first Compact Header */}
-        <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-8 flex-shrink-0">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-muted/30 to-background">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 flex flex-col min-h-screen">
+        {/* Enhanced Header */}
+        <div className="flex items-center justify-between mb-6 sm:mb-8 flex-shrink-0">
           <div className="flex items-center">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => navigate('/')}
-              className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg hover:bg-white/80 hover:shadow-sm transition-all duration-200 min-h-[36px] sm:min-h-[40px] touch-manipulation"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted hover:shadow-soft transition-all duration-200 text-foreground font-medium"
             >
-              <ArrowLeft size={16} className="sm:hidden" />
-              <ArrowLeft size={18} className="hidden sm:block" />
-              <span className="font-medium text-sm sm:text-base">{t.back}</span>
+              <ArrowLeft size={18} />
+              <span className="text-sm sm:text-base">{t.back}</span>
             </Button>
           </div>
           
@@ -228,31 +227,31 @@ export default function TransactionFlow() {
         </div>
 
         <div className="w-full flex-1 flex flex-col">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 flex-1">
-            {/* Mobile-first Compact Input Form */}
-            <Card className="h-fit lg:h-full lg:col-span-2 border-2 border-border shadow-xl bg-white/95 backdrop-blur-sm rounded-xl">
-              <CardHeader className="pb-2 sm:pb-3 md:pb-4 bg-gradient-to-r from-white/80 to-off-white/80 rounded-t-xl border-b-2 border-border/50 px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
-                <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                  <Badge className={`${getTransactionColor(transactionType)} text-white px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm font-bold rounded-lg shadow-sm border border-white/20`}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1">
+            {/* Enhanced Input Form */}
+            <Card className="h-fit lg:h-full lg:col-span-2 border border-border shadow-lg bg-card backdrop-blur-sm rounded-lg">
+              <CardHeader className="pb-3 bg-gradient-to-r from-card to-muted/50 rounded-t-lg border-b border-border px-4 sm:px-6 py-3 sm:py-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <Badge className={`${getTransactionColor(transactionType)} text-white px-3 py-1.5 text-sm font-semibold rounded-md shadow-sm`}>
                     {t[transactionType.toLowerCase() as keyof typeof t]}
                   </Badge>
                 </div>
-                <CardTitle className="text-lg sm:text-xl font-bold text-dark tracking-tight">
+                <CardTitle className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight">
                   {isEditMode ? 'Edit Transaction' : 'Transaction Details'}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 sm:space-y-6 p-4 sm:p-6">
+              <CardContent className="space-y-6 p-4 sm:p-6">
                 {/* Average Prices Display */}
                 <DayAveragePrices transactionType={transactionType} />
 
                 {/* Transaction Details Section */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+                <div className="space-y-5">
+                  <h3 className="text-lg font-semibold text-foreground border-b border-border pb-3">
                     {transactionType === 'EXCHANGE' ? 'Gold Exchange Details' : 
                      transactionType === 'PURCHASE' ? 'Gold Purchase Details' : 'Gold Sale Details'}
                   </h3>
 
-                  <div className="space-y-4">
+                  <div className="space-y-5">
                     {/* Weight Input */}
                     <BusinessInput
                       id="weight"
@@ -349,52 +348,52 @@ export default function TransactionFlow() {
             </Card>
 
 
-            {/* Live Calculation Summary */}
+            {/* Enhanced Live Calculation Summary */}
 {calculation && (
-  <Card className="h-fit border border-yellow-200 bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 dark:border-yellow-800">
-    <CardHeader className="pb-2 pt-3 px-3">
-      <div className="flex items-center gap-1.5">
-        <Badge className="bg-yellow-500 text-white px-1.5 py-0.5 text-xs">
+  <Card className="h-fit border border-warning/30 bg-gradient-to-br from-warning/5 to-warning/10 backdrop-blur-sm rounded-lg shadow-md">
+    <CardHeader className="pb-2 pt-3 px-4">
+      <div className="flex items-center gap-2">
+        <Badge className="bg-warning text-warning-foreground px-2 py-1 text-xs font-medium rounded-md shadow-sm">
           📊
         </Badge>
-        <CardTitle className="text-sm font-bold text-yellow-900 dark:text-yellow-100">
+        <CardTitle className="text-base font-semibold text-foreground">
           {transactionType === 'EXCHANGE' ? 'Exchange Summary' : 
            transactionType === 'PURCHASE' ? 'Purchase Summary' : 'Sale Summary'}
         </CardTitle>
       </div>
     </CardHeader>
-    <CardContent className="space-y-2 px-3 pb-3">
+    <CardContent className="space-y-3 px-4 pb-4">
       {/* Main Output */}
-      <div className="bg-yellow-100/80 dark:bg-yellow-900/40 rounded-md p-2 text-center">
-        <div className="text-xs text-yellow-800 dark:text-yellow-200 mb-0.5">
+      <div className="bg-warning/10 border border-warning/20 rounded-lg p-3 text-center">
+        <div className="text-xs font-medium text-foreground/70 mb-1">
           {transactionType === 'EXCHANGE' ? 'Fine Weight Output' : 
            transactionType === 'PURCHASE' ? 'Fine Gold Purchased' : 'Total Amount'}
         </div>
-        <div className="text-xl font-bold text-yellow-900 dark:text-yellow-100">
+        <div className="text-2xl font-bold text-foreground">
           {transactionType !== 'SALE' ? formatWeight(calculation.fineGold) : formatIndianCurrency(calculation.amount)}
         </div>
         {transactionType !== 'SALE' && (
-          <div className="text-xs text-yellow-700 dark:text-yellow-300">grams</div>
+          <div className="text-xs text-muted-foreground mt-1">grams</div>
         )}
       </div>
 
       {/* Detailed Breakdown */}
-      <div className="space-y-1.5">
-        <div className="flex justify-between items-center py-0.5">
-          <span className="text-xs text-yellow-800 dark:text-yellow-200">
+      <div className="space-y-2">
+        <div className="flex justify-between items-center py-1">
+          <span className="text-xs font-medium text-muted-foreground">
             {transactionType === 'EXCHANGE' ? 'Old Weight:' : 'Weight:'}
           </span>
-          <span className="text-xs font-semibold text-yellow-900 dark:text-yellow-100">
+          <span className="text-xs font-semibold text-foreground">
             {formatWeight(parseFloat(formData.weight || '0'))}g
           </span>
         </div>
 
         {transactionType !== 'SALE' && (
-          <div className="flex justify-between items-center py-0.5">
-            <span className="text-xs text-yellow-800 dark:text-yellow-200">
+          <div className="flex justify-between items-center py-1">
+            <span className="text-xs font-medium text-muted-foreground">
               {transactionType === 'EXCHANGE' ? 'Original Purity:' : 'Purity:'}
             </span>
-            <span className="text-xs font-semibold text-yellow-900 dark:text-yellow-100">
+            <span className="text-xs font-semibold text-foreground">
               {formatPercentage(parseFloat(formData.purity || '0'))}%
             </span>
           </div>
@@ -402,25 +401,25 @@ export default function TransactionFlow() {
 
         {transactionType === 'EXCHANGE' && (
           <>
-            <div className="flex justify-between items-center py-0.5">
-              <span className="text-xs text-yellow-800 dark:text-yellow-200">Reduction:</span>
-              <span className="text-xs font-semibold text-yellow-900 dark:text-yellow-100">
+            <div className="flex justify-between items-center py-1">
+              <span className="text-xs font-medium text-muted-foreground">Reduction:</span>
+              <span className="text-xs font-semibold text-foreground">
                 {formatPercentage(parseFloat(formData.reduction || '0'))}%
               </span>
             </div>
-            <div className="flex justify-between items-center py-0.5">
-              <span className="text-xs text-yellow-800 dark:text-yellow-200">Adjusted Purity:</span>
-              <span className="text-xs font-semibold text-yellow-900 dark:text-yellow-100">
+            <div className="flex justify-between items-center py-1">
+              <span className="text-xs font-medium text-muted-foreground">Adjusted Purity:</span>
+              <span className="text-xs font-semibold text-foreground">
                 {formatPercentage(parseFloat(formData.purity || '0') - parseFloat(formData.reduction || '0'))}%
               </span>
             </div>
           </>
         )}
 
-        <div className="flex justify-between items-center py-0.5">
-          <span className="text-xs text-yellow-800 dark:text-yellow-200">Fine Weight:</span>
-          <span className="text-xs font-semibold text-yellow-900 dark:text-yellow-100">
-            <Badge className="bg-yellow-600 text-white px-1.5 py-0.5 text-xs">
+        <div className="flex justify-between items-center py-1">
+          <span className="text-xs font-medium text-muted-foreground">Fine Weight:</span>
+          <span className="text-xs font-semibold text-foreground">
+            <Badge className="bg-primary text-primary-foreground px-2 py-1 text-xs font-medium rounded-md shadow-sm">
               {formatWeight(calculation.fineGold)}g
             </Badge>
           </span>
@@ -428,15 +427,15 @@ export default function TransactionFlow() {
 
         {transactionType !== 'EXCHANGE' && (
           <>
-            <div className="flex justify-between items-center py-0.5">
-              <span className="text-xs text-yellow-800 dark:text-yellow-200">Rate:</span>
-              <span className="text-xs font-semibold text-yellow-900 dark:text-yellow-100">
+            <div className="flex justify-between items-center py-1">
+              <span className="text-xs font-medium text-muted-foreground">Rate:</span>
+              <span className="text-xs font-semibold text-foreground">
                 {formatIndianRate(parseFloat(formData.rate || '0'))}
               </span>
             </div>
-            <div className="flex justify-between items-center py-0.5">
-              <span className="text-xs text-yellow-800 dark:text-yellow-200">Total Amount:</span>
-              <span className="text-xs font-semibold text-yellow-900 dark:text-yellow-100">
+            <div className="flex justify-between items-center py-1">
+              <span className="text-xs font-medium text-muted-foreground">Total Amount:</span>
+              <span className="text-xs font-semibold text-foreground">
                 {formatIndianCurrency(calculation.amount)}
               </span>
             </div>

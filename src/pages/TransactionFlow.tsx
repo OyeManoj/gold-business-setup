@@ -442,31 +442,6 @@ export default function TransactionFlow() {
             </div>
           </>
         )}
-
-        {transactionType === 'EXCHANGE' && (
-          <div className="flex justify-between items-center py-0.5">
-            <span className="text-xs text-yellow-800 dark:text-yellow-200">Payment:</span>
-            <Badge className="bg-yellow-500 text-white px-1.5 py-0.5 text-xs">
-              Fine Gold
-            </Badge>
-          </div>
-        )}
-      </div>
-
-      {/* Formula Display */}
-      <div className="bg-yellow-100/50 dark:bg-yellow-900/20 rounded-md p-1.5 mt-2">
-        <div className="text-xs text-yellow-800 dark:text-yellow-200 font-medium mb-0.5">Calculation:</div>
-        <div className="text-xs text-yellow-700 dark:text-yellow-300 font-mono leading-tight">
-          {transactionType === 'EXCHANGE' && 
-            `Fine = ${formData.weight || '0'} × (${formData.purity || '0'} - ${formData.reduction || '0'}) ÷ 100 = ${formatWeight(calculation.fineGold)}g`
-          }
-          {transactionType === 'PURCHASE' && 
-            `Fine = ${formData.weight || '0'} × ${formData.purity || '0'} ÷ 100 = ${formatWeight(calculation.fineGold)}g`
-          }
-          {transactionType === 'SALE' && 
-            `Amount = ${formData.weight || '0'} × ${formData.rate || '0'} = ${formatIndianCurrency(calculation.amount)}`
-          }
-        </div>
       </div>
     </CardContent>
   </Card>

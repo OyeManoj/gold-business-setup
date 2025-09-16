@@ -15,6 +15,8 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuditLog } from '@/hooks/useAuditLog';
 import { TransactionForm } from '@/components/TransactionForm';
 import { LiveCalculation } from '@/components/LiveCalculation';
+import type { BusinessProfile } from '@/types/business';
+import type { ReceiptSettings } from '@/types/receiptSettings';
 
 export default function TransactionFlow() {
   const { type, transactionId } = useParams<{ type: string; transactionId?: string }>();
@@ -33,6 +35,20 @@ export default function TransactionFlow() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [calculation, setCalculation] = useState<any>(null);
+  const [businessProfileState, setBusinessProfileState] = useState<BusinessProfile | undefined>(undefined);
+  const [receiptSettingsState, setReceiptSettingsState] = useState<ReceiptSettings | undefined>(undefined);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const [bp, rs] = await Promise.all([getBusinessProfile(), getReceiptSettings()]);
+        setBusinessProfileState(bp);
+        setReceiptSettingsState(rs);
+      } catch (e) {
+        console.error('Failed to preload receipt dependencies', e);
+      }
+    })();
+  }, []);
 
   const t = useTranslation(language);
   const transactionType = type?.toUpperCase() as TransactionType;
@@ -120,9 +136,6 @@ export default function TransactionFlow() {
     if (!validateForm() || !calculation) return;
 
     try {
-      const businessProfile = await getBusinessProfile();
-      const receiptSettings = await getReceiptSettings();
-      
       const transaction: Transaction = {
         id: editingTransaction?.id || crypto.randomUUID(),
         type: transactionType,
@@ -134,6 +147,20 @@ export default function TransactionFlow() {
         amount: calculation.amount,
         date: editingTransaction?.date || new Date(),
       };
+
+      // Trigger printing immediately (within user gesture)
+      try {
+        const receiptText = generateReceiptText(transaction, language, businessProfileState, receiptSettingsState);
+        printReceipt(receiptText);
+        console.log('Receipt printing initiated for transaction:', transaction.id);
+      } catch (printError) {
+        console.error('Receipt printing failed:', printError);
+        toast({
+          title: "Print Notice",
+          description: "Receipt printing failed. You can print it later from History.",
+          variant: "default",
+        });
+      }
 
       if (isEditMode && editingTransaction) {
         await updateTransaction(transaction);
@@ -148,20 +175,6 @@ export default function TransactionFlow() {
         toast({
           title: "Transaction Saved",
           description: "Transaction has been successfully saved.",
-        });
-      }
-
-      // Always print receipt when transaction is completed
-      try {
-        const receiptText = generateReceiptText(transaction, language, businessProfile, receiptSettings);
-        printReceipt(receiptText);
-        console.log('Receipt printing initiated for transaction:', transaction.id);
-      } catch (printError) {
-        console.error('Receipt printing failed:', printError);
-        toast({
-          title: "Print Notice",
-          description: "Transaction saved successfully, but receipt printing failed. You can print from history.",
-          variant: "default",
         });
       }
 

@@ -205,9 +205,9 @@ export default function TransactionFlow() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-muted/30 to-background">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 flex flex-col min-h-screen">
+      <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-3 sm:py-4 lg:py-6 flex flex-col min-h-screen">
         {/* Enhanced Header */}
-        <div className="flex items-center justify-between mb-6 sm:mb-8 flex-shrink-0">
+        <div className="flex items-center justify-between mb-4 sm:mb-6 flex-shrink-0">
           <div className="flex items-center">
             <Button
               variant="ghost"
@@ -230,8 +230,8 @@ export default function TransactionFlow() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1">
             {/* Enhanced Input Form */}
             <Card className="h-fit lg:h-full lg:col-span-2 border border-border shadow-lg bg-card backdrop-blur-sm rounded-lg">
-              <CardHeader className="pb-3 bg-gradient-to-r from-card to-muted/50 rounded-t-lg border-b border-border px-4 sm:px-6 py-3 sm:py-4">
-                <div className="flex items-center gap-3 mb-3">
+              <CardHeader className="pb-2 bg-gradient-to-r from-card to-muted/50 rounded-t-lg border-b border-border px-3 sm:px-4 py-2 sm:py-3">
+                <div className="flex items-center gap-3 mb-2">
                   <Badge className={`${getTransactionColor(transactionType)} text-white px-3 py-1.5 text-sm font-semibold rounded-md shadow-sm`}>
                     {t[transactionType.toLowerCase() as keyof typeof t]}
                   </Badge>
@@ -240,18 +240,18 @@ export default function TransactionFlow() {
                    {isEditMode ? 'Edit Transaction' : ''}
                  </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6 p-4 sm:p-6">
+              <CardContent className="space-y-4 p-3 sm:p-4">
                 {/* Average Prices Display */}
                 <DayAveragePrices transactionType={transactionType} />
 
                 {/* Transaction Details Section */}
-                <div className="space-y-5">
-                  <h3 className="text-xl font-semibold text-foreground border-b border-border pb-4 mb-6">
+                <div className="space-y-4">
+                  <h3 className="text-xl font-semibold text-foreground border-b border-border pb-2 mb-4">
                     {transactionType === 'EXCHANGE' ? 'Gold Exchange Details' : 
                      transactionType === 'PURCHASE' ? 'Gold Purchase Details' : 'Gold Sale Details'}
                   </h3>
 
-                  <div className="space-y-6">
+                  <div className="space-y-4">
                     {/* Weight Input */}
                     <BusinessInput
                       id="weight"
@@ -318,7 +318,7 @@ export default function TransactionFlow() {
 
                     {/* Fine Weight Display (for Exchange) */}
                     {transactionType === 'EXCHANGE' && calculation && (
-                      <div className="bg-muted/30 border border-border rounded-lg p-4">
+                      <div className="bg-muted/30 border border-border rounded-lg p-3">
                         <label className="text-sm font-semibold text-foreground mb-3 block">
                           Fine Weight (g)
                         </label>
@@ -351,7 +351,7 @@ export default function TransactionFlow() {
             {/* Enhanced Live Calculation Summary */}
 {calculation && (
   <Card className="h-fit border border-warning/30 bg-gradient-to-br from-warning/5 to-warning/10 backdrop-blur-sm rounded-lg shadow-md">
-    <CardHeader className="pb-2 pt-3 px-4">
+    <CardHeader className="pb-2 pt-2 px-3">
       <div className="flex items-center gap-2">
         <Badge className="bg-warning text-warning-foreground px-2 py-1 text-xs font-medium rounded-md shadow-sm">
           📊
@@ -362,7 +362,7 @@ export default function TransactionFlow() {
         </CardTitle>
       </div>
     </CardHeader>
-    <CardContent className="space-y-3 px-4 pb-4">
+    <CardContent className="space-y-3 px-3 pb-3">
       {/* Main Output */}
       <div className="bg-warning/10 border border-warning/20 rounded-lg p-3 text-center">
         <div className="text-xs font-medium text-foreground/70 mb-1">

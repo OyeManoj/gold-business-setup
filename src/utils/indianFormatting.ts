@@ -27,7 +27,7 @@ export function formatIndianRate(rate: number): string {
  * Formats weight with proper decimal places
  */
 export function formatWeight(weight: number): string {
-  return formatIndianNumber(weight, 3);
+  return formatIndianNumber(weight, 2);
 }
 
 /**

@@ -5,7 +5,8 @@ import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { FilterSection } from '@/components/FilterSection';
 import { TransactionSummaryCard } from '@/components/TransactionSummaryCard';
 import { ExportControls } from '@/components/ExportControls';
-import { clearTransactions, deleteTransaction } from '@/utils/storage';
+import { BulkTransactionControls } from '@/components/BulkTransactionControls';
+import { clearTransactions, deleteTransaction, deleteTransactions } from '@/utils/storage';
 import { useTranslation } from '@/utils/translations';
 import { formatTransactionType } from '@/utils/exportUtils';
 import { useTransactionFilters } from '@/hooks/useTransactionFilters';
@@ -23,6 +24,8 @@ export default function History() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [language, setLanguage] = useState<Language>('en');
+  const [selectedTransactions, setSelectedTransactions] = useState<string[]>([]);
+  const [showSelection, setShowSelection] = useState(false);
   
   // Use realtime transactions hook for automatic sync across devices
   const { transactions, isLoading, refreshTransactions } = useRealtimeTransactions();
@@ -90,6 +93,38 @@ export default function History() {
         description: "Failed to delete transaction. Please try again.",
         variant: "destructive"
       });
+    }
+  };
+
+  const handleBulkDelete = async (transactionIds: string[]) => {
+    try {
+      await deleteTransactions(transactionIds);
+      await refreshTransactions();
+      setSelectedTransactions([]);
+      toast({
+        title: "Success",
+        description: `${transactionIds.length} transaction${transactionIds.length > 1 ? 's' : ''} deleted successfully`,
+        variant: "default"
+      });
+    } catch (error) {
+      console.error('Bulk delete error:', error);
+      toast({
+        title: "Delete Error",
+        description: "Failed to delete some transactions. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleSelectionChange = (transactionIds: string[]) => {
+    setSelectedTransactions(transactionIds);
+  };
+
+  const handleSingleSelectionChange = (transactionId: string, selected: boolean) => {
+    if (selected) {
+      setSelectedTransactions(prev => [...prev, transactionId]);
+    } else {
+      setSelectedTransactions(prev => prev.filter(id => id !== transactionId));
     }
   };
 
@@ -167,6 +202,16 @@ export default function History() {
               </div>
             ) : (
               <>
+                {/* Bulk Transaction Controls */}
+                <BulkTransactionControls
+                  transactions={filteredTransactions}
+                  selectedTransactions={selectedTransactions}
+                  onSelectionChange={handleSelectionChange}
+                  onBulkDelete={handleBulkDelete}
+                  showSelection={showSelection}
+                  setShowSelection={setShowSelection}
+                />
+
                 {/* Compact Transaction Table */}
                 <div className="bg-card rounded-lg border border-border shadow-md overflow-hidden">
                   <div className="overflow-x-auto">
@@ -190,6 +235,9 @@ export default function History() {
                             transaction={transaction}
                             index={index}
                             language={language}
+                            showSelection={showSelection}
+                            isSelected={selectedTransactions.includes(transaction.id)}
+                            onSelectionChange={handleSingleSelectionChange}
                             onEdit={handleEditTransaction}
                             onPrint={handlePrintReceipt}
                             onDelete={handleDeleteTransaction}

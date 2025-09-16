@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Edit, Printer, Trash2 } from 'lucide-react';
 import { Transaction } from '@/types/transaction';
@@ -10,6 +11,9 @@ interface SwipeableTransactionRowProps {
   transaction: Transaction;
   index: number;
   language: string;
+  showSelection?: boolean;
+  isSelected?: boolean;
+  onSelectionChange?: (transactionId: string, selected: boolean) => void;
   onEdit: (transaction: Transaction) => void;
   onPrint: (transaction: Transaction) => void;
   onDelete: (transaction: Transaction) => void;
@@ -19,6 +23,9 @@ export function SwipeableTransactionRow({
   transaction,
   index,
   language,
+  showSelection = false,
+  isSelected = false,
+  onSelectionChange,
   onEdit,
   onPrint,
   onDelete
@@ -125,6 +132,15 @@ export function SwipeableTransactionRow({
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
       >
+        {showSelection && (
+          <td className="py-2 px-2 w-12">
+            <Checkbox
+              checked={isSelected}
+              onCheckedChange={(checked) => onSelectionChange?.(transaction.id, !!checked)}
+              className="w-4 h-4"
+            />
+          </td>
+        )}
         <td className="py-2 px-2">
           <div className="text-sm">
             <div className="font-semibold text-foreground">{transaction.date.toLocaleDateString('en-IN')}</div>

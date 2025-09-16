@@ -149,6 +149,44 @@ export async function deleteTransaction(transactionId: string): Promise<void> {
   }
 }
 
+// Delete multiple transactions
+export async function deleteTransactions(transactionIds: string[]): Promise<void> {
+  const userId = await getCurrentUserId();
+  if (!userId) {
+    // Perform offline deletion for all transactions
+    for (const transactionId of transactionIds) {
+      await deleteTransactionOffline(transactionId);
+    }
+    return;
+  }
+
+  const errors: string[] = [];
+  
+  for (const transactionId of transactionIds) {
+    try {
+      // Use secure RPC to delete specific transaction
+      const { data, error } = await supabase.rpc('delete_transaction_for_custom_user', {
+        input_user_id: userId,
+        input_transaction_id: transactionId
+      });
+
+      if (error || !data?.success) {
+        errors.push(transactionId);
+        console.warn('Failed to delete transaction from Supabase:', transactionId, data?.error);
+        await deleteTransactionOffline(transactionId);
+      }
+    } catch (error) {
+      console.warn('Failed to delete transaction from Supabase:', transactionId, error);
+      await deleteTransactionOffline(transactionId);
+      errors.push(transactionId);
+    }
+  }
+
+  if (errors.length > 0) {
+    console.warn(`Failed to delete ${errors.length} transactions from Supabase, deleted offline instead`);
+  }
+}
+
 // Transform Supabase data to Transaction format
 function transformSupabaseToTransaction(data: any): Transaction {
   return {

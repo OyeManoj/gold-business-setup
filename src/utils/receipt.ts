@@ -94,19 +94,19 @@ export function generateReceiptText(
   const dateTimeText = `${date} • ${time}`;
   receipt += `${centerText(dateTimeText)}\n`;
   receipt += `--------------------------------\n`;
-  receipt += formatLine('WEIGHT', transaction.weight.toFixed(3), 'G');
-  receipt += formatLine('PURITY', String(transaction.purity), '%');
+  receipt += formatLine('WEIGHT', transaction.weight.toFixed(2), 'G');
+  receipt += formatLine('PURITY', transaction.purity.toFixed(2), '%');
   
   if (transaction.reduction !== undefined) {
-    receipt += formatLine('REDUCTION', String(transaction.reduction), '%');
+    receipt += formatLine('REDUCTION', transaction.reduction.toFixed(2), '%');
   }
   
   receipt += `--------------------------------\n`;
-  receipt += formatLargeLine('FINE GOLD', transaction.fineGold.toFixed(3), 'G');
+  receipt += formatLargeLine('FINE GOLD', transaction.fineGold.toFixed(2), 'G');
 
   // Only show payment for non-Exchange transactions
   if (transaction.type !== 'EXCHANGE') {
-    receipt += formatLargeLine('PAYMENT', `${t.rupees}${transaction.amount.toLocaleString()}`);
+    receipt += formatLargeLine('PAYMENT', `${t.rupees}${transaction.amount.toFixed(2)}`);
   }
   
   receipt += `\n================================\n`;

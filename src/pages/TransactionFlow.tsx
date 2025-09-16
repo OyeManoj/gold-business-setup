@@ -280,10 +280,6 @@ export default function TransactionFlow() {
                     {transactionType === 'EXCHANGE' ? 'Gold Exchange Details' : 
                      transactionType === 'PURCHASE' ? 'Gold Purchase Details' : 'Gold Sale Details'}
                   </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {transactionType === 'EXCHANGE' ? 'Enter old gold details for exchange calculation' :
-                     transactionType === 'PURCHASE' ? 'Enter gold purchase details' : 'Enter gold sale details'}
-                  </p>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Weight Input */}
@@ -362,18 +358,6 @@ export default function TransactionFlow() {
                       </div>
                     )}
                   </div>
-
-                  {/* Payment Mode (for Exchange) */}
-                  {transactionType === 'EXCHANGE' && (
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-foreground">Payment Mode</label>
-                      <div className="flex gap-2">
-                        <Badge className="bg-yellow-500 text-white px-3 py-1 rounded-full">
-                          Fine Gold
-                        </Badge>
-                      </div>
-                    </div>
-                  )}
                 </div>
 
                 {/* One-Touch Complete Transaction Button */}

@@ -8,115 +8,115 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Ultra Clean White Design System */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3%;
+    /* 4K Quality Color Palette - Ultra Sharp */
+    --background: 0 0% 99%;
+    --foreground: 0 0% 5%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3%;
+    --card-foreground: 0 0% 5%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3%;
+    --popover-foreground: 0 0% 5%;
 
-    --primary: 0 0% 3%;
+    --primary: 214 84% 56%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 0 0% 8%;
+    --primary-glow: 214 84% 66%;
 
-    --secondary: 0 0% 99%;
-    --secondary-foreground: 0 0% 3%;
+    --secondary: 0 0% 97%;
+    --secondary-foreground: 0 0% 5%;
 
-    --muted: 0 0% 99%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 0 0% 98%;
+    --muted-foreground: 0 0% 40%;
 
-    --accent: 0 0% 8%;
+    --accent: 270 68% 58%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 65% 50%;
+    --destructive: 0 90% 63%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 95%;
+    --border: 0 0% 92%;
     --input: 0 0% 100%;
-    --ring: 0 0% 8%;
+    --ring: 214 84% 56%;
 
-    --success: 150 60% 50%;
+    --success: 123 48% 56%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 45 95% 55%;
-    --warning-foreground: 0 0% 3%;
+    --warning: 38 92% 60%;
+    --warning-foreground: 0 0% 100%;
 
-    /* Minimal White System Colors */
-    --dark: 0 0% 3%;
-    --dark-light: 0 0% 8%;
-    --dark-medium: 0 0% 5%;
-    --gray: 0 0% 50%;
-    --gray-light: 0 0% 70%;
-    --light-gray: 0 0% 95%;
+    /* Ultra High Definition Colors */
+    --dark: 0 0% 8%;
+    --dark-light: 0 0% 15%;
+    --dark-medium: 0 0% 12%;
+    --gray: 0 0% 42%;
+    --gray-light: 0 0% 62%;
+    --light-gray: 0 0% 88%;
     --off-white: 0 0% 99%;
     --pure-white: 0 0% 100%;
-    --charcoal: 0 0% 3%;
-    --slate: 0 0% 55%;
+    --charcoal: 0 0% 10%;
+    --slate: 0 0% 48%;
 
-    /* Clean Accent Variations */
-    --accent-1: 0 0% 8%;
-    --accent-1-light: 0 0% 15%;
-    --accent-2: 0 0% 12%;
-    --accent-2-light: 0 0% 20%;
-    --accent-3: 0 0% 6%;
-    --accent-3-light: 0 0% 10%;
+    /* 4K Accent Variations */
+    --accent-1: 196 68% 52%;
+    --accent-1-light: 196 68% 72%;
+    --accent-2: 158 64% 52%;
+    --accent-2-light: 158 64% 72%;
+    --accent-3: 316 70% 56%;
+    --accent-3-light: 316 70% 76%;
 
-    /* Ultra Clean Gradients */
+    /* 4K Quality Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-glow)) 100%);
-    --gradient-secondary: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
-    --gradient-card: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--background)) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)) 20%, hsl(var(--background)) 100%);
+    --gradient-secondary: linear-gradient(180deg, hsl(var(--accent-1)) 0%, hsl(var(--accent-2)) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)) 40%, hsl(var(--background)) 100%);
     --gradient-button: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
-    --gradient-border: linear-gradient(90deg, hsl(var(--border)) 0%, hsl(var(--muted)) 50%, hsl(var(--border)) 100%);
+    --gradient-border: linear-gradient(90deg, hsl(var(--border)) 0%, hsl(var(--primary)) 50%, hsl(var(--border)) 100%);
 
-    /* Minimal Border Radius */
-    --radius: 6px;
-    --spacing-xs: 2px;
-    --spacing-sm: 4px;
-    --spacing-md: 8px;
-    --spacing-lg: 12px;
-    --spacing-xl: 16px;
-    --spacing-2xl: 24px;
-    --spacing-3xl: 32px;
-    --spacing-4xl: 48px;
+    /* 4K Border Radius */
+    --radius: 8px;
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+    --spacing-3xl: 64px;
+    --spacing-4xl: 96px;
 
-    /* Minimal Touch Targets */
-    --touch-target: 44px;
-    --touch-padding: 8px;
-    --mobile-padding: 12px;
-    --mobile-margin: 8px;
-    --mobile-gap: 6px;
+    /* Mobile-first touch targets */
+    --touch-target: 48px;
+    --touch-padding: 16px;
+    --mobile-padding: 20px;
+    --mobile-margin: 16px;
+    --mobile-gap: 12px;
 
-    /* Ultra Minimal Shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.03);
-    --shadow-md: 0 2px 4px 0 hsl(0 0% 0% / 0.04);
-    --shadow-lg: 0 4px 8px 0 hsl(0 0% 0% / 0.05);
-    --shadow-xl: 0 8px 16px 0 hsl(0 0% 0% / 0.06);
-    --shadow-elegant: 0 4px 12px hsl(0 0% 0% / 0.04);
-    --shadow-dark: 0 4px 8px hsl(0 0% 0% / 0.08);
-    --shadow-light: 0 2px 4px hsl(0 0% 0% / 0.02);
-    --shadow-strong: 0 8px 20px hsl(0 0% 0% / 0.08);
-    --shadow-soft: 0 1px 3px hsl(0 0% 0% / 0.02);
-    --shadow-crisp: 0 1px 2px hsl(0 0% 0% / 0.04);
-    --shadow-focused: 0 0 0 2px hsl(0 0% 8% / 0.15);
+    /* 4K Quality Shadows */
+    --shadow-sm: 0 1px 3px 0 hsl(214 84% 56% / 0.08), 0 1px 2px 0 hsl(214 84% 56% / 0.06);
+    --shadow-md: 0 4px 6px -1px hsl(214 84% 56% / 0.1), 0 2px 4px -1px hsl(214 84% 56% / 0.06);
+    --shadow-lg: 0 10px 15px -3px hsl(214 84% 56% / 0.1), 0 4px 6px -2px hsl(214 84% 56% / 0.05);
+    --shadow-xl: 0 20px 25px -5px hsl(214 84% 56% / 0.1), 0 10px 10px -5px hsl(214 84% 56% / 0.04);
+    --shadow-elegant: 0 8px 30px hsl(214 84% 56% / 0.12);
+    --shadow-dark: 0 8px 24px hsl(0 0% 8% / 0.15);
+    --shadow-light: 0 4px 12px hsl(214 84% 56% / 0.08);
+    --shadow-strong: 0 16px 40px hsl(214 84% 56% / 0.15);
+    --shadow-soft: 0 2px 8px hsl(214 84% 56% / 0.05);
+    --shadow-crisp: 0 1px 3px hsl(0 0% 0% / 0.1);
+    --shadow-focused: 0 0 0 3px hsl(214 84% 56% / 0.15);
 
-    /* Ultra Smooth Minimal Transitions */
-    --transition-smooth: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-fast: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    /* 4K Smooth Transitions */
+    --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    /* Clean White Sidebar */
+    /* Modern 4K Sidebar */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 0 0% 3%;
-    --sidebar-primary: 0 0% 3%;
+    --sidebar-foreground: 0 0% 5%;
+    --sidebar-primary: 214 84% 56%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 99%;
-    --sidebar-accent-foreground: 0 0% 3%;
-    --sidebar-border: 0 0% 95%;
-    --sidebar-ring: 0 0% 8%;
+    --sidebar-accent: 0 0% 98%;
+    --sidebar-accent-foreground: 0 0% 5%;
+    --sidebar-border: 0 0% 92%;
+    --sidebar-ring: 214 84% 56%;
   }
 
   .dark {

@@ -151,11 +151,11 @@ export default function History() {
           />
         </div>
 
-        {/* Clean Main Content */}
-        <Card className="max-w-7xl mx-auto border border-border bg-white rounded-md">
-          <CardHeader className="bg-white border-b border-border px-3 py-2">
+        {/* Compact Main Content Card */}
+        <Card className="max-w-7xl mx-auto shadow-lg border border-border bg-card backdrop-blur-sm rounded-xl">
+          <CardHeader className="bg-card rounded-t-xl border-b border-border px-4 py-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-semibold text-foreground">{t.history}</CardTitle>
+              <CardTitle className="text-base font-bold text-foreground tracking-tight">{t.history}</CardTitle>
               <ExportControls
                 transactions={transactions}
                 filteredTransactions={filteredTransactions}
@@ -169,7 +169,7 @@ export default function History() {
             </div>
             
             {showFilters && (
-              <div className="mt-2 p-2 bg-muted rounded border border-border">
+              <div className="mt-3 p-3 bg-muted/20 rounded-lg border border-border shadow-inner">
                 <FilterSection
                   filters={filters}
                   onFilterChange={updateFilter}
@@ -178,22 +178,25 @@ export default function History() {
             )}
           </CardHeader>
           
-          <CardContent className="px-3 py-2">
-            {/* Summary Section */}
-            <div className="mb-3">
-              <div className="bg-muted rounded p-2 border border-border">
+          <CardContent className="px-4 py-3">
+            {/* Always show Summary Section */}
+            <div className="mb-4">
+              <div className="bg-muted/10 rounded-lg p-3 border border-border shadow-inner">
                 <TransactionSummaryCard summary={summary} />
               </div>
             </div>
             
             {filteredTransactions.length === 0 ? (
-              <div className="text-center py-6">
+              <div className="text-center py-8">
                 <div className="max-w-md mx-auto">
-                  <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto mb-2">
-                    <HistoryIcon size={24} className="text-muted-foreground" />
+                  <div className="w-16 h-16 bg-muted/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <HistoryIcon size={32} className="text-muted-foreground/50" />
                   </div>
-                  <p className="text-muted-foreground text-sm">
-                    {transactions.length === 0 ? 'No transactions yet' : 'No transactions match filters'}
+                  <p className="text-muted-foreground text-base font-medium">
+                    {transactions.length === 0 ? 'No transactions yet' : 'No transactions match the selected filters'}
+                  </p>
+                  <p className="text-muted-foreground/70 text-sm mt-1">
+                    {transactions.length === 0 ? 'Start by creating your first transaction' : 'Try adjusting your filter criteria'}
                   </p>
                 </div>
               </div>
@@ -209,23 +212,23 @@ export default function History() {
                   setShowSelection={setShowSelection}
                 />
 
-                {/* Clean Transaction Table */}
-                <div className="bg-white rounded border border-border overflow-hidden">
+                {/* Compact Transaction Table */}
+                <div className="bg-card rounded-lg border border-border shadow-md overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="bg-muted border-b border-border">
+                        <tr className="bg-muted/10 border-b border-border">
                           {showSelection && (
-                            <th className="text-left py-1 px-2 w-8"></th>
+                            <th className="text-left py-2 px-2 w-12"></th>
                           )}
-                          <th className="text-left py-1 px-2 font-medium text-foreground text-xs">Date</th>
-                          <th className="text-left py-1 px-2 font-medium text-foreground text-xs">Type</th>
-                          <th className="text-right py-1 px-2 font-medium text-foreground text-xs">Weight</th>
-                          <th className="text-right py-1 px-2 font-medium text-foreground text-xs">Purity</th>
-                          <th className="text-right py-1 px-2 font-medium text-foreground text-xs">Rate</th>
-                          <th className="text-right py-1 px-2 font-medium text-foreground text-xs">Fine Gold</th>
-                          <th className="text-right py-1 px-2 font-medium text-foreground text-xs">Amount</th>
-                          <th className="text-center py-1 px-2 font-medium text-foreground text-xs">Actions</th>
+                          <th className="text-left py-2 px-2 font-bold text-foreground text-sm tracking-wide">Date & Time</th>
+                          <th className="text-left py-2 px-2 font-bold text-foreground text-sm tracking-wide">Type</th>
+                          <th className="text-right py-2 px-2 font-bold text-foreground text-sm tracking-wide">Weight (g)</th>
+                          <th className="text-right py-2 px-2 font-bold text-foreground text-sm tracking-wide">Purity (%)</th>
+                          <th className="text-right py-2 px-2 font-bold text-foreground text-sm tracking-wide">Rate (₹/g)</th>
+                          <th className="text-right py-2 px-2 font-bold text-foreground text-sm tracking-wide">Fine Gold (g)</th>
+                          <th className="text-right py-2 px-2 font-bold text-foreground text-sm tracking-wide">Amount (₹)</th>
+                          <th className="text-center py-2 px-2 font-bold text-foreground text-sm tracking-wide">Actions</th>
                         </tr>
                       </thead>
                       <tbody>

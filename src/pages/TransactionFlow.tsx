@@ -124,7 +124,7 @@ export default function TransactionFlow() {
       const receiptSettings = await getReceiptSettings();
       
       const transaction: Transaction = {
-        id: editingTransaction?.id || `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        id: editingTransaction?.id || crypto.randomUUID(),
         type: transactionType,
         weight: parseFloat(formData.weight),
         purity: transactionType !== 'SALE' ? parseFloat(formData.purity) : 100,

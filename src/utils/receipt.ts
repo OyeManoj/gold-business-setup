@@ -172,35 +172,39 @@ export function printReceipt(receiptText: string): void {
     const printStyles = document.createElement('style');
     printStyles.textContent = `
       @media print {
+        * {
+          visibility: hidden !important;
+        }
         body * {
-          visibility: hidden;
+          visibility: hidden !important;
         }
         #receipt-print-container,
         #receipt-print-container * {
-          visibility: visible;
+          visibility: visible !important;
         }
         #receipt-print-container {
           position: absolute !important;
           top: 0 !important;
-          left: 0 !important;
+          left: 1mm !important;
           width: 2.8in !important;
           height: auto !important;
           font-size: 13px !important;
           font-weight: 700 !important;
           line-height: 1.1 !important;
-          margin: 0.1in !important;
+          margin: 0 !important;
           padding: 0 !important;
           page-break-inside: avoid !important;
         }
         @page {
           size: 3in auto;
-          margin: 0.2in 0.1in;
+          margin: 0;
           padding: 0;
         }
         html, body {
           margin: 0 !important;
           padding: 0 !important;
           height: auto !important;
+          overflow: hidden !important;
         }
       }
     `;
@@ -272,8 +276,13 @@ export function printReceipt(receiptText: string): void {
               }
               @media print {
                 * {
-                  margin: 0 !important;
-                  padding: 0 !important;
+                  visibility: hidden !important;
+                }
+                body, body * {
+                  visibility: hidden !important;
+                }
+                pre, pre * {
+                  visibility: visible !important;
                 }
                 body { 
                   margin: 0 !important;
@@ -289,12 +298,13 @@ export function printReceipt(receiptText: string): void {
                 pre {
                   margin: 0 !important;
                   padding: 0 !important;
+                  padding-left: 1mm !important;
                   text-align: left !important;
                   font-weight: 700;
                 }
                 @page {
                   size: 3in auto;
-                  margin: 0.2in 0.1in !important;
+                  margin: 0 !important;
                   padding: 0 !important;
               }
             </style>

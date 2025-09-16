@@ -387,6 +387,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      delete_transaction_for_custom_user: {
+        Args: { input_transaction_id: string; input_user_id: string }
+        Returns: Json
+      }
       delete_transactions_for_custom_user: {
         Args: { input_user_id: string }
         Returns: Json

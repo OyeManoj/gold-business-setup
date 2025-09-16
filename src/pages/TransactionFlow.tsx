@@ -18,7 +18,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuditLog } from '@/hooks/useAuditLog';
 import { Badge } from '@/components/ui/badge';
 import { DayAveragePrices } from '@/components/DayAveragePrices';
-import { formatWeight, formatIndianCurrency } from '@/utils/indianFormatting';
+import { formatWeight, formatIndianCurrency, formatPercentage, formatIndianRate } from '@/utils/indianFormatting';
 
 export default function TransactionFlow() {
   const { type, transactionId } = useParams<{ type: string; transactionId?: string }>();
@@ -332,26 +332,73 @@ export default function TransactionFlow() {
 
 
             {/* Live Calculation Preview */}
-            {calculation && (
-              <Card className="h-fit border-2 border-green-200 bg-green-50/80 dark:bg-green-900/20 dark:border-green-800">
-                <CardContent className="p-4">
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-green-800 dark:text-green-200">Fine Gold:</span>
-                      <span className="text-lg font-bold text-green-900 dark:text-green-100">
-                        {formatWeight(calculation.fineGold)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-green-800 dark:text-green-200">Total Amount:</span>
-                      <span className="text-xl font-bold text-green-900 dark:text-green-100">
-                        {formatIndianCurrency(calculation.amount)}
-                      </span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+{calculation && (
+  <Card className="h-fit border-2 border-green-200 bg-green-50/80 dark:bg-green-900/20 dark:border-green-800">
+    <CardContent className="p-4">
+      <div className="space-y-4">
+        <div className="space-y-3">
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-medium text-green-800 dark:text-green-200">Fine Gold:</span>
+            <span className="text-lg font-bold text-green-900 dark:text-green-100">
+              {formatWeight(calculation.fineGold)}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-medium text-green-800 dark:text-green-200">Total Amount:</span>
+            <span className="text-xl font-bold text-green-900 dark:text-green-100">
+              {formatIndianCurrency(calculation.amount)}
+            </span>
+          </div>
+        </div>
+
+        <div className="h-px bg-green-200/60 dark:bg-green-800/60" />
+
+        <div className="grid grid-cols-2 gap-3 text-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-green-800/90 dark:text-green-200/90">Weight</span>
+            <span className="font-semibold text-green-900 dark:text-green-100">{formatWeight(parseFloat(formData.weight || '0'))} g</span>
+          </div>
+          {transactionType !== 'SALE' && (
+            <div className="flex items-center justify-between">
+              <span className="text-green-800/90 dark:text-green-200/90">Purity</span>
+              <span className="font-semibold text-green-900 dark:text-green-100">{formatPercentage(parseFloat(formData.purity || '0'))} %</span>
+            </div>
+          )}
+          {transactionType === 'EXCHANGE' && (
+            <div className="flex items-center justify-between">
+              <span className="text-green-800/90 dark:text-green-200/90">Reduction</span>
+              <span className="font-semibold text-green-900 dark:text-green-100">{formatPercentage(parseFloat(formData.reduction || '0'))} %</span>
+            </div>
+          )}
+          {transactionType !== 'EXCHANGE' && (
+            <div className="flex items-center justify-between">
+              <span className="text-green-800/90 dark:text-green-200/90">Rate</span>
+              <span className="font-semibold text-green-900 dark:text-green-100">{formatIndianRate(parseFloat(formData.rate || '0'))}</span>
+            </div>
+          )}
+        </div>
+
+        <div className="text-xs text-green-900/70 dark:text-green-200/70">
+          {transactionType === 'EXCHANGE' && (
+            <div>
+              Formula: Fine = Weight × (Purity − Reduction) / 100
+            </div>
+          )}
+          {transactionType === 'PURCHASE' && (
+            <div>
+              Formula: Fine = Weight × Purity / 100
+            </div>
+          )}
+          {transactionType === 'SALE' && (
+            <div>
+              Formula: Amount = Weight × Rate
+            </div>
+          )}
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+)}
           </div>
         </div>
       </div>

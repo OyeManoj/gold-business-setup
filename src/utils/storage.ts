@@ -127,7 +127,11 @@ export async function clearTransactions(): Promise<void> {
 // Delete a specific transaction
 export async function deleteTransaction(transactionId: string): Promise<void> {
   const userId = await getCurrentUserId();
-  if (!userId) throw new Error('User not authenticated');
+  // If no authenticated user, perform offline deletion instead of throwing
+  if (!userId) {
+    await deleteTransactionOffline(transactionId);
+    return;
+  }
 
   try {
     // Use secure RPC to delete specific transaction

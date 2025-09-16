@@ -17,6 +17,7 @@ import { formatIndianCurrency, formatIndianRate, formatWeight, formatPercentage 
 import { generateReceiptText, printReceipt } from '@/utils/receipt';
 import { getBusinessProfile } from '@/utils/businessStorage';
 import { getReceiptSettings } from '@/utils/receiptSettingsStorage';
+import { SwipeableTransactionRow } from '@/components/SwipeableTransactionRow';
 
 export default function History() {
   const navigate = useNavigate();
@@ -165,57 +166,14 @@ export default function History() {
                       </thead>
                       <tbody>
                         {filteredTransactions.map((transaction, index) => (
-                          <tr 
+                          <SwipeableTransactionRow
                             key={transaction.id}
-                            className={`border-b border-border hover:bg-muted/5 transition-all duration-200 ${
-                              index % 2 === 0 ? 'bg-card' : 'bg-muted/5'
-                            }`}
-                          >
-                            <td className="py-2 px-2">
-                              <div className="text-sm">
-                                <div className="font-semibold text-foreground">{transaction.date.toLocaleDateString('en-IN')}</div>
-                                <div className="text-muted-foreground text-sm font-medium">{transaction.date.toLocaleTimeString('en-IN', { hour12: true })}</div>
-                              </div>
-                            </td>
-                            <td className="py-2 px-2">
-                              <span className={`inline-flex px-2 py-1 rounded-md text-sm font-bold shadow-sm ${
-                                transaction.type === 'PURCHASE' 
-                                  ? 'bg-green-100 text-green-800 border border-green-200 dark:bg-green-900/30 dark:text-green-400' 
-                                  : transaction.type === 'SALE'
-                                  ? 'bg-red-100 text-red-800 border border-red-200 dark:bg-red-900/30 dark:text-red-400'
-                                  : 'bg-blue-100 text-blue-800 border border-blue-200 dark:bg-blue-900/30 dark:text-blue-400'
-                              }`}>
-                                {formatTransactionType(transaction.type, language)}
-                              </span>
-                            </td>
-                            <td className="py-2 px-2 text-right font-mono text-sm font-medium">{formatWeight(transaction.weight)}</td>
-                            <td className="py-2 px-2 text-right font-mono text-sm font-medium">{formatPercentage(transaction.purity)}</td>
-                            <td className="py-2 px-2 text-right font-mono text-sm font-medium">{formatIndianRate(transaction.rate).replace('₹', '').replace('/g', '')}</td>
-                            <td className="py-2 px-2 text-right font-mono text-sm font-semibold text-primary">{formatWeight(transaction.fineGold)}</td>
-                            <td className="py-2 px-2 text-right font-mono text-sm font-bold text-green-700 dark:text-green-400">{formatIndianCurrency(transaction.amount)}</td>
-                            <td className="py-2 px-2 text-center">
-                              <div className="flex items-center justify-center gap-1">
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => handlePrintReceipt(transaction)}
-                                  className="h-6 w-6 p-0 rounded-md border hover:border-blue-300 hover:bg-blue-50 hover:shadow-sm transition-all duration-200"
-                                  title="Print Receipt"
-                                >
-                                  <Printer size={12} />
-                                </Button>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => handleEditTransaction(transaction)}
-                                  className="h-6 w-6 p-0 rounded-md border hover:border-primary/30 hover:bg-primary/5 hover:shadow-sm transition-all duration-200"
-                                  title="Edit Transaction"
-                                >
-                                  <Edit size={12} />
-                                </Button>
-                              </div>
-                            </td>
-                          </tr>
+                            transaction={transaction}
+                            index={index}
+                            language={language}
+                            onEdit={handleEditTransaction}
+                            onPrint={handlePrintReceipt}
+                          />
                         ))}
                       </tbody>
                     </table>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BusinessInput } from '@/components/BusinessInput';
@@ -19,10 +19,12 @@ import { useAuditLog } from '@/hooks/useAuditLog';
 import { Badge } from '@/components/ui/badge';
 import { DayAveragePrices } from '@/components/DayAveragePrices';
 import { formatWeight, formatIndianCurrency } from '@/utils/indianFormatting';
+import { SmartDefaults } from '@/components/SmartDefaults';
 
 export default function TransactionFlow() {
   const { type, transactionId } = useParams<{ type: string; transactionId?: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   const { logTransaction } = useAuditLog();
   
@@ -36,12 +38,14 @@ export default function TransactionFlow() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showSummary, setShowSummary] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+  const [calculation, setCalculation] = useState<any>(null);
+  const [autoAdvance, setAutoAdvance] = useState(false);
 
   const t = useTranslation(language);
   const transactionType = type?.toUpperCase() as TransactionType;
   const isEditMode = transactionId !== undefined;
 
-  // Load transaction for editing
+  // Load transaction for editing or pre-populate from URL params
   useEffect(() => {
     const loadTransaction = async () => {
       if (isEditMode && transactionId) {
@@ -56,10 +60,24 @@ export default function TransactionFlow() {
             rate: transaction.rate.toString(),
           });
         }
+      } else {
+        // Pre-populate from URL parameters for quick actions
+        const urlParams = new URLSearchParams(location.search);
+        const newFormData: FormData = {
+          weight: urlParams.get('weight') || '',
+          purity: urlParams.get('purity') || '',
+          reduction: urlParams.get('reduction') || '',
+          rate: urlParams.get('rate') || '',
+        };
+        
+        // Only update if there are parameters to avoid overriding user input
+        if (Object.values(newFormData).some(value => value !== '')) {
+          setFormData(newFormData);
+        }
       }
     };
     loadTransaction();
-  }, [isEditMode, transactionId]);
+  }, [isEditMode, transactionId, location.search]);
 
   
 
@@ -76,12 +94,54 @@ export default function TransactionFlow() {
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
+    
+    // Auto-calculate when form is valid
+    setTimeout(() => {
+      const newErrors = validateTransactionForm({ ...formData, [field]: value }, transactionType);
+      setErrors(newErrors);
+      
+      if (Object.keys(newErrors).length === 0) {
+        try {
+          const calc = calculateTransaction(
+            transactionType,
+            parseFloat(formData.weight || (field === 'weight' ? value : '0')),
+            transactionType === 'SALE' ? 100 : parseFloat(formData.purity || (field === 'purity' ? value : '0')),
+            transactionType === 'EXCHANGE' ? 1 : parseFloat(formData.rate || (field === 'rate' ? value : '0')),
+            transactionType === 'EXCHANGE' ? parseFloat(formData.reduction || (field === 'reduction' ? value : '0')) : undefined
+          );
+          setCalculation(calc);
+          setShowSummary(true);
+        } catch (error) {
+          setCalculation(null);
+          setShowSummary(false);
+        }
+      } else {
+        setCalculation(null);
+        setShowSummary(false);
+      }
+    }, 300);
   };
 
   const handleCalculate = () => {
     if (validateForm()) {
       setShowSummary(true);
     }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent, nextField?: string) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (nextField) {
+        const nextInput = document.getElementById(nextField);
+        nextInput?.focus();
+      } else if (calculation && !errors.weight && !errors.purity && !errors.rate && !errors.reduction) {
+        handleConfirm();
+      }
+    }
+  };
+
+  const handleApplyDefaults = (defaults: { weight?: string; purity?: string; rate?: string; reduction?: string }) => {
+    setFormData(prev => ({ ...prev, ...defaults }));
   };
 
   const handleConfirm = async () => {
@@ -132,13 +192,6 @@ export default function TransactionFlow() {
 
     navigate('/');
   };
-  const calculation = showSummary ? calculateTransaction(
-    transactionType,
-    parseFloat(formData.weight),
-    transactionType === 'SALE' ? 100 : parseFloat(formData.purity),
-    transactionType === 'EXCHANGE' ? 1 : parseFloat(formData.rate),
-    transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined
-  ) : null;
 
   if (!transactionType || !['EXCHANGE', 'PURCHASE', 'SALE'].includes(transactionType)) {
     navigate('/');
@@ -196,6 +249,12 @@ export default function TransactionFlow() {
                 {/* Average Prices Display */}
                 <DayAveragePrices transactionType={transactionType} />
                 
+                {/* Smart Defaults */}
+                <SmartDefaults 
+                  transactionType={transactionType} 
+                  onApplyDefaults={handleApplyDefaults}
+                />
+                
                 {/* Weight Input */}
                 <BusinessInput
                   id="weight"
@@ -206,8 +265,10 @@ export default function TransactionFlow() {
                   min="0"
                   value={formData.weight}
                   onChange={(e) => handleInputChange('weight', e.target.value)}
+                  onKeyPress={(e) => handleKeyPress(e, transactionType !== 'SALE' ? 'purity' : 'rate')}
                   error={errors.weight}
                   placeholder="Enter weight"
+                  autoFocus
                 />
 
                 {/* Purity Input (not for Sale) */}
@@ -222,6 +283,7 @@ export default function TransactionFlow() {
                     max="100"
                     value={formData.purity}
                     onChange={(e) => handleInputChange('purity', e.target.value)}
+                    onKeyPress={(e) => handleKeyPress(e, transactionType === 'EXCHANGE' ? 'reduction' : 'rate')}
                     error={errors.purity}
                     placeholder="Enter purity percentage"
                   />
@@ -238,6 +300,7 @@ export default function TransactionFlow() {
                     min="0"
                     value={formData.reduction}
                     onChange={(e) => handleInputChange('reduction', e.target.value)}
+                    onKeyPress={(e) => handleKeyPress(e)}
                     error={errors.reduction}
                     placeholder="Enter reduction percentage"
                   />
@@ -254,45 +317,50 @@ export default function TransactionFlow() {
                     min="0"
                     value={formData.rate}
                     onChange={(e) => handleInputChange('rate', e.target.value)}
+                    onKeyPress={(e) => handleKeyPress(e)}
                     error={errors.rate}
                     placeholder="Enter current gold rate"
                   />
                 )}
 
-                {/* Mobile-optimized Calculate Button */}
-                <Button
-                  variant="default"
-                  size="lg"
-                  onClick={handleCalculate}
-                  className="w-full py-3 sm:py-2.5 text-sm sm:text-base font-bold rounded-lg bg-gradient-to-r from-dark to-charcoal hover:from-charcoal hover:to-dark shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] active:scale-[0.99] touch-manipulation min-h-[44px] sm:min-h-[40px]"
-                  disabled={
-                    !formData.weight || 
-                    (transactionType !== 'EXCHANGE' && !formData.rate)
-                  }
-                >
-                  <Calculator size={16} className="mr-2" />
-                  <span className="text-sm sm:text-base">{isEditMode ? 'Update Transaction' : 'Calculate Transaction'}</span>
-                </Button>
+                {/* One-Touch Complete Transaction Button */}
+                {calculation && (
+                  <Button
+                    variant="default"
+                    size="lg"
+                    onClick={handleConfirm}
+                    className="w-full py-3 sm:py-2.5 text-sm sm:text-base font-bold rounded-lg bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] active:scale-[0.99] touch-manipulation min-h-[44px] sm:min-h-[40px]"
+                  >
+                    <Check size={16} className="mr-2" />
+                    <span className="text-sm sm:text-base">
+                      {isEditMode ? 'Update Transaction' : `Complete Transaction ${formatIndianCurrency(calculation.amount)}`}
+                    </span>
+                  </Button>
+                )}
               </CardContent>
             </Card>
 
 
-            {/* Summary Panel */}
-            {showSummary && calculation && (
-              <TransactionSummary
-                type={transactionType}
-                weight={parseFloat(formData.weight)}
-                purity={transactionType === 'SALE' ? 100 : parseFloat(formData.purity)}
-                rate={transactionType === 'EXCHANGE' ? 1 : parseFloat(formData.rate)}
-                fineGold={calculation.fineGold}
-                amount={calculation.amount}
-                reduction={transactionType === 'EXCHANGE' ? parseFloat(formData.reduction) : undefined}
-                remainingFineGold={calculation.remainingFineGold}
-                language={language}
-                isEditMode={isEditMode}
-                onConfirm={handleConfirm}
-                onEdit={() => setShowSummary(false)}
-              />
+            {/* Live Calculation Preview */}
+            {calculation && (
+              <Card className="h-fit border-2 border-green-200 bg-green-50/80 dark:bg-green-900/20 dark:border-green-800">
+                <CardContent className="p-4">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-green-800 dark:text-green-200">Fine Gold:</span>
+                      <span className="text-lg font-bold text-green-900 dark:text-green-100">
+                        {formatWeight(calculation.fineGold)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-green-800 dark:text-green-200">Total Amount:</span>
+                      <span className="text-xl font-bold text-green-900 dark:text-green-100">
+                        {formatIndianCurrency(calculation.amount)}
+                      </span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             )}
           </div>
         </div>

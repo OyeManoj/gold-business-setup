@@ -7,10 +7,11 @@ interface BusinessInputProps extends React.InputHTMLAttributes<HTMLInputElement>
   label: string;
   unit?: string;
   error?: string;
+  onKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 export const BusinessInput = forwardRef<HTMLInputElement, BusinessInputProps>(
-  ({ label, unit, error, className, ...props }, ref) => {
+  ({ label, unit, error, className, onKeyPress, ...props }, ref) => {
     return (
       <div className="space-y-2 md:space-y-3">
         <Label htmlFor={props.id} className="text-sm font-semibold text-foreground">
@@ -25,6 +26,7 @@ export const BusinessInput = forwardRef<HTMLInputElement, BusinessInputProps>(
               error && "ring-2 ring-destructive border-destructive bg-destructive/5",
               className
             )}
+            onKeyPress={onKeyPress}
             {...props}
           />
           {unit && (

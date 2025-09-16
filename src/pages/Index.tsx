@@ -8,6 +8,9 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useAppTitle } from '@/hooks/useAppTitle';
 import { History, Settings, LogOut, User } from 'lucide-react';
 import { DeviceTracker } from '@/components/DeviceTracker';
+import { QuickActions } from '@/components/QuickActions';
+import { FloatingActionButton } from '@/components/FloatingActionButton';
+import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -123,6 +126,9 @@ const Index = () => {
           </div>
         </div>
 
+        {/* Quick Actions */}
+        <QuickActions language={language} />
+
         {/* Mobile-first Transaction Cards Grid */}
         <div className="w-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
@@ -159,6 +165,12 @@ const Index = () => {
           <div className="w-48 h-1 bg-primary mx-auto"></div>
         </div>
       </div>
+
+      {/* Floating Action Button */}
+      <FloatingActionButton />
+      
+      {/* Keyboard Shortcuts */}
+      <KeyboardShortcuts onQuickTransaction={(type) => navigate(`/transaction/${type}`)} />
     </div>
   );
 };

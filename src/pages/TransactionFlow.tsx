@@ -240,16 +240,21 @@ export default function TransactionFlow() {
                   {isEditMode ? 'Edit Transaction' : 'Transaction Details'}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6 p-4 sm:p-6">
+              <CardContent className="space-y-8 p-6 sm:p-8">
                 {/* Average Prices Display */}
-                <DayAveragePrices transactionType={transactionType} />
+                <div className="bg-muted/30 rounded-lg p-4 border border-border/50">
+                  <DayAveragePrices transactionType={transactionType} />
+                </div>
 
                 {/* Transaction Details Section */}
-                <div className="space-y-5">
-                  <h3 className="text-xl font-semibold text-foreground border-b border-border pb-4 mb-6">
-                    {transactionType === 'EXCHANGE' ? 'Gold Exchange Details' : 
-                     transactionType === 'PURCHASE' ? 'Gold Purchase Details' : 'Gold Sale Details'}
-                  </h3>
+                <div className="bg-gradient-to-br from-card to-muted/20 rounded-xl p-6 border border-border shadow-soft">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-1 h-8 bg-primary rounded-full"></div>
+                    <h3 className="text-xl font-semibold text-foreground tracking-tight">
+                      {transactionType === 'EXCHANGE' ? 'Gold Exchange Details' : 
+                       transactionType === 'PURCHASE' ? 'Gold Purchase Details' : 'Gold Sale Details'}
+                    </h3>
+                  </div>
 
                   <div className="space-y-6">
                     {/* Weight Input */}
@@ -330,19 +335,21 @@ export default function TransactionFlow() {
                   </div>
                 </div>
 
-                {/* One-Touch Complete Transaction Button */}
+                {/* Enhanced Complete Transaction Button */}
                 {calculation && (
-                  <Button
-                    variant="default"
-                    size="lg"
-                    onClick={handleConfirm}
-                    className="w-full h-14 text-lg font-semibold rounded-lg bg-gradient-to-r from-success to-success/90 hover:from-success/90 hover:to-success/80 text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.01] focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
-                  >
-                    <Check size={20} className="mr-3" />
-                    <span className="text-lg">
-                      {isEditMode ? 'Update Transaction' : `Complete Transaction ${formatIndianCurrency(calculation.amount)}`}
-                    </span>
-                  </Button>
+                  <div className="bg-gradient-to-r from-success/5 to-success/10 rounded-xl p-6 border border-success/20">
+                    <Button
+                      variant="default"
+                      size="lg"
+                      onClick={handleConfirm}
+                      className="w-full h-16 text-xl font-semibold rounded-xl bg-gradient-to-r from-success to-success/90 hover:from-success/90 hover:to-success/80 text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.01] focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
+                    >
+                      <Check size={24} className="mr-3" />
+                      <span className="text-xl">
+                        {isEditMode ? 'Update Transaction' : `Complete • ${formatIndianCurrency(calculation.amount)}`}
+                      </span>
+                    </Button>
+                  </div>
                 )}
               </CardContent>
             </Card>

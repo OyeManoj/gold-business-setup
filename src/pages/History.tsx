@@ -218,6 +218,9 @@ export default function History() {
                     <table className="w-full">
                       <thead>
                         <tr className="bg-muted/10 border-b border-border">
+                          {showSelection && (
+                            <th className="text-left py-2 px-2 w-12"></th>
+                          )}
                           <th className="text-left py-2 px-2 font-bold text-foreground text-sm tracking-wide">Date & Time</th>
                           <th className="text-left py-2 px-2 font-bold text-foreground text-sm tracking-wide">Type</th>
                           <th className="text-right py-2 px-2 font-bold text-foreground text-sm tracking-wide">Weight (g)</th>

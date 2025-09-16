@@ -98,7 +98,7 @@ export function SwipeableTransactionRow({
     <>
       {/* Action Hints */}
       <tr className="absolute inset-0 pointer-events-none">
-        <td colSpan={8} className="relative">
+        <td colSpan={showSelection ? 9 : 8} className="relative">
           {swipeX > 40 && (
             <div className="absolute left-4 top-1/2 transform -translate-y-1/2 flex items-center gap-2 text-green-600">
               <Printer size={16} />
@@ -137,6 +137,9 @@ export function SwipeableTransactionRow({
             <Checkbox
               checked={isSelected}
               onCheckedChange={(checked) => onSelectionChange?.(transaction.id, !!checked)}
+              onClick={(e) => e.stopPropagation()}
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
               className="w-4 h-4"
             />
           </td>

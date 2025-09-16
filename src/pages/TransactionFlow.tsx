@@ -151,10 +151,18 @@ export default function TransactionFlow() {
         });
       }
 
-      // Auto-print functionality
-      if (receiptSettings.autoPrint) {
+      // Always print receipt when transaction is completed
+      try {
         const receiptText = generateReceiptText(transaction, language, businessProfile, receiptSettings);
         printReceipt(receiptText);
+        console.log('Receipt printing initiated for transaction:', transaction.id);
+      } catch (printError) {
+        console.error('Receipt printing failed:', printError);
+        toast({
+          title: "Print Notice",
+          description: "Transaction saved successfully, but receipt printing failed. You can print from history.",
+          variant: "default",
+        });
       }
 
       navigate('/history');

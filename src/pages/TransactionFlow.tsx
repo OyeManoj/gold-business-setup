@@ -380,50 +380,50 @@ export default function TransactionFlow() {
 
             {/* Live Calculation Summary */}
 {calculation && (
-  <Card className="h-fit border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 dark:border-yellow-800">
-    <CardHeader className="pb-3">
-      <div className="flex items-center gap-2">
-        <Badge className="bg-yellow-500 text-white px-2 py-1 text-xs">
+  <Card className="h-fit border border-yellow-200 bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 dark:border-yellow-800">
+    <CardHeader className="pb-2 pt-3 px-3">
+      <div className="flex items-center gap-1.5">
+        <Badge className="bg-yellow-500 text-white px-1.5 py-0.5 text-xs">
           📊
         </Badge>
-        <CardTitle className="text-lg font-bold text-yellow-900 dark:text-yellow-100">
+        <CardTitle className="text-sm font-bold text-yellow-900 dark:text-yellow-100">
           {transactionType === 'EXCHANGE' ? 'Exchange Summary' : 
            transactionType === 'PURCHASE' ? 'Purchase Summary' : 'Sale Summary'}
         </CardTitle>
       </div>
     </CardHeader>
-    <CardContent className="space-y-4">
+    <CardContent className="space-y-2 px-3 pb-3">
       {/* Main Output */}
-      <div className="bg-yellow-100/80 dark:bg-yellow-900/40 rounded-lg p-4 text-center">
-        <div className="text-sm text-yellow-800 dark:text-yellow-200 mb-1">
+      <div className="bg-yellow-100/80 dark:bg-yellow-900/40 rounded-md p-2 text-center">
+        <div className="text-xs text-yellow-800 dark:text-yellow-200 mb-0.5">
           {transactionType === 'EXCHANGE' ? 'Fine Weight Output' : 
            transactionType === 'PURCHASE' ? 'Fine Gold Purchased' : 'Total Amount'}
         </div>
-        <div className="text-3xl font-bold text-yellow-900 dark:text-yellow-100">
+        <div className="text-xl font-bold text-yellow-900 dark:text-yellow-100">
           {transactionType !== 'SALE' ? formatWeight(calculation.fineGold) : formatIndianCurrency(calculation.amount)}
         </div>
         {transactionType !== 'SALE' && (
-          <div className="text-xs text-yellow-700 dark:text-yellow-300 mt-1">grams</div>
+          <div className="text-xs text-yellow-700 dark:text-yellow-300">grams</div>
         )}
       </div>
 
       {/* Detailed Breakdown */}
-      <div className="space-y-3">
-        <div className="flex justify-between items-center py-1">
-          <span className="text-sm text-yellow-800 dark:text-yellow-200">
+      <div className="space-y-1.5">
+        <div className="flex justify-between items-center py-0.5">
+          <span className="text-xs text-yellow-800 dark:text-yellow-200">
             {transactionType === 'EXCHANGE' ? 'Old Weight:' : 'Weight:'}
           </span>
-          <span className="font-semibold text-yellow-900 dark:text-yellow-100">
+          <span className="text-xs font-semibold text-yellow-900 dark:text-yellow-100">
             {formatWeight(parseFloat(formData.weight || '0'))}g
           </span>
         </div>
 
         {transactionType !== 'SALE' && (
-          <div className="flex justify-between items-center py-1">
-            <span className="text-sm text-yellow-800 dark:text-yellow-200">
+          <div className="flex justify-between items-center py-0.5">
+            <span className="text-xs text-yellow-800 dark:text-yellow-200">
               {transactionType === 'EXCHANGE' ? 'Original Purity:' : 'Purity:'}
             </span>
-            <span className="font-semibold text-yellow-900 dark:text-yellow-100">
+            <span className="text-xs font-semibold text-yellow-900 dark:text-yellow-100">
               {formatPercentage(parseFloat(formData.purity || '0'))}%
             </span>
           </div>
@@ -431,25 +431,25 @@ export default function TransactionFlow() {
 
         {transactionType === 'EXCHANGE' && (
           <>
-            <div className="flex justify-between items-center py-1">
-              <span className="text-sm text-yellow-800 dark:text-yellow-200">Reduction:</span>
-              <span className="font-semibold text-yellow-900 dark:text-yellow-100">
+            <div className="flex justify-between items-center py-0.5">
+              <span className="text-xs text-yellow-800 dark:text-yellow-200">Reduction:</span>
+              <span className="text-xs font-semibold text-yellow-900 dark:text-yellow-100">
                 {formatPercentage(parseFloat(formData.reduction || '0'))}%
               </span>
             </div>
-            <div className="flex justify-between items-center py-1">
-              <span className="text-sm text-yellow-800 dark:text-yellow-200">Adjusted Purity:</span>
-              <span className="font-semibold text-yellow-900 dark:text-yellow-100">
+            <div className="flex justify-between items-center py-0.5">
+              <span className="text-xs text-yellow-800 dark:text-yellow-200">Adjusted Purity:</span>
+              <span className="text-xs font-semibold text-yellow-900 dark:text-yellow-100">
                 {formatPercentage(parseFloat(formData.purity || '0') - parseFloat(formData.reduction || '0'))}%
               </span>
             </div>
           </>
         )}
 
-        <div className="flex justify-between items-center py-1">
-          <span className="text-sm text-yellow-800 dark:text-yellow-200">Fine Weight:</span>
-          <span className="font-semibold text-yellow-900 dark:text-yellow-100">
-            <Badge className="bg-yellow-600 text-white px-2 py-1 text-xs">
+        <div className="flex justify-between items-center py-0.5">
+          <span className="text-xs text-yellow-800 dark:text-yellow-200">Fine Weight:</span>
+          <span className="text-xs font-semibold text-yellow-900 dark:text-yellow-100">
+            <Badge className="bg-yellow-600 text-white px-1.5 py-0.5 text-xs">
               {formatWeight(calculation.fineGold)}g
             </Badge>
           </span>
@@ -457,15 +457,15 @@ export default function TransactionFlow() {
 
         {transactionType !== 'EXCHANGE' && (
           <>
-            <div className="flex justify-between items-center py-1">
-              <span className="text-sm text-yellow-800 dark:text-yellow-200">Rate:</span>
-              <span className="font-semibold text-yellow-900 dark:text-yellow-100">
+            <div className="flex justify-between items-center py-0.5">
+              <span className="text-xs text-yellow-800 dark:text-yellow-200">Rate:</span>
+              <span className="text-xs font-semibold text-yellow-900 dark:text-yellow-100">
                 {formatIndianRate(parseFloat(formData.rate || '0'))}
               </span>
             </div>
-            <div className="flex justify-between items-center py-1">
-              <span className="text-sm text-yellow-800 dark:text-yellow-200">Total Amount:</span>
-              <span className="font-semibold text-yellow-900 dark:text-yellow-100">
+            <div className="flex justify-between items-center py-0.5">
+              <span className="text-xs text-yellow-800 dark:text-yellow-200">Total Amount:</span>
+              <span className="text-xs font-semibold text-yellow-900 dark:text-yellow-100">
                 {formatIndianCurrency(calculation.amount)}
               </span>
             </div>
@@ -473,9 +473,9 @@ export default function TransactionFlow() {
         )}
 
         {transactionType === 'EXCHANGE' && (
-          <div className="flex justify-between items-center py-1">
-            <span className="text-sm text-yellow-800 dark:text-yellow-200">Payment:</span>
-            <Badge className="bg-yellow-500 text-white px-2 py-1 text-xs">
+          <div className="flex justify-between items-center py-0.5">
+            <span className="text-xs text-yellow-800 dark:text-yellow-200">Payment:</span>
+            <Badge className="bg-yellow-500 text-white px-1.5 py-0.5 text-xs">
               Fine Gold
             </Badge>
           </div>
@@ -483,9 +483,9 @@ export default function TransactionFlow() {
       </div>
 
       {/* Formula Display */}
-      <div className="bg-yellow-100/50 dark:bg-yellow-900/20 rounded-md p-3 mt-4">
-        <div className="text-xs text-yellow-800 dark:text-yellow-200 font-medium mb-1">Calculation:</div>
-        <div className="text-xs text-yellow-700 dark:text-yellow-300 font-mono">
+      <div className="bg-yellow-100/50 dark:bg-yellow-900/20 rounded-md p-1.5 mt-2">
+        <div className="text-xs text-yellow-800 dark:text-yellow-200 font-medium mb-0.5">Calculation:</div>
+        <div className="text-xs text-yellow-700 dark:text-yellow-300 font-mono leading-tight">
           {transactionType === 'EXCHANGE' && 
             `Fine = ${formData.weight || '0'} × (${formData.purity || '0'} - ${formData.reduction || '0'}) ÷ 100 = ${formatWeight(calculation.fineGold)}g`
           }

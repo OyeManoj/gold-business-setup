@@ -7,7 +7,7 @@ import { useTranslation } from '@/utils/translations';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAppTitle } from '@/hooks/useAppTitle';
 import { History, Settings, LogOut, User } from 'lucide-react';
-import { DeviceTracker } from '@/components/DeviceTracker';
+
 import { FloatingActionButton } from '@/components/FloatingActionButton';
 import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
 
@@ -98,8 +98,6 @@ const Index = () => {
               </div>
 
               <div className="flex items-center gap-1 sm:gap-2">
-                <DeviceTracker />
-                
                 <div className="flex items-center gap-2 px-2 py-1 bg-muted border border-border rounded-lg">
                   <User size={16} className="text-primary" />
                   <div className="flex flex-col min-w-0">

@@ -236,9 +236,9 @@ export default function TransactionFlow() {
                     {t[transactionType.toLowerCase() as keyof typeof t]}
                   </Badge>
                 </div>
-                <CardTitle className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight">
-                  {isEditMode ? 'Edit Transaction' : 'Transaction Details'}
-                </CardTitle>
+                 <CardTitle className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight">
+                   {isEditMode ? 'Edit Transaction' : ''}
+                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6 p-4 sm:p-6">
                 {/* Average Prices Display */}

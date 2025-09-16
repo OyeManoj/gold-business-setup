@@ -34,6 +34,10 @@ export default function TransactionFlow() {
     reduction: '',
     rate: '',
   });
+  const [customerData, setCustomerData] = useState({
+    name: '',
+    mobile: '',
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showSummary, setShowSummary] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
@@ -241,77 +245,136 @@ export default function TransactionFlow() {
                   {isEditMode ? 'Edit Transaction' : 'Transaction Details'}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3 sm:space-y-4 p-3 sm:p-4 md:p-6">
+              <CardContent className="space-y-4 sm:space-y-6 p-4 sm:p-6">
+                {/* Customer Information Section */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+                    Customer Information
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <BusinessInput
+                      id="customerName"
+                      label="Customer Name"
+                      type="text"
+                      value={customerData.name}
+                      onChange={(e) => setCustomerData(prev => ({ ...prev, name: e.target.value }))}
+                      placeholder="Enter customer name"
+                    />
+                    <BusinessInput
+                      id="customerMobile"
+                      label="Mobile Number"
+                      type="tel"
+                      value={customerData.mobile}
+                      onChange={(e) => setCustomerData(prev => ({ ...prev, mobile: e.target.value }))}
+                      placeholder="Enter 10-digit mobile number"
+                    />
+                  </div>
+                </div>
+
                 {/* Average Prices Display */}
                 <DayAveragePrices transactionType={transactionType} />
-                
-                {/* Weight Input */}
-                <BusinessInput
-                  id="weight"
-                  label={t.weight}
-                  unit={t.grams}
-                  type="number"
-                  step="0.001"
-                  min="0"
-                  value={formData.weight}
-                  onChange={(e) => handleInputChange('weight', e.target.value)}
-                  onKeyPress={(e) => handleKeyPress(e, transactionType !== 'SALE' ? 'purity' : 'rate')}
-                  error={errors.weight}
-                  placeholder="Enter weight"
-                  autoFocus
-                />
 
-                {/* Purity Input (not for Sale) */}
-                {transactionType !== 'SALE' && (
-                  <BusinessInput
-                    id="purity"
-                    label={t.purity}
-                    unit={t.percent}
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    max="100"
-                    value={formData.purity}
-                    onChange={(e) => handleInputChange('purity', e.target.value)}
-                    onKeyPress={(e) => handleKeyPress(e, transactionType === 'EXCHANGE' ? 'reduction' : 'rate')}
-                    error={errors.purity}
-                    placeholder="Enter purity percentage"
-                  />
-                )}
+                {/* Transaction Details Section */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+                    {transactionType === 'EXCHANGE' ? 'Gold Exchange Details' : 
+                     transactionType === 'PURCHASE' ? 'Gold Purchase Details' : 'Gold Sale Details'}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {transactionType === 'EXCHANGE' ? 'Enter old gold details for exchange calculation' :
+                     transactionType === 'PURCHASE' ? 'Enter gold purchase details' : 'Enter gold sale details'}
+                  </p>
 
-                {/* Reduction Input (only for Exchange) */}
-                {transactionType === 'EXCHANGE' && (
-                  <BusinessInput
-                    id="reduction"
-                    label={t.reduction}
-                    unit={t.percent}
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    value={formData.reduction}
-                    onChange={(e) => handleInputChange('reduction', e.target.value)}
-                    onKeyPress={(e) => handleKeyPress(e)}
-                    error={errors.reduction}
-                    placeholder="Enter reduction percentage"
-                  />
-                )}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Weight Input */}
+                    <BusinessInput
+                      id="weight"
+                      label={transactionType === 'EXCHANGE' ? 'Old Gold Weight (g)' : `${t.weight} (g)`}
+                      type="number"
+                      step="0.001"
+                      min="0"
+                      value={formData.weight}
+                      onChange={(e) => handleInputChange('weight', e.target.value)}
+                      onKeyPress={(e) => handleKeyPress(e, transactionType !== 'SALE' ? 'purity' : 'rate')}
+                      error={errors.weight}
+                      placeholder="0.000"
+                      autoFocus
+                    />
 
-                {/* Rate Input (not for Exchange) */}
-                {transactionType !== 'EXCHANGE' && (
-                  <BusinessInput
-                    id="rate"
-                    label={t.rate}
-                    unit={`${t.rupees}/g`}
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value={formData.rate}
-                    onChange={(e) => handleInputChange('rate', e.target.value)}
-                    onKeyPress={(e) => handleKeyPress(e)}
-                    error={errors.rate}
-                    placeholder="Enter current gold rate"
-                  />
-                )}
+                    {/* Purity Input (not for Sale) */}
+                    {transactionType !== 'SALE' && (
+                      <BusinessInput
+                        id="purity"
+                        label="Purity (%)"
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        max="100"
+                        value={formData.purity}
+                        onChange={(e) => handleInputChange('purity', e.target.value)}
+                        onKeyPress={(e) => handleKeyPress(e, transactionType === 'EXCHANGE' ? 'reduction' : 'rate')}
+                        error={errors.purity}
+                        placeholder="91.6"
+                      />
+                    )}
+
+                    {/* Reduction Input (only for Exchange) */}
+                    {transactionType === 'EXCHANGE' && (
+                      <BusinessInput
+                        id="reduction"
+                        label="Reduction (%)"
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        value={formData.reduction}
+                        onChange={(e) => handleInputChange('reduction', e.target.value)}
+                        onKeyPress={(e) => handleKeyPress(e, 'fineWeight')}
+                        error={errors.reduction}
+                        placeholder="0.03"
+                      />
+                    )}
+
+                    {/* Rate Input (not for Exchange) */}
+                    {transactionType !== 'EXCHANGE' && (
+                      <BusinessInput
+                        id="rate"
+                        label={`Rate (${t.rupees}/g)`}
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        value={formData.rate}
+                        onChange={(e) => handleInputChange('rate', e.target.value)}
+                        onKeyPress={(e) => handleKeyPress(e)}
+                        error={errors.rate}
+                        placeholder="Enter current gold rate"
+                      />
+                    )}
+
+                    {/* Fine Weight Display (for Exchange) */}
+                    {transactionType === 'EXCHANGE' && calculation && (
+                      <div className="md:col-span-2">
+                        <label className="text-sm font-medium text-foreground mb-2 block">
+                          Fine Weight (g)
+                        </label>
+                        <div className="h-10 px-3 py-2 border border-border rounded-md bg-muted text-foreground font-medium">
+                          {formatWeight(calculation.fineGold)}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Payment Mode (for Exchange) */}
+                  {transactionType === 'EXCHANGE' && (
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground">Payment Mode</label>
+                      <div className="flex gap-2">
+                        <Badge className="bg-yellow-500 text-white px-3 py-1 rounded-full">
+                          Fine Gold
+                        </Badge>
+                      </div>
+                    </div>
+                  )}
+                </div>
 
                 {/* One-Touch Complete Transaction Button */}
                 {calculation && (
@@ -331,69 +394,123 @@ export default function TransactionFlow() {
             </Card>
 
 
-            {/* Live Calculation Preview */}
+            {/* Live Calculation Summary */}
 {calculation && (
-  <Card className="h-fit border-2 border-green-200 bg-green-50/80 dark:bg-green-900/20 dark:border-green-800">
-    <CardContent className="p-4">
-      <div className="space-y-4">
-        <div className="space-y-3">
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-medium text-green-800 dark:text-green-200">Fine Gold:</span>
-            <span className="text-lg font-bold text-green-900 dark:text-green-100">
-              {formatWeight(calculation.fineGold)}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-medium text-green-800 dark:text-green-200">Total Amount:</span>
-            <span className="text-xl font-bold text-green-900 dark:text-green-100">
-              {formatIndianCurrency(calculation.amount)}
-            </span>
-          </div>
+  <Card className="h-fit border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 dark:border-yellow-800">
+    <CardHeader className="pb-3">
+      <div className="flex items-center gap-2">
+        <Badge className="bg-yellow-500 text-white px-2 py-1 text-xs">
+          📊
+        </Badge>
+        <CardTitle className="text-lg font-bold text-yellow-900 dark:text-yellow-100">
+          {transactionType === 'EXCHANGE' ? 'Exchange Summary' : 
+           transactionType === 'PURCHASE' ? 'Purchase Summary' : 'Sale Summary'}
+        </CardTitle>
+      </div>
+    </CardHeader>
+    <CardContent className="space-y-4">
+      {/* Main Output */}
+      <div className="bg-yellow-100/80 dark:bg-yellow-900/40 rounded-lg p-4 text-center">
+        <div className="text-sm text-yellow-800 dark:text-yellow-200 mb-1">
+          {transactionType === 'EXCHANGE' ? 'Fine Weight Output' : 
+           transactionType === 'PURCHASE' ? 'Fine Gold Purchased' : 'Total Amount'}
+        </div>
+        <div className="text-3xl font-bold text-yellow-900 dark:text-yellow-100">
+          {transactionType !== 'SALE' ? formatWeight(calculation.fineGold) : formatIndianCurrency(calculation.amount)}
+        </div>
+        {transactionType !== 'SALE' && (
+          <div className="text-xs text-yellow-700 dark:text-yellow-300 mt-1">grams</div>
+        )}
+      </div>
+
+      {/* Detailed Breakdown */}
+      <div className="space-y-3">
+        <div className="flex justify-between items-center py-1">
+          <span className="text-sm text-yellow-800 dark:text-yellow-200">
+            {transactionType === 'EXCHANGE' ? 'Old Weight:' : 'Weight:'}
+          </span>
+          <span className="font-semibold text-yellow-900 dark:text-yellow-100">
+            {formatWeight(parseFloat(formData.weight || '0'))}g
+          </span>
         </div>
 
-        <div className="h-px bg-green-200/60 dark:bg-green-800/60" />
-
-        <div className="grid grid-cols-2 gap-3 text-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-green-800/90 dark:text-green-200/90">Weight</span>
-            <span className="font-semibold text-green-900 dark:text-green-100">{formatWeight(parseFloat(formData.weight || '0'))} g</span>
+        {transactionType !== 'SALE' && (
+          <div className="flex justify-between items-center py-1">
+            <span className="text-sm text-yellow-800 dark:text-yellow-200">
+              {transactionType === 'EXCHANGE' ? 'Original Purity:' : 'Purity:'}
+            </span>
+            <span className="font-semibold text-yellow-900 dark:text-yellow-100">
+              {formatPercentage(parseFloat(formData.purity || '0'))}%
+            </span>
           </div>
-          {transactionType !== 'SALE' && (
-            <div className="flex items-center justify-between">
-              <span className="text-green-800/90 dark:text-green-200/90">Purity</span>
-              <span className="font-semibold text-green-900 dark:text-green-100">{formatPercentage(parseFloat(formData.purity || '0'))} %</span>
+        )}
+
+        {transactionType === 'EXCHANGE' && (
+          <>
+            <div className="flex justify-between items-center py-1">
+              <span className="text-sm text-yellow-800 dark:text-yellow-200">Reduction:</span>
+              <span className="font-semibold text-yellow-900 dark:text-yellow-100">
+                {formatPercentage(parseFloat(formData.reduction || '0'))}%
+              </span>
             </div>
-          )}
-          {transactionType === 'EXCHANGE' && (
-            <div className="flex items-center justify-between">
-              <span className="text-green-800/90 dark:text-green-200/90">Reduction</span>
-              <span className="font-semibold text-green-900 dark:text-green-100">{formatPercentage(parseFloat(formData.reduction || '0'))} %</span>
+            <div className="flex justify-between items-center py-1">
+              <span className="text-sm text-yellow-800 dark:text-yellow-200">Adjusted Purity:</span>
+              <span className="font-semibold text-yellow-900 dark:text-yellow-100">
+                {formatPercentage(parseFloat(formData.purity || '0') - parseFloat(formData.reduction || '0'))}%
+              </span>
             </div>
-          )}
-          {transactionType !== 'EXCHANGE' && (
-            <div className="flex items-center justify-between">
-              <span className="text-green-800/90 dark:text-green-200/90">Rate</span>
-              <span className="font-semibold text-green-900 dark:text-green-100">{formatIndianRate(parseFloat(formData.rate || '0'))}</span>
-            </div>
-          )}
+          </>
+        )}
+
+        <div className="flex justify-between items-center py-1">
+          <span className="text-sm text-yellow-800 dark:text-yellow-200">Fine Weight:</span>
+          <span className="font-semibold text-yellow-900 dark:text-yellow-100">
+            <Badge className="bg-yellow-600 text-white px-2 py-1 text-xs">
+              {formatWeight(calculation.fineGold)}g
+            </Badge>
+          </span>
         </div>
 
-        <div className="text-xs text-green-900/70 dark:text-green-200/70">
-          {transactionType === 'EXCHANGE' && (
-            <div>
-              Formula: Fine = Weight × (Purity − Reduction) / 100
+        {transactionType !== 'EXCHANGE' && (
+          <>
+            <div className="flex justify-between items-center py-1">
+              <span className="text-sm text-yellow-800 dark:text-yellow-200">Rate:</span>
+              <span className="font-semibold text-yellow-900 dark:text-yellow-100">
+                {formatIndianRate(parseFloat(formData.rate || '0'))}
+              </span>
             </div>
-          )}
-          {transactionType === 'PURCHASE' && (
-            <div>
-              Formula: Fine = Weight × Purity / 100
+            <div className="flex justify-between items-center py-1">
+              <span className="text-sm text-yellow-800 dark:text-yellow-200">Total Amount:</span>
+              <span className="font-semibold text-yellow-900 dark:text-yellow-100">
+                {formatIndianCurrency(calculation.amount)}
+              </span>
             </div>
-          )}
-          {transactionType === 'SALE' && (
-            <div>
-              Formula: Amount = Weight × Rate
-            </div>
-          )}
+          </>
+        )}
+
+        {transactionType === 'EXCHANGE' && (
+          <div className="flex justify-between items-center py-1">
+            <span className="text-sm text-yellow-800 dark:text-yellow-200">Payment:</span>
+            <Badge className="bg-yellow-500 text-white px-2 py-1 text-xs">
+              Fine Gold
+            </Badge>
+          </div>
+        )}
+      </div>
+
+      {/* Formula Display */}
+      <div className="bg-yellow-100/50 dark:bg-yellow-900/20 rounded-md p-3 mt-4">
+        <div className="text-xs text-yellow-800 dark:text-yellow-200 font-medium mb-1">Calculation:</div>
+        <div className="text-xs text-yellow-700 dark:text-yellow-300 font-mono">
+          {transactionType === 'EXCHANGE' && 
+            `Fine = ${formData.weight || '0'} × (${formData.purity || '0'} - ${formData.reduction || '0'}) ÷ 100 = ${formatWeight(calculation.fineGold)}g`
+          }
+          {transactionType === 'PURCHASE' && 
+            `Fine = ${formData.weight || '0'} × ${formData.purity || '0'} ÷ 100 = ${formatWeight(calculation.fineGold)}g`
+          }
+          {transactionType === 'SALE' && 
+            `Amount = ${formData.weight || '0'} × ${formData.rate || '0'} = ${formatIndianCurrency(calculation.amount)}`
+          }
         </div>
       </div>
     </CardContent>

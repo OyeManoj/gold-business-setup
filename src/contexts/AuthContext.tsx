@@ -113,9 +113,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Admin has all permissions
     if (user.role === 'admin') return true;
     
-    // Define employee restrictions (currently no restrictions)
+    // Define employee restrictions
     if (user.role === 'employee') {
-      const restrictedPermissions: string[] = []; // No restrictions for employees
+      const restrictedPermissions = ['history'];
       return !restrictedPermissions.includes(permission);
     }
     

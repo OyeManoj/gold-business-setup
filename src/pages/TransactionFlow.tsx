@@ -179,7 +179,7 @@ export default function TransactionFlow() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <div className="container mx-auto px-4 py-4 flex flex-col min-h-screen">
+      <div className="container mx-auto px-8 md:px-16 lg:px-24 xl:px-32 py-4 flex flex-col min-h-screen">
         {/* Header */}
         <div className="flex items-center justify-between mb-6 flex-shrink-0">
           <div className="flex items-center">
@@ -200,9 +200,9 @@ export default function TransactionFlow() {
           />
         </div>
 
-        {/* Main Content - Symmetric Layout */}
-        <div className="flex-1 flex flex-col">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-1">
+        {/* Main Content - Compact Centered Layout */}
+        <div className="flex-1 flex flex-col max-w-6xl mx-auto w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 flex-1 px-4 md:px-8">
             {/* Transaction Form */}
             <TransactionForm
               transactionType={transactionType}

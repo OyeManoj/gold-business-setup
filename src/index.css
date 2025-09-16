@@ -8,35 +8,35 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* 4K Quality Color Palette - Ultra Sharp */
-    --background: 0 0% 99%;
-    --foreground: 0 0% 5%;
+    /* Clean White Color Palette */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 5%;
+    --card-foreground: 0 0% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 5%;
+    --popover-foreground: 0 0% 10%;
 
-    --primary: 214 84% 56%;
+    --primary: 0 0% 20%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 214 84% 66%;
+    --primary-glow: 0 0% 30%;
 
-    --secondary: 0 0% 97%;
-    --secondary-foreground: 0 0% 5%;
+    --secondary: 0 0% 98%;
+    --secondary-foreground: 0 0% 10%;
 
-    --muted: 0 0% 98%;
-    --muted-foreground: 0 0% 40%;
+    --muted: 0 0% 97%;
+    --muted-foreground: 0 0% 50%;
 
-    --accent: 270 68% 58%;
+    --accent: 0 0% 15%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 90% 63%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 92%;
+    --border: 0 0% 90%;
     --input: 0 0% 100%;
-    --ring: 214 84% 56%;
+    --ring: 0 0% 20%;
 
     --success: 123 48% 56%;
     --success-foreground: 0 0% 100%;
@@ -83,12 +83,12 @@ All colors MUST be HSL.
     --spacing-3xl: 64px;
     --spacing-4xl: 96px;
 
-    /* Mobile-first touch targets */
-    --touch-target: 48px;
-    --touch-padding: 16px;
-    --mobile-padding: 20px;
-    --mobile-margin: 16px;
-    --mobile-gap: 12px;
+    /* Mobile-first touch targets - Reduced */
+    --touch-target: 44px;
+    --touch-padding: 8px;
+    --mobile-padding: 12px;
+    --mobile-margin: 8px;
+    --mobile-gap: 8px;
 
     /* 4K Quality Shadows */
     --shadow-sm: 0 1px 3px 0 hsl(214 84% 56% / 0.08), 0 1px 2px 0 hsl(214 84% 56% / 0.06);

@@ -50,9 +50,9 @@ const Index = () => {
       {/* Modern Grid Background */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:32px_32px] opacity-30"></div>
       
-      <div className="relative z-10 container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+      <div className="relative z-10 container mx-auto px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4">
         {/* Mobile-first Modern Header */}
-        <div className="text-center mb-6 sm:mb-8">
+        <div className="text-center mb-3 sm:mb-4">
            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-foreground mb-2 sm:mb-4 tracking-tighter leading-tight">
              {language === 'ar' ? (appTitle === 'Gold Ease' ? 'ذهب أمبيكا' : appTitle) : appTitle.toUpperCase()}
            </h1>
@@ -63,15 +63,15 @@ const Index = () => {
         </div>
 
         {/* Single Row Navigation */}
-        <div className="w-full mb-6 sm:mb-8 md:mb-12">
-          <div className="bg-card border border-border shadow-md p-3 sm:p-4 rounded-lg">            
-            <div className="flex items-center justify-between gap-3 sm:gap-4 overflow-x-auto">
+        <div className="w-full mb-3 sm:mb-4 md:mb-6">
+          <div className="bg-card border border-border shadow-sm p-2 sm:p-3 rounded-lg">
+            <div className="flex items-center justify-between gap-2 sm:gap-3 overflow-x-auto">
               <LanguageToggle
                 currentLanguage={language}
                 onLanguageChange={setLanguage}
               />
               
-              <div className="flex items-center gap-2 sm:gap-3">
+              <div className="flex items-center gap-1 sm:gap-2">
                 
                 <Button
                   variant="outline"
@@ -97,10 +97,10 @@ const Index = () => {
                 )}
               </div>
 
-              <div className="flex items-center gap-2 sm:gap-3">
+              <div className="flex items-center gap-1 sm:gap-2">
                 <DeviceTracker />
                 
-                <div className="flex items-center gap-2 px-3 py-2 bg-muted border border-border rounded-lg">
+                <div className="flex items-center gap-2 px-2 py-1 bg-muted border border-border rounded-lg">
                   <User size={16} className="text-primary" />
                   <div className="flex flex-col min-w-0">
                     <span className="font-semibold text-foreground text-sm truncate">{user?.name || 'User'}</span>
@@ -127,25 +127,25 @@ const Index = () => {
 
         {/* Mobile-first Transaction Cards Grid */}
         <div className="w-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
             {transactions.map((transaction, index) => (
               <Card 
                 key={transaction.type}
                 className="group bg-card border-2 border-border hover:border-primary cursor-pointer transition-all duration-200 hover:shadow-lg active:scale-[0.98] touch-manipulation"
                 onClick={() => navigate(transaction.path)}
               >
-                <CardContent className="p-6 sm:p-8 md:p-10 lg:p-12 text-center">
+                <CardContent className="p-4 sm:p-5 md:p-6 text-center">
                   {/* Mobile-optimized Typography */}
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-3 sm:mb-4 uppercase tracking-wide leading-tight">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2 sm:mb-3 uppercase tracking-wide leading-tight">
                     {transaction.title}
                   </h3>
                   
-                  <p className="text-muted-foreground mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed">
+                  <p className="text-muted-foreground mb-4 sm:mb-5 text-sm sm:text-base leading-relaxed">
                     {transaction.description}
                   </p>
 
                   {/* Action Button */}
-                  <div className="border-t border-border pt-4 sm:pt-6">
+                  <div className="border-t border-border pt-3 sm:pt-4">
                     <span className="text-primary font-semibold uppercase tracking-wider text-xs sm:text-sm">
                       {language === 'ar' ? 'ابدأ الآن' : 'START NOW'}
                     </span>
@@ -157,8 +157,8 @@ const Index = () => {
         </div>
 
         {/* Bottom Grid Accent */}
-        <div className="text-center mt-24">
-          <div className="w-48 h-1 bg-primary mx-auto"></div>
+        <div className="text-center mt-8">
+          <div className="w-24 h-1 bg-primary mx-auto"></div>
         </div>
       </div>
 

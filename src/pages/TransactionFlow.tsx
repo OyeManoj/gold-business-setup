@@ -179,7 +179,7 @@ export default function TransactionFlow() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <div className="container mx-auto px-8 md:px-16 lg:px-24 xl:px-32 py-4 flex flex-col min-h-screen">
+      <div className="container mx-auto px-12 md:px-24 lg:px-32 xl:px-48 py-4 flex flex-col min-h-screen">
         {/* Header */}
         <div className="flex items-center justify-between mb-6 flex-shrink-0">
           <div className="flex items-center">

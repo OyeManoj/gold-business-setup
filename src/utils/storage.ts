@@ -124,6 +124,27 @@ export async function clearTransactions(): Promise<void> {
   localStorage.removeItem(STORAGE_KEY);
 }
 
+// Delete a specific transaction
+export async function deleteTransaction(transactionId: string): Promise<void> {
+  const userId = await getCurrentUserId();
+  if (!userId) throw new Error('User not authenticated');
+
+  try {
+    // Use secure RPC to delete specific transaction
+    const { data, error } = await supabase.rpc('delete_transaction_for_custom_user', {
+      input_user_id: userId,
+      input_transaction_id: transactionId
+    });
+
+    if (error || !data?.success) {
+      throw new Error(data?.error || 'Failed to delete transaction');
+    }
+  } catch (error) {
+    console.warn('Failed to delete from Supabase, deleting offline:', error);
+    await deleteTransactionOffline(transactionId);
+  }
+}
+
 // Transform Supabase data to Transaction format
 function transformSupabaseToTransaction(data: any): Transaction {
   return {
@@ -237,4 +258,16 @@ async function syncOfflineTransactions(): Promise<void> {
       console.warn('Failed to sync transaction:', transaction.id, error);
     }
   }
+}
+
+async function deleteTransactionOffline(transactionId: string): Promise<void> {
+  const userId = await getCurrentUserId();
+  if (!userId) return;
+
+  const transactions = await getOfflineTransactions();
+  const filtered = transactions.filter(t => t.id !== transactionId);
+  
+  // Update both secure storage and fallback
+  await SecureStorage.setSecureItem('transactions_offline', filtered, userId);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
 }

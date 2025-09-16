@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Edit, Printer, Trash2 } from 'lucide-react';
 import { Transaction } from '@/types/transaction';
 import { formatTransactionType } from '@/utils/exportUtils';
@@ -11,7 +12,7 @@ interface SwipeableTransactionRowProps {
   language: string;
   onEdit: (transaction: Transaction) => void;
   onPrint: (transaction: Transaction) => void;
-  onDelete?: (transaction: Transaction) => void;
+  onDelete: (transaction: Transaction) => void;
 }
 
 export function SwipeableTransactionRow({
@@ -48,9 +49,9 @@ export function SwipeableTransactionRow({
     setIsDragging(false);
     
     // Trigger action based on swipe distance
-    if (swipeX > 60) {
+    if (swipeX > 80) {
       onPrint(transaction);
-    } else if (swipeX < -60) {
+    } else if (swipeX < -80) {
       onEdit(transaction);
     }
     
@@ -77,9 +78,9 @@ export function SwipeableTransactionRow({
   const handleMouseUp = () => {
     setIsDragging(false);
     
-    if (swipeX > 60) {
+    if (swipeX > 80) {
       onPrint(transaction);
-    } else if (swipeX < -60) {
+    } else if (swipeX < -80) {
       onEdit(transaction);
     }
     
@@ -91,13 +92,13 @@ export function SwipeableTransactionRow({
       {/* Action Hints */}
       <tr className="absolute inset-0 pointer-events-none">
         <td colSpan={8} className="relative">
-          {swipeX > 20 && (
+          {swipeX > 40 && (
             <div className="absolute left-4 top-1/2 transform -translate-y-1/2 flex items-center gap-2 text-green-600">
               <Printer size={16} />
               <span className="text-sm font-medium">Print</span>
             </div>
           )}
-          {swipeX < -20 && (
+          {swipeX < -40 && (
             <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-2 text-blue-600">
               <Edit size={16} />
               <span className="text-sm font-medium">Edit</span>
@@ -172,6 +173,36 @@ export function SwipeableTransactionRow({
             >
               <Edit size={12} />
             </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 w-8 p-0 rounded-md border hover:border-red-300 hover:bg-red-50 hover:shadow-sm transition-all duration-200 touch-manipulation"
+                  title="Delete Transaction"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Trash2 size={12} />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete Transaction</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to delete this transaction? This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => onDelete(transaction)}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </td>
       </tr>

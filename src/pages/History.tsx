@@ -5,7 +5,7 @@ import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { FilterSection } from '@/components/FilterSection';
 import { TransactionSummaryCard } from '@/components/TransactionSummaryCard';
 import { ExportControls } from '@/components/ExportControls';
-import { clearTransactions } from '@/utils/storage';
+import { clearTransactions, deleteTransaction } from '@/utils/storage';
 import { useTranslation } from '@/utils/translations';
 import { formatTransactionType } from '@/utils/exportUtils';
 import { useTransactionFilters } from '@/hooks/useTransactionFilters';
@@ -69,6 +69,25 @@ export default function History() {
       toast({
         title: "Print Error", 
         description: "Failed to print receipt. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDeleteTransaction = async (transaction: any) => {
+    try {
+      await deleteTransaction(transaction.id);
+      await refreshTransactions();
+      toast({
+        title: "Success",
+        description: "Transaction deleted successfully",
+        variant: "default"
+      });
+    } catch (error) {
+      console.error('Delete error:', error);
+      toast({
+        title: "Delete Error",
+        description: "Failed to delete transaction. Please try again.",
         variant: "destructive"
       });
     }
@@ -173,6 +192,7 @@ export default function History() {
                             language={language}
                             onEdit={handleEditTransaction}
                             onPrint={handlePrintReceipt}
+                            onDelete={handleDeleteTransaction}
                           />
                         ))}
                       </tbody>

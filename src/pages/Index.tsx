@@ -8,7 +8,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useAppTitle } from '@/hooks/useAppTitle';
 import { History, Settings, LogOut, User } from 'lucide-react';
 import { DeviceTracker } from '@/components/DeviceTracker';
-import { QuickActions } from '@/components/QuickActions';
 import { FloatingActionButton } from '@/components/FloatingActionButton';
 import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
 
@@ -125,9 +124,6 @@ const Index = () => {
             </div>
           </div>
         </div>
-
-        {/* Quick Actions */}
-        <QuickActions language={language} />
 
         {/* Mobile-first Transaction Cards Grid */}
         <div className="w-full">

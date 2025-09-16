@@ -19,7 +19,6 @@ import { useAuditLog } from '@/hooks/useAuditLog';
 import { Badge } from '@/components/ui/badge';
 import { DayAveragePrices } from '@/components/DayAveragePrices';
 import { formatWeight, formatIndianCurrency } from '@/utils/indianFormatting';
-import { SmartDefaults } from '@/components/SmartDefaults';
 
 export default function TransactionFlow() {
   const { type, transactionId } = useParams<{ type: string; transactionId?: string }>();
@@ -140,9 +139,6 @@ export default function TransactionFlow() {
     }
   };
 
-  const handleApplyDefaults = (defaults: { weight?: string; purity?: string; rate?: string; reduction?: string }) => {
-    setFormData(prev => ({ ...prev, ...defaults }));
-  };
 
   const handleConfirm = async () => {
     const transaction: Transaction = {
@@ -248,12 +244,6 @@ export default function TransactionFlow() {
               <CardContent className="space-y-3 sm:space-y-4 p-3 sm:p-4 md:p-6">
                 {/* Average Prices Display */}
                 <DayAveragePrices transactionType={transactionType} />
-                
-                {/* Smart Defaults */}
-                <SmartDefaults 
-                  transactionType={transactionType} 
-                  onApplyDefaults={handleApplyDefaults}
-                />
                 
                 {/* Weight Input */}
                 <BusinessInput

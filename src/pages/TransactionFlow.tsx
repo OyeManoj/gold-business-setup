@@ -246,12 +246,12 @@ export default function TransactionFlow() {
 
                 {/* Transaction Details Section */}
                 <div className="space-y-5">
-                  <h3 className="text-lg font-semibold text-foreground border-b border-border pb-3">
+                  <h3 className="text-xl font-semibold text-foreground border-b border-border pb-4 mb-6">
                     {transactionType === 'EXCHANGE' ? 'Gold Exchange Details' : 
                      transactionType === 'PURCHASE' ? 'Gold Purchase Details' : 'Gold Sale Details'}
                   </h3>
 
-                  <div className="space-y-5">
+                  <div className="space-y-6">
                     {/* Weight Input */}
                     <BusinessInput
                       id="weight"
@@ -318,11 +318,11 @@ export default function TransactionFlow() {
 
                     {/* Fine Weight Display (for Exchange) */}
                     {transactionType === 'EXCHANGE' && calculation && (
-                      <div>
-                        <label className="text-sm font-medium text-foreground mb-2 block">
+                      <div className="bg-muted/30 border border-border rounded-lg p-4">
+                        <label className="text-sm font-semibold text-foreground mb-3 block">
                           Fine Weight (g)
                         </label>
-                        <div className="h-10 px-3 py-2 border border-border rounded-md bg-muted text-foreground font-medium">
+                        <div className="h-12 px-4 py-3 border border-border/50 rounded-lg bg-card text-foreground font-semibold text-lg flex items-center">
                           {formatWeight(calculation.fineGold)}
                         </div>
                       </div>
@@ -336,10 +336,10 @@ export default function TransactionFlow() {
                     variant="default"
                     size="lg"
                     onClick={handleConfirm}
-                    className="w-full py-3 sm:py-2.5 text-sm sm:text-base font-bold rounded-lg bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] active:scale-[0.99] touch-manipulation min-h-[44px] sm:min-h-[40px]"
+                    className="w-full h-14 text-lg font-semibold rounded-lg bg-gradient-to-r from-success to-success/90 hover:from-success/90 hover:to-success/80 text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.01] focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
                   >
-                    <Check size={16} className="mr-2" />
-                    <span className="text-sm sm:text-base">
+                    <Check size={20} className="mr-3" />
+                    <span className="text-lg">
                       {isEditMode ? 'Update Transaction' : `Complete Transaction ${formatIndianCurrency(calculation.amount)}`}
                     </span>
                   </Button>

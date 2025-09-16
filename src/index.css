@@ -8,35 +8,35 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Clean White Color Palette */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 10%;
+    /* Modern Blue-Gray Color Palette */
+    --background: 210 40% 98%;
+    --foreground: 222 84% 5%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
+    --card-foreground: 222 84% 5%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
+    --popover-foreground: 222 84% 5%;
 
-    --primary: 0 0% 20%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 0 0% 30%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 210 40% 98%;
+    --primary-glow: 221 83% 63%;
 
-    --secondary: 0 0% 98%;
-    --secondary-foreground: 0 0% 10%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 0 0% 97%;
-    --muted-foreground: 0 0% 50%;
+    --muted: 210 40% 95%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 142 76% 36%;
+    --accent-foreground: 355 7% 97%;
 
     --destructive: 0 90% 63%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
+    --border: 214 32% 91%;
     --input: 0 0% 100%;
-    --ring: 0 0% 20%;
+    --ring: 221 83% 53%;
 
     --success: 123 48% 56%;
     --success-foreground: 0 0% 100%;
@@ -44,27 +44,27 @@ All colors MUST be HSL.
     --warning: 38 92% 60%;
     --warning-foreground: 0 0% 100%;
 
-    /* Ultra High Definition Colors */
-    --dark: 0 0% 8%;
-    --dark-light: 0 0% 15%;
-    --dark-medium: 0 0% 12%;
-    --gray: 0 0% 42%;
-    --gray-light: 0 0% 62%;
-    --light-gray: 0 0% 88%;
-    --off-white: 0 0% 99%;
+    /* Modern Color Variations */
+    --dark: 222 84% 5%;
+    --dark-light: 215 28% 17%;
+    --dark-medium: 217 33% 17%;
+    --gray: 215 14% 34%;
+    --gray-light: 214 13% 47%;
+    --light-gray: 210 40% 92%;
+    --off-white: 210 40% 99%;
     --pure-white: 0 0% 100%;
-    --charcoal: 0 0% 10%;
-    --slate: 0 0% 48%;
+    --charcoal: 222 84% 5%;
+    --slate: 215 25% 27%;
 
-    /* 4K Accent Variations */
-    --accent-1: 196 68% 52%;
-    --accent-1-light: 196 68% 72%;
+    /* Modern Accent Variations */
+    --accent-1: 199 89% 48%;
+    --accent-1-light: 199 89% 64%;
     --accent-2: 158 64% 52%;
     --accent-2-light: 158 64% 72%;
-    --accent-3: 316 70% 56%;
-    --accent-3-light: 316 70% 76%;
+    --accent-3: 340 75% 55%;
+    --accent-3-light: 340 75% 70%;
 
-    /* 4K Quality Gradients */
+    /* Modern Quality Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-glow)) 100%);
     --gradient-secondary: linear-gradient(180deg, hsl(var(--accent-1)) 0%, hsl(var(--accent-2)) 100%);
     --gradient-card: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%);

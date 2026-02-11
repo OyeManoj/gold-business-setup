@@ -221,6 +221,14 @@ export type Database = {
         }
         Returns: Json
       }
+      reset_custom_user_pin: {
+        Args: {
+          input_admin_user_id: string
+          input_new_pin: string
+          input_target_user_id: string
+        }
+        Returns: Json
+      }
       update_custom_user_role: {
         Args: {
           input_admin_user_id: string

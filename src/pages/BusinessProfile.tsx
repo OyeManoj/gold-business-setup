@@ -5,12 +5,21 @@ import { BusinessProfileForm } from '@/components/BusinessProfileForm';
 import { ReceiptSettingsComponent } from '@/components/ReceiptSettings';
 import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { useAppTitle } from '@/hooks/useAppTitle';
+import { useAuth } from '@/contexts/AuthContext';
 import { ArrowLeft } from 'lucide-react';
 
 const BusinessProfile = () => {
   const navigate = useNavigate();
   const { refreshBusinessProfile, appTitle } = useAppTitle();
+  const { user, hasPermission } = useAuth();
   const [language, setLanguage] = useState<Language>('en');
+
+  // Redirect non-admins
+  useEffect(() => {
+    if (user && !hasPermission('business-profile')) {
+      navigate('/', { replace: true });
+    }
+  }, [user, hasPermission, navigate]);
 
   // Update document title when appTitle changes
   useEffect(() => {

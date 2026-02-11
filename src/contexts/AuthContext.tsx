@@ -32,6 +32,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch (error) {
         localStorage.removeItem('currentUser');
       }
+    } else {
+      // Auto-login with default user
+      const autoLogin = async () => {
+        const { error } = await signIn('1111', '1234');
+        if (error) {
+          console.error('Auto-login failed:', error);
+        }
+      };
+      autoLogin();
     }
   }, []);
 

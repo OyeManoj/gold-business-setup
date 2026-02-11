@@ -24,7 +24,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<CustomUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // only for initial app load
   const [autoLoginFailed, setAutoLoginFailed] = useState(false);
 
   useEffect(() => {
@@ -40,11 +40,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       }
       // Auto-login with default user
-      const { error } = await signIn('1111', '1234');
-      if (error) {
-        console.error('Auto-login failed:', error);
-        setAutoLoginFailed(true);
+      try {
+        const { data, error } = await supabase.rpc('verify_login_credentials', {
+          input_user_id: '1111',
+          input_pin: '1234'
+        });
+        if (!error) {
+          const result = data as any;
+          if (result?.success) {
+            setUser(result.user);
+            localStorage.setItem('currentUser', JSON.stringify(result.user));
+            setIsLoading(false);
+            return;
+          }
+        }
+      } catch (e) {
+        console.error('Auto-login failed:', e);
       }
+      setAutoLoginFailed(true);
       setIsLoading(false);
     };
     init();
@@ -53,17 +66,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const retryAutoLogin = async () => {
     setIsLoading(true);
     setAutoLoginFailed(false);
-    const { error } = await signIn('1111', '1234');
-    if (error) {
-      setAutoLoginFailed(true);
+    try {
+      const { data, error } = await supabase.rpc('verify_login_credentials', {
+        input_user_id: '1111',
+        input_pin: '1234'
+      });
+      if (!error) {
+        const result = data as any;
+        if (result?.success) {
+          setUser(result.user);
+          localStorage.setItem('currentUser', JSON.stringify(result.user));
+          setIsLoading(false);
+          return;
+        }
+      }
+    } catch (e) {
+      console.error('Retry auto-login failed:', e);
     }
+    setAutoLoginFailed(true);
     setIsLoading(false);
   };
 
   const signUp = async (name: string, pin: string, role: 'admin' | 'employee' = 'employee', userId?: string) => {
     try {
-      setIsLoading(true);
-      
       const { data, error } = await supabase.rpc('register_custom_user', {
         input_name: name,
         input_pin: pin,
@@ -81,15 +106,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error: any) {
       return { error: error.message };
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const signIn = async (userId: string, pin: string) => {
     try {
-      setIsLoading(true);
-      
       const { data, error } = await supabase.rpc('verify_login_credentials', {
         input_user_id: userId,
         input_pin: pin
@@ -101,6 +122,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (result?.success) {
         const userData = result.user;
         setUser(userData);
+        setAutoLoginFailed(false);
         localStorage.setItem('currentUser', JSON.stringify(userData));
         return {};
       } else {
@@ -108,8 +130,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error: any) {
       return { error: error.message };
-    } finally {
-      setIsLoading(false);
     }
   };
 

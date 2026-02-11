@@ -4,8 +4,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { RoleProtectedRoute } from "@/components/RoleProtectedRoute";
 import Index from "./pages/Index";
 
 import TransactionFlow from "./pages/TransactionFlow";
@@ -24,14 +22,11 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route path="/auth" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-            <Route path="/login" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-            <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-            <Route path="/transaction/:type" element={<ProtectedRoute><TransactionFlow /></ProtectedRoute>} />
-            <Route path="/transaction/:type/edit/:transactionId" element={<ProtectedRoute><TransactionFlow /></ProtectedRoute>} />
-            <Route path="/business-profile" element={<ProtectedRoute><BusinessProfile /></ProtectedRoute>} />
-            
-            <Route path="/history" element={<ProtectedRoute><RoleProtectedRoute requiredPermission="history"><History /></RoleProtectedRoute></ProtectedRoute>} />
+            <Route path="/" element={<Index />} />
+            <Route path="/transaction/:type" element={<TransactionFlow />} />
+            <Route path="/transaction/:type/edit/:transactionId" element={<TransactionFlow />} />
+            <Route path="/business-profile" element={<BusinessProfile />} />
+            <Route path="/history" element={<History />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

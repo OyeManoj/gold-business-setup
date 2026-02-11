@@ -9,6 +9,7 @@ import Auth from "./pages/Auth";
 import TransactionFlow from "./pages/TransactionFlow";
 import BusinessProfile from "./pages/BusinessProfile";
 import History from "./pages/History";
+import UserManagement from "./pages/UserManagement";
 import NotFound from "./pages/NotFound";
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
@@ -59,6 +60,7 @@ function AppRoutes() {
       <Route path="/transaction/:type/edit/:transactionId" element={<TransactionFlow />} />
       <Route path="/business-profile" element={<BusinessProfile />} />
       <Route path="/history" element={<History />} />
+      <Route path="/user-management" element={<UserManagement />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

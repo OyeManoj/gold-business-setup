@@ -1,7 +1,23 @@
 // Encryption utilities for securing offline data
 export class SecureStorage {
+  /**
+   * Gets or creates a random salt for a user, stored in localStorage.
+   * This adds entropy beyond the 4-digit user ID to prevent brute-force key derivation.
+   */
+  private static getUserSalt(userId: string): string {
+    const saltKey = `_enc_salt_${userId}`;
+    let salt = localStorage.getItem(saltKey);
+    if (!salt) {
+      const randomBytes = crypto.getRandomValues(new Uint8Array(32));
+      salt = btoa(String.fromCharCode(...randomBytes));
+      localStorage.setItem(saltKey, salt);
+    }
+    return salt;
+  }
+
   private static async getEncryptionKey(userId: string): Promise<CryptoKey> {
-    const keyData = new TextEncoder().encode(`${userId}_secure_key_v1`);
+    const salt = this.getUserSalt(userId);
+    const keyData = new TextEncoder().encode(`${userId}_${salt}_secure_key_v2`);
     const hashBuffer = await crypto.subtle.digest('SHA-256', keyData);
     
     return crypto.subtle.importKey(

@@ -188,12 +188,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      delete_custom_user: {
+        Args: { input_admin_user_id: string; input_target_user_id: string }
+        Returns: Json
+      }
       delete_transaction_for_custom_user: {
         Args: { input_transaction_id: string; input_user_id: string }
         Returns: Json
       }
       delete_transactions_for_custom_user: {
         Args: { input_user_id: string }
+        Returns: Json
+      }
+      get_all_custom_users: {
+        Args: { input_admin_user_id: string }
         Returns: Json
       }
       get_transactions_for_custom_user: {
@@ -210,6 +218,14 @@ export type Database = {
           input_pin: string
           input_role?: string
           input_user_id?: string
+        }
+        Returns: Json
+      }
+      update_custom_user_role: {
+        Args: {
+          input_admin_user_id: string
+          input_new_role: string
+          input_target_user_id: string
         }
         Returns: Json
       }

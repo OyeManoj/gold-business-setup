@@ -6,7 +6,7 @@ import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { useTranslation } from '@/utils/translations';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAppTitle } from '@/hooks/useAppTitle';
-import { History, Settings, LogOut, User } from 'lucide-react';
+import { History, Settings, LogOut, User, Users } from 'lucide-react';
 
 import { FloatingActionButton } from '@/components/FloatingActionButton';
 import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
@@ -82,6 +82,19 @@ const Index = () => {
                     <Settings size={16} />
                     <span className="font-medium hidden sm:inline">{language === 'ar' ? 'ملف العمل' : 'Business'}</span>
                     <span className="font-medium sm:hidden">{language === 'ar' ? 'عمل' : 'Biz'}</span>
+                  </Button>
+                )}
+
+                {hasPermission('user-management') && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate('/user-management')}
+                    className="flex items-center gap-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground text-sm whitespace-nowrap"
+                  >
+                    <Users size={16} />
+                    <span className="font-medium hidden sm:inline">{language === 'ar' ? 'المستخدمين' : 'Users'}</span>
+                    <span className="font-medium sm:hidden">{language === 'ar' ? 'مستخدم' : 'Users'}</span>
                   </Button>
                 )}
                 

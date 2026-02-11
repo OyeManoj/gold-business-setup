@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { ArrowLeft, Trash2, Shield, Users, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Trash2, Shield, Users, RefreshCw, KeyRound } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 interface ManagedUser {
@@ -22,9 +24,19 @@ interface ManagedUser {
 
 export default function UserManagement() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, hasPermission } = useAuth();
   const [users, setUsers] = useState<ManagedUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [resetPinUserId, setResetPinUserId] = useState<string | null>(null);
+  const [newPin, setNewPin] = useState('');
+  const [isResetting, setIsResetting] = useState(false);
+
+  // Redirect non-admins
+  useEffect(() => {
+    if (user && !hasPermission('user-management')) {
+      navigate('/', { replace: true });
+    }
+  }, [user, hasPermission, navigate]);
 
   const fetchUsers = async () => {
     if (!user?.user_id) return;
@@ -89,6 +101,35 @@ export default function UserManagement() {
       }
     } catch (error: any) {
       toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    }
+  };
+
+  const handleResetPin = async () => {
+    if (!user?.user_id || !resetPinUserId || !newPin) return;
+    if (newPin.length < 4) {
+      toast({ title: 'Error', description: 'PIN must be at least 4 digits', variant: 'destructive' });
+      return;
+    }
+    setIsResetting(true);
+    try {
+      const { data, error } = await supabase.rpc('reset_custom_user_pin', {
+        input_admin_user_id: user.user_id,
+        input_target_user_id: resetPinUserId,
+        input_new_pin: newPin
+      });
+      if (error) throw error;
+      const result = data as any;
+      if (result?.success) {
+        toast({ title: 'PIN reset', description: `PIN for user ${resetPinUserId} has been updated` });
+        setResetPinUserId(null);
+        setNewPin('');
+      } else {
+        toast({ title: 'Error', description: result?.error, variant: 'destructive' });
+      }
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    } finally {
+      setIsResetting(false);
     }
   };
 
@@ -181,30 +222,40 @@ export default function UserManagement() {
                           {u.user_id === user?.user_id ? (
                             <Badge variant="secondary" className="text-xs">You</Badge>
                           ) : (
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button variant="outline" size="sm" className="border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground">
-                                  <Trash2 size={14} />
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Delete user {u.user_id}?</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    This will permanently delete {u.name}'s account and all their transactions. This action cannot be undone.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    onClick={() => handleDeleteUser(u.user_id)}
-                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                  >
-                                    Delete
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
+                            <div className="flex items-center justify-end gap-1">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => { setResetPinUserId(u.user_id); setNewPin(''); }}
+                                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                              >
+                                <KeyRound size={14} />
+                              </Button>
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Button variant="outline" size="sm" className="border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground">
+                                    <Trash2 size={14} />
+                                  </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>Delete user {u.user_id}?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      This will permanently delete {u.name}'s account and all their transactions. This action cannot be undone.
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction
+                                      onClick={() => handleDeleteUser(u.user_id)}
+                                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                    >
+                                      Delete
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                            </div>
                           )}
                         </TableCell>
                       </TableRow>
@@ -215,6 +266,29 @@ export default function UserManagement() {
             )}
           </CardContent>
         </Card>
+
+        {/* PIN Reset Dialog */}
+        <Dialog open={!!resetPinUserId} onOpenChange={(open) => { if (!open) { setResetPinUserId(null); setNewPin(''); } }}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Reset PIN for user {resetPinUserId}</DialogTitle>
+              <DialogDescription>Enter a new 4-digit PIN for this user.</DialogDescription>
+            </DialogHeader>
+            <Input
+              type="password"
+              value={newPin}
+              onChange={(e) => setNewPin(e.target.value)}
+              placeholder="New 4-digit PIN"
+              maxLength={4}
+            />
+            <DialogFooter>
+              <Button variant="outline" onClick={() => { setResetPinUserId(null); setNewPin(''); }}>Cancel</Button>
+              <Button onClick={handleResetPin} disabled={isResetting || newPin.length < 4}>
+                {isResetting ? 'Resetting...' : 'Reset PIN'}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

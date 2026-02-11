@@ -22,26 +22,28 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<CustomUser | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('currentUser');
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (error) {
-        localStorage.removeItem('currentUser');
-      }
-    } else {
-      // Auto-login with default user
-      const autoLogin = async () => {
-        const { error } = await signIn('1111', '1234');
-        if (error) {
-          console.error('Auto-login failed:', error);
+    const init = async () => {
+      const storedUser = localStorage.getItem('currentUser');
+      if (storedUser) {
+        try {
+          setUser(JSON.parse(storedUser));
+          setIsLoading(false);
+          return;
+        } catch (error) {
+          localStorage.removeItem('currentUser');
         }
-      };
-      autoLogin();
-    }
+      }
+      // Auto-login with default user
+      const { error } = await signIn('1111', '1234');
+      if (error) {
+        console.error('Auto-login failed:', error);
+      }
+      setIsLoading(false);
+    };
+    init();
   }, []);
 
   const signUp = async (name: string, pin: string, role: 'admin' | 'employee' = 'employee', userId?: string) => {

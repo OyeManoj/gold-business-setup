@@ -38,11 +38,12 @@ export function BusinessProfileForm({ language, onProfileUpdated }: BusinessProf
           input_user_id: user.user_id
         });
 
-        if (!error && data?.success && data.profile) {
+        const result = data as any;
+        if (!error && result?.success && result.profile) {
           setProfile({
-            name: data.profile.name || '',
-            phone: data.profile.phone || '',
-            address: data.profile.address || ''
+            name: result.profile.name || '',
+            phone: result.profile.phone || '',
+            address: result.profile.address || ''
           });
         }
       } catch (error) {
@@ -67,10 +68,11 @@ export function BusinessProfileForm({ language, onProfileUpdated }: BusinessProf
         input_address: profile.address
       });
 
-      if (error || !data?.success) {
+      const result = data as any;
+      if (error || !result?.success) {
         toast({
           title: language === 'ar' ? 'خطأ' : 'Error',
-          description: language === 'ar' ? 'فشل في حفظ البيانات' : data?.error || 'Failed to save profile',
+          description: language === 'ar' ? 'فشل في حفظ البيانات' : result?.error || 'Failed to save profile',
           variant: 'destructive',
         });
         return;
@@ -81,7 +83,6 @@ export function BusinessProfileForm({ language, onProfileUpdated }: BusinessProf
         description: language === 'ar' ? 'تم حفظ بيانات العمل بنجاح' : 'Business profile has been saved successfully.',
       });
 
-      // Trigger refresh of app title
       onProfileUpdated?.();
     } catch (error) {
       console.error('Error saving business profile:', error);

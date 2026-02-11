@@ -14,13 +14,235 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      audit_logs: {
+        Row: {
+          action: string
+          created_at: string
+          custom_user_id: string | null
+          device_info: Json | null
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          new_data: Json | null
+          old_data: Json | null
+          resource_id: string | null
+          resource_type: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          custom_user_id?: string | null
+          device_info?: Json | null
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          new_data?: Json | null
+          old_data?: Json | null
+          resource_id?: string | null
+          resource_type: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          custom_user_id?: string | null
+          device_info?: Json | null
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          new_data?: Json | null
+          old_data?: Json | null
+          resource_id?: string | null
+          resource_type?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      business_profiles: {
+        Row: {
+          address: string
+          created_at: string
+          id: string
+          name: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string
+          created_at?: string
+          id?: string
+          name?: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string
+          created_at?: string
+          id?: string
+          name?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "custom_users"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      custom_users: {
+        Row: {
+          created_at: string
+          id: string
+          last_login: string | null
+          name: string
+          pin_hash: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_login?: string | null
+          name: string
+          pin_hash: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_login?: string | null
+          name?: string
+          pin_hash?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          fine_gold: number
+          id: string
+          purity: number
+          rate: number
+          reduction: number | null
+          remaining_fine_gold: number | null
+          type: string
+          updated_at: string
+          user_id: string
+          weight: number
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          fine_gold?: number
+          id: string
+          purity?: number
+          rate?: number
+          reduction?: number | null
+          remaining_fine_gold?: number | null
+          type: string
+          updated_at?: string
+          user_id: string
+          weight?: number
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          fine_gold?: number
+          id?: string
+          purity?: number
+          rate?: number
+          reduction?: number | null
+          remaining_fine_gold?: number | null
+          type?: string
+          updated_at?: string
+          user_id?: string
+          weight?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "custom_users"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      delete_transaction_for_custom_user: {
+        Args: { input_transaction_id: string; input_user_id: string }
+        Returns: Json
+      }
+      delete_transactions_for_custom_user: {
+        Args: { input_user_id: string }
+        Returns: Json
+      }
+      get_transactions_for_custom_user: {
+        Args: { input_user_id: string }
+        Returns: Json
+      }
+      get_user_business_profile: {
+        Args: { input_user_id: string }
+        Returns: Json
+      }
+      register_custom_user: {
+        Args: {
+          input_name: string
+          input_pin: string
+          input_role?: string
+          input_user_id?: string
+        }
+        Returns: Json
+      }
+      upsert_business_profile: {
+        Args: {
+          input_address?: string
+          input_name: string
+          input_phone?: string
+          input_user_id: string
+        }
+        Returns: Json
+      }
+      upsert_transaction_for_custom_user: {
+        Args: {
+          input_amount?: number
+          input_created_at?: string
+          input_fine_gold?: number
+          input_id: string
+          input_purity: number
+          input_rate?: number
+          input_reduction?: number
+          input_remaining_fine_gold?: number
+          input_type: string
+          input_updated_at?: string
+          input_user_id: string
+          input_weight: number
+        }
+        Returns: Json
+      }
+      verify_login_credentials: {
+        Args: { input_pin: string; input_user_id: string }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never

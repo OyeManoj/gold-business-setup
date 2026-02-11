@@ -22,10 +22,10 @@ export class SecureStorage {
     
     const key = await this.getEncryptionKey(userId);
     const iv = this.generateIV();
-    const encodedData = new TextEncoder().encode(data);
+    const encodedData: ArrayBuffer = new TextEncoder().encode(data).buffer as ArrayBuffer;
 
     const encrypted = await crypto.subtle.encrypt(
-      { name: 'AES-GCM', iv },
+      { name: 'AES-GCM', iv: iv as unknown as Uint8Array<ArrayBuffer> },
       key,
       encodedData
     );

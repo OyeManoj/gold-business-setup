@@ -25,7 +25,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Check for stored user session
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
       try {
@@ -47,14 +46,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         input_user_id: userId
       });
 
-      if (error) {
-        return { error: error.message };
-      }
+      if (error) return { error: error.message };
 
-      if (data.success) {
-        return { user_id: data.user_id };
+      const result = data as any;
+      if (result?.success) {
+        return { user_id: result.user_id };
       } else {
-        return { error: data.error };
+        return { error: result?.error || 'Registration failed' };
       }
     } catch (error: any) {
       return { error: error.message };
@@ -72,17 +70,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         input_pin: pin
       });
 
-      if (error) {
-        return { error: error.message };
-      }
+      if (error) return { error: error.message };
 
-      if (data.success) {
-        const userData = data.user;
+      const result = data as any;
+      if (result?.success) {
+        const userData = result.user;
         setUser(userData);
         localStorage.setItem('currentUser', JSON.stringify(userData));
         return {};
       } else {
-        return { error: data.error };
+        return { error: result?.error || 'Login failed' };
       }
     } catch (error: any) {
       return { error: error.message };
@@ -93,13 +90,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     try {
-      // Clear secure offline data before signout
       if (user?.id) {
         const { SecureStorage } = await import('@/utils/encryption');
         SecureStorage.clearUserData(user.id);
       }
-      
-      // Clear local state
       setUser(null);
       localStorage.removeItem('currentUser');
     } catch (error) {
@@ -109,28 +103,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const hasPermission = (permission: string): boolean => {
     if (!user) return false;
-    
-    // Admin has all permissions
     if (user.role === 'admin') return true;
-    
-    // Define employee restrictions
     if (user.role === 'employee') {
       const restrictedPermissions = ['history'];
       return !restrictedPermissions.includes(permission);
     }
-    
     return false;
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      signUp, 
-      signIn, 
-      signOut, 
-      isLoading, 
-      hasPermission 
-    }}>
+    <AuthContext.Provider value={{ user, signUp, signIn, signOut, isLoading, hasPermission }}>
       {children}
     </AuthContext.Provider>
   );

@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LogIn, UserPlus, AlertCircle } from 'lucide-react';
 
 export default function Auth() {
@@ -13,6 +14,7 @@ export default function Auth() {
   const [signupName, setSignupName] = useState('');
   const [signupPin, setSignupPin] = useState('');
   const [signupUserId, setSignupUserId] = useState('');
+  const [signupRole, setSignupRole] = useState<'admin' | 'employee'>('employee');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -27,14 +29,15 @@ export default function Auth() {
     e.preventDefault();
     setError('');
     setSuccess('');
-    const result = await signUp(signupName, signupPin, 'employee', signupUserId || undefined);
+    const result = await signUp(signupName, signupPin, signupRole, signupUserId || undefined);
     if (result.error) {
       setError(result.error);
     } else if (result.user_id) {
-      setSuccess(`Account created! Your User ID is: ${result.user_id}`);
+      setSuccess(`Account created! Your User ID is: ${result.user_id} (Role: ${signupRole})`);
       setSignupName('');
       setSignupPin('');
       setSignupUserId('');
+      setSignupRole('employee');
     }
   };
 
@@ -126,6 +129,18 @@ export default function Auth() {
                     placeholder="Custom 4-digit ID or auto-generated"
                     maxLength={4}
                   />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-1 block">Role</label>
+                  <Select value={signupRole} onValueChange={(v) => setSignupRole(v as 'admin' | 'employee')}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="employee">Employee</SelectItem>
+                      <SelectItem value="admin">Admin</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? 'Creating account...' : 'Create Account'}

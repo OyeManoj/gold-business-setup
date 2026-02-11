@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface AuditLogParams {
   action: string;
@@ -10,10 +11,20 @@ interface AuditLogParams {
 }
 
 export function useAuditLog() {
+  const { user } = useAuth();
+
   const createAuditLog = async (params: AuditLogParams) => {
+    if (!user?.user_id) {
+      console.warn('Audit log skipped: no authenticated user');
+      return false;
+    }
+
     try {
       const { data, error } = await supabase.functions.invoke('audit-log', {
-        body: params
+        body: {
+          ...params,
+          customUserId: user.user_id
+        }
       });
 
       if (error) {

@@ -1,0 +1,1 @@
+UPDATE custom_users SET role = 'admin' WHERE user_id = '1111';

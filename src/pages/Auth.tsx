@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { LogIn, UserPlus, AlertCircle } from 'lucide-react';
 
 export default function Auth() {
-  const { signIn, signUp, isLoading } = useAuth();
+  const { signIn, signUp } = useAuth();
   const [loginId, setLoginId] = useState('');
   const [loginPin, setLoginPin] = useState('');
   const [signupName, setSignupName] = useState('');
@@ -17,18 +17,24 @@ export default function Auth() {
   const [signupRole, setSignupRole] = useState<'admin' | 'employee'>('employee');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsSubmitting(true);
     const result = await signIn(loginId, loginPin);
-    if (result.error) setError(result.error);
+    if (result.error) {
+      setError(result.error);
+      setIsSubmitting(false);
+    }
   };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setIsSubmitting(true);
     const result = await signUp(signupName, signupPin, signupRole, signupUserId || undefined);
     if (result.error) {
       setError(result.error);
@@ -39,6 +45,7 @@ export default function Auth() {
       setSignupUserId('');
       setSignupRole('employee');
     }
+    setIsSubmitting(false);
   };
 
   return (
@@ -93,8 +100,8 @@ export default function Auth() {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? 'Logging in...' : 'Login'}
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                  {isSubmitting ? 'Logging in...' : 'Login'}
                 </Button>
               </form>
             </TabsContent>
@@ -142,8 +149,8 @@ export default function Auth() {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? 'Creating account...' : 'Create Account'}
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                  {isSubmitting ? 'Creating account...' : 'Create Account'}
                 </Button>
               </form>
             </TabsContent>

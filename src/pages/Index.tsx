@@ -9,6 +9,7 @@ import { useAppTitle } from '@/hooks/useAppTitle';
 import { History, Settings, LogOut, User, Users } from 'lucide-react';
 
 import { FloatingActionButton } from '@/components/FloatingActionButton';
+import { ChangePinDialog } from '@/components/ChangePinDialog';
 import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
 
 const Index = () => {
@@ -110,6 +111,7 @@ const Index = () => {
               </div>
 
               <div className="flex items-center gap-1 sm:gap-2">
+                <ChangePinDialog />
                 <div className="flex items-center gap-2 px-2 py-1 bg-muted border border-border rounded-lg">
                   <User size={16} className="text-primary" />
                   <div className="flex flex-col min-w-0">

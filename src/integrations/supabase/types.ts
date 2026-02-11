@@ -188,6 +188,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      change_own_pin: {
+        Args: {
+          input_current_pin: string
+          input_new_pin: string
+          input_user_id: string
+        }
+        Returns: Json
+      }
       delete_custom_user: {
         Args: { input_admin_user_id: string; input_target_user_id: string }
         Returns: Json

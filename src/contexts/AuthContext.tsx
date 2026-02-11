@@ -120,6 +120,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         SecureStorage.clearUserData(user.id);
       }
       setUser(null);
+      setAutoLoginFailed(true);
       localStorage.removeItem('currentUser');
     } catch (error) {
       console.error('Error signing out:', error);
@@ -129,11 +130,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const hasPermission = (permission: string): boolean => {
     if (!user) return false;
     if (user.role === 'admin') return true;
-    if (user.role === 'employee') {
-      const restrictedPermissions = ['history'];
-      return !restrictedPermissions.includes(permission);
-    }
-    return false;
+    // Employee has access to dashboard, transactions, and history only
+    const employeePermissions = ['dashboard', 'transactions', 'history'];
+    return employeePermissions.includes(permission);
   };
 
   return (

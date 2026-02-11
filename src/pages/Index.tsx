@@ -6,14 +6,14 @@ import { LanguageToggle, Language } from '@/components/LanguageToggle';
 import { useTranslation } from '@/utils/translations';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAppTitle } from '@/hooks/useAppTitle';
-import { History, Settings } from 'lucide-react';
+import { History, Settings, LogOut, User } from 'lucide-react';
 
 import { FloatingActionButton } from '@/components/FloatingActionButton';
 import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, signOut, hasPermission } = useAuth();
   const { appTitle } = useAppTitle();
   const [language, setLanguage] = useState<Language>('en');
   const t = useTranslation(language);
@@ -72,17 +72,18 @@ const Index = () => {
               />
               
               <div className="flex items-center gap-1 sm:gap-2">
-                
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate('/business-profile')}
-                  className="flex items-center gap-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground text-sm whitespace-nowrap"
-                >
-                  <Settings size={16} />
-                  <span className="font-medium hidden sm:inline">{language === 'ar' ? 'ملف العمل' : 'Business'}</span>
-                  <span className="font-medium sm:hidden">{language === 'ar' ? 'عمل' : 'Biz'}</span>
-                </Button>
+                {hasPermission('business-profile') && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate('/business-profile')}
+                    className="flex items-center gap-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground text-sm whitespace-nowrap"
+                  >
+                    <Settings size={16} />
+                    <span className="font-medium hidden sm:inline">{language === 'ar' ? 'ملف العمل' : 'Business'}</span>
+                    <span className="font-medium sm:hidden">{language === 'ar' ? 'عمل' : 'Biz'}</span>
+                  </Button>
+                )}
                 
                 <Button
                   variant="outline"
@@ -92,6 +93,29 @@ const Index = () => {
                 >
                   <History size={16} />
                   <span className="font-medium">{t.history}</span>
+                </Button>
+              </div>
+
+              <div className="flex items-center gap-1 sm:gap-2">
+                <div className="flex items-center gap-2 px-2 py-1 bg-muted border border-border rounded-lg">
+                  <User size={16} className="text-primary" />
+                  <div className="flex flex-col min-w-0">
+                    <span className="font-semibold text-foreground text-sm truncate">{user?.name || 'User'}</span>
+                    <span className="text-xs text-muted-foreground truncate">
+                      {user?.role?.toUpperCase() || 'USER'}
+                    </span>
+                  </div>
+                </div>
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={signOut}
+                  className="flex items-center gap-2 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground text-sm whitespace-nowrap"
+                >
+                  <LogOut size={16} />
+                  <span className="font-medium hidden sm:inline">{language === 'ar' ? 'تسجيل الخروج' : 'Logout'}</span>
+                  <span className="font-medium sm:hidden">{language === 'ar' ? 'خروج' : 'Out'}</span>
                 </Button>
               </div>
 

@@ -15,6 +15,8 @@ interface AuthContextType {
   signIn: (userId: string, pin: string) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
   isLoading: boolean;
+  autoLoginFailed: boolean;
+  retryAutoLogin: () => Promise<void>;
   hasPermission: (permission: string) => boolean;
 }
 
@@ -23,6 +25,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<CustomUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [autoLoginFailed, setAutoLoginFailed] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -40,11 +43,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { error } = await signIn('1111', '1234');
       if (error) {
         console.error('Auto-login failed:', error);
+        setAutoLoginFailed(true);
       }
       setIsLoading(false);
     };
     init();
   }, []);
+
+  const retryAutoLogin = async () => {
+    setIsLoading(true);
+    setAutoLoginFailed(false);
+    const { error } = await signIn('1111', '1234');
+    if (error) {
+      setAutoLoginFailed(true);
+    }
+    setIsLoading(false);
+  };
 
   const signUp = async (name: string, pin: string, role: 'admin' | 'employee' = 'employee', userId?: string) => {
     try {
@@ -123,7 +137,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, signUp, signIn, signOut, isLoading, hasPermission }}>
+    <AuthContext.Provider value={{ user, signUp, signIn, signOut, isLoading, autoLoginFailed, retryAutoLogin, hasPermission }}>
       {children}
     </AuthContext.Provider>
   );
